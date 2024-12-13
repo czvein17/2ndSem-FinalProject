@@ -1,0 +1,37 @@
+# Ignore node_modules directories
+node_modules/
+
+# Ignore build directories
+build/
+dist/
+
+# Ignore environment variable files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+
+# Ignore specific directories in your project
+BE/node_modules/
+Electron/node_modules/
+FE/node_modules/
+BE/build/
+Electron/build/
+FE/build/
+
+# Ignore specific files in your project
+BE/src/.env
+Electron/.env
+FE/.env
+
+# Ignore IDE specific files
+.vscode/
+.idea/

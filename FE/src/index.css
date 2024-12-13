@@ -1,0 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend&family=Montserrat:wght@100..900&display=swap");
+
+@tailwind base;
+@tailwind components;   
+@tailwind utilities;
+
+:root {
+  background-color: transparent;
+}
+
+/* Add this to your global CSS file or a CSS module */
+@layer utilities {
+  .clip-path-checkmark {
+    clip-path: polygon(14% 44%, 0% 65%, 50% 100%, 100% 20%, 80% 0%, 43% 62%);
+  }
+}
