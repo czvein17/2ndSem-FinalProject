@@ -14,12 +14,14 @@ const loginEmailAndPassword = async (email, password) => {
 };
 
 const loginViaGoogle = async (req) => {
+  console.log(req.body);
   let user;
 
   const firstName = req.body?.userInfo?.given_name;
   const lastName = req.body?.userInfo?.family_name;
   const email = req.body?.userInfo?.email;
   const googleId = req.body?.userInfo?.id;
+  const googleProfilePic = req.body?.userInfo?.picture;
 
   if (email) user = await userService.findUserByEmail(email);
   else if (googleId) user = await userService.findUserByGoogleId(googleId);
@@ -30,6 +32,7 @@ const loginViaGoogle = async (req) => {
       lastName,
       email,
       googleId,
+      googleProfilePic,
     });
   }
 

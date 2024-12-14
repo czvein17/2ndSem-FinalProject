@@ -46,6 +46,7 @@ const createUserViaGoogle = async (payload) => {
     lastName: payload.lastName,
     email: payload.email,
     googleId: payload.googleId,
+    googleProfilePic: payload.googleProfilePic,
   });
 
   return user;

@@ -8,6 +8,7 @@ function createWindow() {
     autoHideMenuBar: true,
     width: 1600,
     height: 900,
+    icon: path.join(__dirname, "assets", "logo.jpg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
     },
@@ -17,6 +18,7 @@ function createWindow() {
 
   mainWindow.webContents.on("did-finish-load", () => {
     mainWindow.setTitle("My App");
+    mainWindow.logo = path.join(__dirname, "assets", "logo.png");
   });
 
   // Remove the default menu bar
