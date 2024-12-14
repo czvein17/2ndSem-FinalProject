@@ -1,5 +1,6 @@
 import { RxDashboard } from "react-icons/rx";
 import { AiOutlineLogout } from "react-icons/ai";
+import { LuUsersRound } from "react-icons/lu";
 
 import { SideBarList } from "./SideBarList";
 import { useAuth } from "../../hooks/useAuth";
@@ -13,18 +14,18 @@ const Sidebar = () => {
       icon: <RxDashboard size={20} />,
     },
     {
-      path: "/admin/page1",
-      name: "Page 1",
-      icon: <RxDashboard size={20} />,
-    },
-    {
-      path: "/admin/page2",
-      name: "Page 2",
-      icon: <RxDashboard size={20} />,
+      path: "/admin/manage-users",
+      name: "Users",
+      icon: <LuUsersRound size={20} />,
     },
     {
       path: "/admin/page3",
       name: "Page 3",
+      icon: <RxDashboard size={20} />,
+    },
+    {
+      path: "/admin/page4",
+      name: "Page 4",
       icon: <RxDashboard size={20} />,
     },
   ];

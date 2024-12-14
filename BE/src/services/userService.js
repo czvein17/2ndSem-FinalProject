@@ -5,6 +5,11 @@ const findUserByEmail = async (email) => {
   return user;
 };
 
+const findAllUsers = async () => {
+  const users = await User.find();
+  return users;
+};
+
 const findUserByGoogleId = async (googleId) => {
   const user = await User.findOne({ googleId: googleId }).select("+password");
   return user;
@@ -66,6 +71,7 @@ const createUserViaFacebook = async (payload) => {
 
 module.exports = {
   findUserByEmail,
+  findAllUsers,
   findUserByGoogleId,
   findUserByFacebookId,
   findUserById,

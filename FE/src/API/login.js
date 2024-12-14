@@ -1,20 +1,14 @@
+import axios from "axios";
 import http from "./http";
 
-export const loginViaEmailAndPassword = async (email, password) => {
-  try {
-    const res = await http.post(
-      "/signin/email",
-      {
-        email,
-        password,
-      },
-      { withCredentials: true }
-    );
-    return res.data;
-  } catch (error) {
-    // console.error(error);
-    return error.response;
-  }
+export const loginViaEmailAndPassword = async ({ email, password }) => {
+  console.log("email", email);
+  console.log("password", password);
+  const res = await http.post("/signin/email", {
+    email,
+    password,
+  });
+  return res.data;
 };
 
 export const loginViaGoogle = async (codeResponse) => {
@@ -22,7 +16,7 @@ export const loginViaGoogle = async (codeResponse) => {
 
   try {
     // Fetch user information using the access token
-    const res = await http.get(
+    const res = await axios.get(
       "https://www.googleapis.com/oauth2/v1/userinfo",
       {
         headers: {
@@ -32,13 +26,9 @@ export const loginViaGoogle = async (codeResponse) => {
       }
     );
 
-    const serverRes = await http.post(
-      "/signin/google",
-      {
-        userInfo: res.data,
-      },
-      { withCredentials: true }
-    );
+    const serverRes = await http.post("/signin/google", {
+      userInfo: res.data,
+    });
 
     return serverRes.data;
   } catch (error) {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 
 import { loginViaEmailAndPassword, loginViaGoogle } from "../API/login";
@@ -8,30 +8,38 @@ import { FaEye } from "react-icons/fa6";
 import { FaEyeSlash } from "react-icons/fa6";
 import { GoogleLoginButton } from "./button/GoogleLoginButton";
 import { useAuth } from "../hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {
-  const { login, error, setError } = useAuth();
+  const { login } = useAuth();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
   const [data, setData] = useState({
     username: "",
     password: "",
   });
 
   const googleLogin = useGoogleLogin({
-    onSuccess: async (codeResponse) => {
-      const user = await loginViaGoogle(codeResponse);
-      console.log("Login Success:", user);
-      login(user);
-    },
+    onSuccess: async (codeResponse) => loginUsingGoogle(codeResponse),
     onError: (error) => console.log("Login Failed:", error),
   });
 
-  function clearError() {
-    setTimeout(() => {
-      setError("");
-    }, 5000);
-  }
+  const {
+    mutateAsync: loginUsingEmailAndPassword,
+    isPending: isLoginViaEmailPending,
+  } = useMutation({
+    mutationFn: loginViaEmailAndPassword,
+    onSuccess: (user) => login(user),
+    onError: (error) => setError(error.message),
+  });
+
+  const { mutateAsync: loginUsingGoogle, isPending: isLoginViaGooglePending } =
+    useMutation({
+      mutationFn: loginViaGoogle,
+      onSuccess: (user) => login(user),
+      onError: (error) => setError(error.message),
+    });
 
   function showAndHidePassword(e) {
     e.preventDefault();
@@ -42,14 +50,22 @@ const Login = () => {
     e.preventDefault();
 
     if (data.username === "" || data.password === "") {
-      setError("Please fill all the fields");
-      clearError();
-      return;
+      return setError("Please fill all the fields");
     }
 
-    const user = await loginViaEmailAndPassword(data.username, data.password);
-    login(user);
+    loginUsingEmailAndPassword({
+      email: data.username,
+      password: data.password,
+    });
   }
+
+  useEffect(() => {
+    if (!error) return;
+
+    setTimeout(() => {
+      setError("");
+    }, 5000);
+  }, [error]);
 
   return (
     <div className="flex flex-col-reverse md:flex-row items-center justify-center h-screen font-inter">
@@ -127,7 +143,9 @@ const Login = () => {
             type="submit"
             className="bg-black text-white p-5 rounded-lg font-bold"
           >
-            Login
+            {isLoginViaEmailPending || isLoginViaGooglePending
+              ? "Loading..."
+              : "Login"}
           </button>
         </form>
 

@@ -9,6 +9,8 @@ const errorHandler = require("./middlewares/errorHandler");
 
 const signinRoutes = require("./routes/signinRoutes");
 const signupRoutes = require("./routes/signupRoutes");
+const userRoutes = require("./routes/userRoutes");
+
 const chatBotRoutes = require("./routes/chatBotRoutes");
 
 app.use((req, res, next) => {
@@ -37,6 +39,7 @@ app.use("/example", (req, res, next) => {
 
 app.use("/api/v1/signin", signinRoutes);
 app.use("/api/v1/signup", signupRoutes);
+app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/chat", chatBotRoutes);
 
 app.use(errorHandler);

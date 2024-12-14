@@ -7,7 +7,7 @@ import Login from "./components/Login";
 import PrivateRoute from "./components/PrivateRoute";
 // ADMIN PAGES
 import AdminPage from "./page/AdminPage/AdminPage";
-import AdminPage1 from "./page/AdminPage/subPage/AdminPage1";
+import MangeUserPage from "./page/AdminPage/subPage/ManageUserPage";
 
 import UserPage from "./page/User/UserPage";
 
@@ -23,9 +23,9 @@ const AppRouter = () => {
           <Route element={<PrivateRoute roles={["admin"]} />}>
             <Route path="admin" element={<AdminPage />}>
               <Route index element={<>HOME</>} />
-              <Route path="page1" element={<AdminPage1 />} />
-              <Route path="page2" element={<>PAGE 2</>} />
-              <Route path="page3" element={<> PAGE 3</>} />
+              <Route path="manage-users" element={<MangeUserPage />} />
+              <Route path="page3" element={<>PAGE 2</>} />
+              <Route path="page4" element={<> PAGE 3</>} />
             </Route>
           </Route>
 

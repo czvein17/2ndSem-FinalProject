@@ -6,9 +6,9 @@ import Sidebar from "../../components/Admin/Sidebar";
 const AdminPage = () => {
   return (
     <div className="h-screen flex  flex-row-reverse items-center justify-center bg-background font-inter">
-      <div className="w-full h-full">
+      <div className="w-full h-full flex flex-col">
         <Header />
-        <div className="p-5">
+        <div className="p-5 h-full">
           <Outlet />
         </div>
       </div>

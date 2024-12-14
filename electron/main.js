@@ -21,7 +21,6 @@ function createWindow() {
     mainWindow.logo = path.join(__dirname, "assets", "logo.png");
   });
 
-  // Remove the default menu bar
   mainWindow.setMenu(null);
 }
 
