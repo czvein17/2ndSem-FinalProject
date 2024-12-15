@@ -77,7 +77,7 @@ const Login = () => {
           <div>
             <p className='text-red-600 h-5'>{error}</p>
             <p className='font-bold'>Email : </p>
-            <div className='bg-white rounded-md py-2 mt-3'>
+            <div className='bg-secondary rounded-md py-2 mt-3'>
               <input
                 placeholder='Enter email'
                 className='border p-2 w-full outline-none bg-transparent border-none text-[16px]'
@@ -89,7 +89,7 @@ const Login = () => {
 
           <div>
             <p className='font-bold'>Password : </p>
-            <div className='bg-white rounded-md py-2 mt-3 relative'>
+            <div className='bg-secondary rounded-md py-2 mt-3 relative'>
               {!showPassword ? (
                 <input
                   type='password'
