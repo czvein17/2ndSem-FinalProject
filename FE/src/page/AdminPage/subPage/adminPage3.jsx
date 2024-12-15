@@ -1,5 +1,5 @@
-const adminPage3 = () => {
-  return <div>adminPage3</div>;
-};
+const AdminPage3 = () => {
+  return <div className='bg-red-600 h-full'>AdminPage3</div>
+}
 
-export default adminPage3;
+export default AdminPage3
