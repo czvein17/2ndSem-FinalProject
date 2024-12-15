@@ -16,11 +16,10 @@ function createWindow() {
 
   mainWindow.loadURL("http://localhost:5173/");
 
-  mainWindow.webContents.on("did-finish-load", () => {
-    mainWindow.setTitle("My App");
-    mainWindow.logo = path.join(__dirname, "assets", "logo.png");
-  });
-
+  // mainWindow.webContents.on("did-finish-load", () => {
+  //   mainWindow.setTitle("My App");
+  //   mainWindow.logo = path.join(__dirname, "assets", "logo.png");
+  // });
   mainWindow.setMenu(null);
 }
 
