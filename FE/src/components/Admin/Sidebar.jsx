@@ -1,6 +1,7 @@
 import { RxDashboard } from 'react-icons/rx'
 import { AiOutlineLogout } from 'react-icons/ai'
 import { LuUsersRound } from 'react-icons/lu'
+import { IoChatbubblesOutline } from 'react-icons/io5'
 
 import { SideBarList } from './SideBarList'
 import { useAuth } from '../../hooks/useAuth'
@@ -21,7 +22,7 @@ const Sidebar = () => {
     {
       path: '/admin/chat',
       name: 'Chat Bot',
-      icon: <RxDashboard size={20} />,
+      icon: <IoChatbubblesOutline size={20} />,
     },
     {
       path: '/admin/page4',

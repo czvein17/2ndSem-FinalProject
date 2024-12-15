@@ -49,7 +49,6 @@ const AdminChatBot = () => {
     queryKey: ['conversation', conversationId],
     mutationFn: getConversationById,
     onSuccess: (data) => {
-      console.log(data.conversation.messages)
       setMessages(data.conversation.messages)
     },
     onError: (error) => console.error('Error fetching conversation:', error),
@@ -190,10 +189,11 @@ const AdminChatBot = () => {
         </div>
       </div>
 
-      <div className='w-[30%] flex flex-col justify-center items-center bg-secondary p-5 rounded-lg'>
+      <div className='w-60 flex flex-col justify-center items-center bg-secondary  p-2 rounded-xl'>
         <h1>History</h1>
+
         <div className='flex-grow w-full'>
-          <ul className='overflow-y-auto p-5'>
+          <ul className='overflow-y-auto'>
             <li
               className='p-2 bg-accent rounded-md my-2 text-white text-sm font-medium'
               onClick={createNewConversation}
@@ -203,7 +203,7 @@ const AdminChatBot = () => {
             {chatHistory?.conversation?.map((chat, index) => (
               <li
                 key={index}
-                className='p-2 bg-accent rounded-md my-2 text-white text-sm font-medium'
+                className='p-2 bg-accent rounded-lg my-2 text-white text-sm font-medium'
                 onClick={() => {
                   showChatHistory(chat._id)
                 }}

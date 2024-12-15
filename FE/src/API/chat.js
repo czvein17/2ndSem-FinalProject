@@ -9,7 +9,6 @@ export const sendChatToBot = async ({ message, conversationId }) => {
 
 export const getChatHistory = async () => {
   const response = await http.get('/chat')
-  console.log(response.data)
   return response.data
 }
 
