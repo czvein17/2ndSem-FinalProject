@@ -3,9 +3,6 @@ import DefaultUserImage from '../../assets/images/default-user.svg'
 import { transformDate } from '../../utils/transformDate'
 
 const UserCardContainer = ({ ...users }) => {
-  console.log(users.data.map((user) => user))
-  const data = Array(6).fill('test') // Example data array with 10 items
-
   return (
     <section className='h-full overflow-y-auto custom-scrollbar py-3 px-3'>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-6 '>

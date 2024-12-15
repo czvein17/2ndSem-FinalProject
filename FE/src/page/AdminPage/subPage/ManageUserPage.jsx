@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 import { IoIdCardOutline } from 'react-icons/io5'
 import { FiEdit2, FiTable } from 'react-icons/fi'
-import { CiViewTable } from 'react-icons/ci'
+import { IoIosAddCircleOutline } from 'react-icons/io'
 
 import { fetchAllUsers } from '../../../API/userDataReq'
 import UserDefaulImg from '../../../assets/images/default-user.svg'
@@ -34,26 +34,31 @@ const AdminPage1 = () => {
       <div className='h-20 '>
         <div className='h-20 flex justify-between '>
           <div className='w-full bg-red-500'>1</div>
-          <div className='w-full flex p-5 justify-end'>
+          <div className='md:w-full flex gap-1 md:gap-3 p-5 justify-end'>
+            {viewMode === 'tables' && (
+              <button className='border-2 border-secondary py-1 px-2 md:py-2 md:px-5 rounded-lg shadow-md flex gap-2 justify-center items-center hover:bg-secondary transition-all ease-in-out'>
+                <span className='text-accent'>
+                  <IoIosAddCircleOutline size={24} />
+                </span>
+                <span className='hidden md:flex'>Add User</span>
+              </button>
+            )}
             <button
-              className='border-2 border-secondary py-2 px-5 rounded-lg shadow-md'
+              className='border-2 border-secondary py-1 px-2 md:py-2 md:px-5 rounded-lg shadow-md hover:bg-secondary transition-all ease-in-out'
               onClick={handleViewModeChange}
             >
-              {viewMode === 'tables' ? (
-                <p className='flex gap-2 justify-center items-center  text-sm'>
+              <p className='flex gap-2 justify-center items-center  text-sm'>
+                {viewMode === 'tables' ? (
                   <span className='text-accent'>
-                    <FiTable size={20} />
+                    <FiTable size={24} />
                   </span>
-                  View as
-                </p>
-              ) : (
-                <p className='flex gap-2 justify-center items-center text-sm'>
+                ) : (
                   <span className='text-accent'>
-                    <IoIdCardOutline size={20} />
+                    <IoIdCardOutline size={24} />
                   </span>
-                  View as
-                </p>
-              )}
+                )}
+                <span className='hidden md:flex'>View As</span>
+              </p>
             </button>
           </div>
         </div>
@@ -72,7 +77,7 @@ const AdminPage1 = () => {
             {viewMode === 'cards' ? (
               <UserCardContainer data={users?.data || []} />
             ) : (
-              <div className='overflow-x-auto bg-black h-full'>
+              <div className='overflow-x-auto  h-full'>
                 <table className='table-auto w-full border-collapse'>
                   <thead>
                     <tr>
@@ -130,7 +135,17 @@ const UserTableRow = ({ user, index }) => {
         </div>
       </td>
       <td className={`${cellClass}`}>{user.email}</td>
-      <td className={`${cellClass} text-center`}>{user.role}</td>
+      <td className={`${cellClass} text-center align-middle`}>
+        <p
+          className={` w-28  px-5 text-center inline-block rounded-lg font-medium ${
+            user.role === 'admin'
+              ? 'bg-[#ff727220] text-[#ff7272] border-2 border-[#ff727210]'
+              : 'bg-[#7bc44320] text-[#7bc443] border-2 border-[#7bc44310]'
+          }`}
+        >
+          {user.role}
+        </p>
+      </td>
       <td className={`${cellClass} text-center`}>{transformDate(user.createdAt)}</td>
       <td className={`${cellClass} `}>
         {/* Add any action buttons or links here */}
