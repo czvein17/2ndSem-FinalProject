@@ -19,8 +19,8 @@ const Sidebar = () => {
       icon: <LuUsersRound size={20} />,
     },
     {
-      path: '/admin/page3',
-      name: 'Page 3',
+      path: '/admin/chat',
+      name: 'Chat Bot',
       icon: <RxDashboard size={20} />,
     },
     {
