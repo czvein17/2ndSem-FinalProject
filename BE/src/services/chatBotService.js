@@ -1,13 +1,37 @@
 const { openai } = require("../config/openai");
 const Conversation = require("../models/Conversation");
 
-const chatCompletion = async (userId, message) => {
-  // Find the conversation for the user or create a new one
-  let conversation = await Conversation.findOne({ userId });
-  if (!conversation) {
-    conversation = new Conversation({ userId, messages: [] });
-  }
+const chatCompletion = async (userId, message, conversationId = null) => {
+  let conversation;
 
+  console.log("userId", userId);
+  console.log("conversationId", conversationId);
+  console.log("message", message);
+
+  // Find the conversation by ID
+  if (conversationId)
+    conversation = await Conversation.findById({ _id: conversationId });
+  else {
+    // if no conversation ID is provided, create a new conversation
+    const conversationTitle = await generateTitle(message);
+
+    conversation = await Conversation.create({
+      userId,
+      conversationTitle,
+      messages: [],
+    });
+
+    // Find the conversation for the user or create a new one
+    // conversation = await Conversation.findOne({ userId });
+    // if (!conversation) {
+    //   const conversationTitle = await generateTitle(message);
+    //   conversation = new Conversation({
+    //     userId,
+    //     conversationTitle,
+    //     messages: [],
+    //   });
+    // }
+  }
   // Add the new user message to the conversation history
   conversation.messages.push({
     role: "user",
@@ -44,7 +68,26 @@ const chatCompletion = async (userId, message) => {
   // Save the conversation
   await conversation.save();
 
-  return response;
+  return { response, conversationId: conversation._id };
+};
+
+const generateTitle = async (message) => {
+  const response = await openai.chat.completions.create({
+    model: "gpt-3.5-turbo",
+    messages: [
+      {
+        role: "system",
+        content:
+          "Generate a short and descriptive title for the following conversation:",
+      },
+      {
+        role: "user",
+        content: message,
+      },
+    ],
+  });
+
+  return response.choices[0].message.content.trim();
 };
 
 const getAllConversation = async (userId) => {
@@ -52,7 +95,13 @@ const getAllConversation = async (userId) => {
   return conversation;
 };
 
+const getConversationById = async (conversationId) => {
+  const conversation = await Conversation.findById({ _id: conversationId });
+  return conversation;
+};
+
 module.exports = {
   chatCompletion,
   getAllConversation,
+  getConversationById,
 };

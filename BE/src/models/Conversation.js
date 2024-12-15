@@ -18,6 +18,10 @@ const conversationSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  conversationTitle: {
+    type: String,
+    // required: true,
+  },
   messages: [messageSchema],
   createdAt: {
     type: Date,
