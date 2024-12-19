@@ -4,12 +4,13 @@ const {
   sendChatToBot,
   getAllConversation,
   getConversationById,
+  deleteConversationById,
 } = require("../controllers/chatBotController");
 
 const router = express.Router();
 
 router.use(protectAuth);
 router.post("/", sendChatToBot).get("/", getAllConversation);
-router.get("/:id", getConversationById);
+router.route("/:id").get(getConversationById).delete(deleteConversationById);
 
 module.exports = router;

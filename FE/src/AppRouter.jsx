@@ -35,6 +35,8 @@ const AppRouter = () => {
           </Route>
         </>
       )}
+
+      <Route path='*' element={<>404 NOT FOUND</>} />
     </Routes>
   )
 }

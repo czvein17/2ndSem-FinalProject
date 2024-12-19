@@ -57,8 +57,25 @@ const formatBytes = (bytes, decimals = 2) => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
 
+const deleteConversationById = asyncHandler(async (req, res, next) => {
+  const conversationId = req.params.id;
+
+  const conversation = await chatBotService.deleteConversationById(
+    conversationId
+  );
+
+  if (!conversation) {
+    return next(new ErrorResponse(404, "Conversation not found"));
+  }
+
+  res
+    .status(200)
+    .json({ id: conversation._id, message: "Conversation deleted" });
+});
+
 module.exports = {
   sendChatToBot,
   getAllConversation,
   getConversationById,
+  deleteConversationById,
 };

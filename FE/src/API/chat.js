@@ -1,9 +1,9 @@
 import http from './http'
 
 export const sendChatToBot = async ({ message, conversationId }) => {
-  console.log({ message, conversationId })
+  console.log(message, conversationId)
   const response = await http.post('/chat', { message, conversationId })
-  //   console.log(response.data)
+  console.log(response.data)
   return response.data
 }
 
@@ -14,5 +14,10 @@ export const getChatHistory = async () => {
 
 export const getConversationById = async (id) => {
   const response = await http.get(`/chat/${id}`)
+  return response.data
+}
+
+export const deleteConversationById = async (id) => {
+  const response = await http.delete(`/chat/${id}`)
   return response.data
 }

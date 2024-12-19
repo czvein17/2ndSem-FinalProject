@@ -14,7 +14,7 @@ import UserCardContainer from '../../../components/Admin/UserCardContainer'
 import { transformDate } from '../../../utils/transformDate'
 
 const AdminPage1 = () => {
-  const [viewMode, setViewMode] = useState('tables')
+  const [viewMode, setViewMode] = useState('cards')
   const {
     data: users,
     isPending,

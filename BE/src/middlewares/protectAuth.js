@@ -4,7 +4,6 @@ const User = require("../models/User");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 const protectAuth = asyncHandler(async (req, res, next) => {
-  console.log(req.headers.authorization);
   if (
     !req.headers?.authorization &&
     !req.headers.authorization?.startsWith("Bearer")

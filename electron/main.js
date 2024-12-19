@@ -6,8 +6,8 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     title: "Final Project",
     autoHideMenuBar: true,
-    width: 1600,
-    height: 900,
+    width: 1800,
+    height: 1200,
     icon: path.join(__dirname, "assets", "logo.jpg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),

@@ -100,8 +100,17 @@ const getConversationById = async (conversationId) => {
   return conversation;
 };
 
+const deleteConversationById = async (conversationId) => {
+  const conversation = await Conversation.findByIdAndDelete({
+    _id: conversationId,
+  });
+
+  return conversation;
+};
+
 module.exports = {
   chatCompletion,
   getAllConversation,
   getConversationById,
+  deleteConversationById,
 };
