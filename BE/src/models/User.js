@@ -16,11 +16,17 @@ const UserSchema = new mongoose.Schema({
     default: "",
     required: [true, "Please provide a last name"],
   },
+  fullname: {
+    type: String,
+    default: "",
+    index: true,
+  },
   email: {
     type: String,
     default: "",
     required: [true, "Please provide an email address"],
     unique: true,
+    index: true,
   },
   password: {
     type: String,
@@ -30,6 +36,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     unique: true,
     sparse: true,
+    index: true,
   },
   googleProfilePic: {
     type: String,
@@ -47,6 +54,10 @@ const UserSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  __v: {
+    type: Number,
+    select: false,
   },
 });
 

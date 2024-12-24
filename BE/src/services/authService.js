@@ -20,6 +20,7 @@ const loginViaGoogle = async (req) => {
   const firstName = req.body?.userInfo?.given_name;
   const lastName = req.body?.userInfo?.family_name;
   const email = req.body?.userInfo?.email;
+  const fullName = firstName + " " + lastName;
   const googleId = req.body?.userInfo?.id;
   const googleProfilePic = req.body?.userInfo?.picture;
 
@@ -30,6 +31,7 @@ const loginViaGoogle = async (req) => {
     user = await userService.createUserViaGoogle({
       firstName,
       lastName,
+      fullName,
       email,
       googleId,
       googleProfilePic,

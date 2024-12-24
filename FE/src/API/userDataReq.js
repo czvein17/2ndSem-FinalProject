@@ -1,8 +1,8 @@
 import http from './http'
 import Cookies from 'js-cookie'
 
-export const fetchAllUsers = async () => {
-  const response = await http.get('/users')
+export const fetchAllUsers = async (queryParams = {}) => {
+  const response = await http.get('/users', { params: queryParams })
   return response.data
 }
 

@@ -13,7 +13,7 @@ const AdminPage = () => {
           <Outlet />
         </div>
       </div>
-      <div className='hidden md:flex flex-none w-64 h-full border-r border-gray  p-5'>
+      <div className='hidden lg:flex flex-none w-64 h-full border-r border-gray  p-5'>
         <Sidebar />
       </div>
       <ToastContainer

@@ -135,47 +135,66 @@ const AdminChatBot = () => {
 
   const formatMessageContent = (content) => {
     const lines = content.split('\n')
-    return lines.map((line, index) => {
+    const formattedContent = []
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+
       if (line.startsWith('### ')) {
-        return (
-          <h3 key={index} className='text-xl font-bold mt-4'>
+        formattedContent.push(
+          <h3 key={i} className='text-xl font-bold mt-4'>
             {line.slice(4)}
-          </h3>
+          </h3>,
         )
       } else if (line.startsWith('#### ')) {
-        return (
-          <h4 key={index} className='text-lg font-bold mt-3'>
+        formattedContent.push(
+          <h4 key={i} className='text-lg font-bold mt-3'>
             {line.slice(5)}
-          </h4>
+          </h4>,
         )
       } else if (line.startsWith('**') && line.endsWith('**')) {
-        return (
-          <p key={index} className='font-bold'>
+        formattedContent.push(
+          <p key={i} className='font-bold'>
             {line.slice(2, -2)}
-          </p>
+          </p>,
         )
       } else if (line.startsWith('- **')) {
-        return (
-          <li key={index} className='list-disc ml-5'>
+        formattedContent.push(
+          <li key={i} className='list-disc ml-5'>
             <strong>{line.slice(4)}</strong>
-          </li>
+          </li>,
         )
       } else if (line.startsWith('- ')) {
-        return (
-          <li key={index} className='list-disc ml-5'>
+        formattedContent.push(
+          <li key={i} className='list-disc ml-5'>
             {line.slice(2)}
-          </li>
+          </li>,
         )
       } else if (line.startsWith('1. ')) {
-        return (
-          <li key={index} className='list-decimal ml-5'>
+        formattedContent.push(
+          <li key={i} className='list-decimal ml-5'>
             {line.slice(3)}
-          </li>
+          </li>,
+        )
+      } else if (line.startsWith('```')) {
+        // Handle code blocks
+        const codeLines = []
+        i++
+        while (i < lines.length && !lines[i].startsWith('```')) {
+          codeLines.push(lines[i])
+          i++
+        }
+        formattedContent.push(
+          <pre key={i} className='bg-gray-800 text-white p-2 rounded'>
+            <code>{codeLines.join('\n')}</code>
+          </pre>,
         )
       } else {
-        return <p key={index}>{line}</p>
+        formattedContent.push(<p key={i}>{line}</p>)
       }
-    })
+    }
+
+    return formattedContent
   }
 
   return (

@@ -1,28 +1,53 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { fetchAllUsers } from '../../../API/userDataReq'
+import { transformDate } from '../../../utils/transformDate'
+import { formatFullname } from '../../../utils/formatFullname'
 
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 import { IoIdCardOutline } from 'react-icons/io5'
 import { FiEdit2, FiTable } from 'react-icons/fi'
 import { IoIosAddCircleOutline } from 'react-icons/io'
-
-import { fetchAllUsers } from '../../../API/userDataReq'
+import { IoSearch } from 'react-icons/io5'
 import UserDefaulImg from '../../../assets/images/default-user.svg'
+
 import Loading from '../../../components/Loading'
 import UserCardContainer from '../../../components/Admin/UserCardContainer'
-import { transformDate } from '../../../utils/transformDate'
 
 const AdminPage1 = () => {
   const [viewMode, setViewMode] = useState('cards')
+  const [searchBy, setSearchBy] = useState('')
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search)
+    }, 500)
+
+    return () => clearTimeout(timer)
+  }, [search])
+
+  useEffect(() => {
+    if (debouncedSearch.includes('@')) setSearchBy('email')
+    else setSearchBy('fullname')
+  }, [debouncedSearch])
+
+  const queryParams = {
+    searchBy: searchBy,
+    search: debouncedSearch,
+  }
+
   const {
     data: users,
     isPending,
     isError,
     error,
   } = useQuery({
-    queryKey: ['users'],
-    queryFn: fetchAllUsers,
+    queryKey: ['users', queryParams],
+    queryFn: () => fetchAllUsers(queryParams),
+    staleTime: 2000,
   })
 
   function handleViewModeChange() {
@@ -33,7 +58,18 @@ const AdminPage1 = () => {
     <div className='h-full flex flex-col'>
       <div className='h-20 '>
         <div className='h-20 flex justify-between '>
-          <div className='w-full bg-red-500'>1</div>
+          <div className='w-full py-5'>
+            <div className='flex lg:w-[300px] bg-secondary rounded-xl gap-2 py-2 px-4 shadow-md'>
+              <IoSearch size={24} />
+              <input
+                type='text'
+                placeholder='Search'
+                className='indent-1 outline-none w-full bg-transparent'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+          </div>
           <div className='md:w-full flex gap-1 md:gap-3 p-5 justify-end'>
             {viewMode === 'tables' && (
               <button className='border-2 border-secondary py-1 px-2 md:py-2 md:px-5 rounded-lg shadow-md flex gap-2 justify-center items-center hover:bg-secondary transition-all ease-in-out'>
@@ -65,53 +101,7 @@ const AdminPage1 = () => {
       </div>
 
       {/* USER DISPLAY */}
-      <div className='flex-grow overflow-hidden m-5'>
-        {isError && (
-          <div>
-            {error.status} Error: {error.message}
-          </div>
-        )}
-        {isPending && <Loading message={'Getting All User '} />}
-        {!isError && !isPending && (
-          <div className='h-full'>
-            {viewMode === 'cards' ? (
-              <UserCardContainer data={users?.data || []} />
-            ) : (
-              <div className='overflow-x-auto  h-full'>
-                <table className='table-auto w-full border-collapse'>
-                  <thead>
-                    <tr>
-                      <th className='bg-secondary text-sm text-accent px-2 py-2 first:rounded-tl-2xl'>
-                        ID
-                      </th>
-                      <th className='bg-secondary text-sm text-accent px-2 py-2'>
-                        Name
-                      </th>
-                      <th className='bg-secondary text-sm text-accent px-2 py-2'>
-                        Email
-                      </th>
-                      <th className='bg-secondary text-sm text-accent px-2 py-2'>
-                        Role
-                      </th>
-                      <th className='bg-secondary text-sm text-accent px-2 py-2'>
-                        Created At
-                      </th>
-                      <th className='bg-secondary text-accent px-2 py-2 last:rounded-tr-2xl'>
-                        Action
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {users?.data.map((user, index) => (
-                      <UserTableRow key={user._id} user={user} index={index} />
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      <UserCardContainer data={users?.data || []} />
     </div>
   )
 }
@@ -125,13 +115,13 @@ const UserTableRow = ({ user, index }) => {
     <tr className='hover:bg-secondary'>
       <td className={`${cellClass} w-1/5 text-center`}>{user._id}</td>
       <td className={`${cellClass} `}>
-        <div className='flex gap-4 w-full items-center '>
+        <div className='flex gap-4 items-center w-[200px]'>
           <img
             className='h-7 w-7 object-cover rounded-full'
             src={user.googleProfilePic || UserDefaulImg}
             alt={user.firstName}
           />
-          {user.firstName + ' ' + user.middleName + ' ' + user.lastName}
+          {formatFullname(user.fullname)}
         </div>
       </td>
       <td className={`${cellClass}`}>{user.email}</td>
@@ -146,7 +136,9 @@ const UserTableRow = ({ user, index }) => {
           {user.role}
         </p>
       </td>
-      <td className={`${cellClass} text-center`}>{transformDate(user.createdAt)}</td>
+      <td className={`${cellClass} text-center w-[1000px]`}>
+        {transformDate(user.createdAt)}
+      </td>
       <td className={`${cellClass} `}>
         {/* Add any action buttons or links here */}
         <span className='flex gap-2 justify-center'>

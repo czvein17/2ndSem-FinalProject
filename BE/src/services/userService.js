@@ -1,12 +1,23 @@
 const User = require("../models/User");
+const APIFeatures = require("../utils/apiFeatures");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 const findUserByEmail = async (email) => {
   const user = await User.findOne({ email: email }).select("+password");
   return user;
 };
 
-const findAllUsers = async () => {
-  const users = await User.find();
+const findAllUsers = async (req) => {
+  console.log(req.query);
+
+  const features = new APIFeatures(User.find(), req.query)
+    .filter()
+    .search()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const users = await features.query;
   return users;
 };
 
@@ -37,6 +48,7 @@ const createUser = async (payload) => {
     firstName: payload.firstName,
     middleName: payload.middleName,
     lastName: payload.lastName,
+    fullname: `${payload.firstName} ${payload.middleName} ${payload.lastName}`,
     email: payload?.email,
     password: payload?.password,
   });
@@ -49,6 +61,7 @@ const createUserViaGoogle = async (payload) => {
     firstName: payload.firstName,
     middleName: payload.middleName,
     lastName: payload.lastName,
+    fullname: payload.fullName,
     email: payload.email,
     googleId: payload.googleId,
     googleProfilePic: payload.googleProfilePic,
