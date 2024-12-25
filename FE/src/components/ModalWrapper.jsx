@@ -20,11 +20,9 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
   }
 
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside)
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside)
+    else document.removeEventListener('mousedown', handleClickOutside)
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
@@ -34,7 +32,10 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
 
   return ReactDOM.createPortal(
     <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-[#00000020] flex justify-center items-center'>
-      <div className='bg-white p-5 rounded-xl relative' ref={modalRef}>
+      <div
+        className='bg-white p-5 rounded-xl relative w-full md:w-auto mx-5'
+        ref={modalRef}
+      >
         <button
           className='absolute top-2 right-2 rounded-tr-xl '
           onClick={() => setIsOpen(false)}

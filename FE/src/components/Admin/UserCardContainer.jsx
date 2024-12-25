@@ -1,13 +1,12 @@
 import { useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
-import { IoIosAddCircleOutline } from 'react-icons/io'
 import { transformDate } from '../../utils/transformDate'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
-import { TbUserEdit } from 'react-icons/tb'
-import { TbUserMinus } from 'react-icons/tb'
+import { TbUserEdit, TbUserMinus } from 'react-icons/tb'
 import DefaultUserImage from '../../assets/images/default-user.svg'
 import { deleteUser, updateUser } from '../../API/userDataReq'
+import { IoPersonAddOutline } from 'react-icons/io5'
 import ModalWrapper from '../ModalWrapper'
 
 const UserCardContainer = ({ ...users }) => {
@@ -50,11 +49,15 @@ const UserCardContainer = ({ ...users }) => {
     },
   })
 
-  // console.log(users?.data?.map((user) => user._id))
-
   return (
     <section className='h-full overflow-y-auto custom-scrollbar bg-blue-500'>
       <div className='grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
+        <div className='w-full relative bg-secondary rounded-xl h-[450px] lg:h-[350px] shadow-lg flex flex-col'>
+          <div className='m-auto text-center  '>
+            <IoPersonAddOutline size={100} />
+            <p className='font-medium text-2xl mt-5'>Add User</p>
+          </div>
+        </div>
         {users?.data.map((user) => (
           <div
             key={user._id}
