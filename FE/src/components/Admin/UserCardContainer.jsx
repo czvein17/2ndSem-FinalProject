@@ -8,6 +8,8 @@ import DefaultUserImage from '../../assets/images/default-user.svg'
 import { deleteUser, updateUser } from '../../API/userDataReq'
 import { IoPersonAddOutline } from 'react-icons/io5'
 import ModalWrapper from '../ModalWrapper'
+import DeleteModalContent from './DeleteModalContent'
+import EditUserModalContent from './EditUserModalContent'
 
 const UserCardContainer = ({ ...users }) => {
   const editRef = useRef()
@@ -27,7 +29,7 @@ const UserCardContainer = ({ ...users }) => {
     mutationFn: deleteUser,
     onSuccess: (data) => {
       deleteRef.current.closeModal()
-      toast.dark.success('User deleted Succesfully')
+      toast.success('User deleted Succesfully')
       console.log(data)
     },
     onError: (data) => {
@@ -71,50 +73,19 @@ const UserCardContainer = ({ ...users }) => {
             </button>
 
             <ModalWrapper ref={editRef}>
-              <div className='w-[400px] h-[400px]'>
-                Edit To
-                <div></div>
-                <div className='flex gap-3'>
-                  <button
-                    className='bg-secondary py-2 px-5 rounded-md font-medium'
-                    onClick={() => editRef.current.closeModal()}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className='bg-accent py-2 px-5 rounded-md text-white font-medium'
-                    onClick={() => handleUpdateUser(user._id)}
-                  >
-                    Yes
-                  </button>
-                </div>
-              </div>
+              <EditUserModalContent
+                onClose={() => editRef.current.closeModal()}
+                onUpdate={() => handleUpdateUser(user._id)}
+                user={user}
+              />
             </ModalWrapper>
 
             <ModalWrapper ref={deleteRef}>
-              <div className='w-[300px] flex flex-col gap-5 items-center justify-center '>
-                <p className='text-center text-lg  w-[80%]'>
-                  Are you sure you want to delete{' '}
-                  <span className='font-medium'>
-                    {user.firstName} {user.middleName} {user.lastName}
-                  </span>
-                </p>
-
-                <div className='flex gap-3'>
-                  <button
-                    className='bg-secondary py-2 px-5 rounded-md font-medium'
-                    onClick={() => deleteRef.current.closeModal()}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className='bg-accent py-2 px-5 rounded-md text-white font-medium'
-                    onClick={() => handleDeleteUser(user._id)}
-                  >
-                    Yes
-                  </button>
-                </div>
-              </div>
+              <DeleteModalContent
+                onClose={() => deleteRef.current.closeModal()}
+                onDelete={() => handleDeleteUser(user._id)}
+                user={user}
+              />
             </ModalWrapper>
 
             {activeDropdown === user._id && (
@@ -141,7 +112,6 @@ const UserCardContainer = ({ ...users }) => {
             )}
 
             <div className='h-full flex justify-center items-center flex-col p-5'>
-              {console.log(user)}
               <img
                 src={user.googleProfilePic || DefaultUserImage}
                 alt='user'
@@ -174,40 +144,6 @@ const UserCardContainer = ({ ...users }) => {
         ))}
       </div>
     </section>
-  )
-}
-
-const EditAndDeleteModal = () => {
-  const editRef = useRef()
-  const deleteRef = useRef()
-  return (
-    <>
-      <ModalWrapper ref={deleteRef}>
-        <div className='w-[300px] flex flex-col gap-5 items-center justify-center '>
-          <p className='text-center text-lg  w-[80%]'>
-            Are you sure you want to delete{' '}
-            <span className='font-medium'>
-              {user.firstName} {user.middleName} {user.lastName}
-            </span>
-          </p>
-
-          <div className='flex gap-3'>
-            <button
-              className='bg-secondary py-2 px-5 rounded-md font-medium'
-              onClick={() => deleteRef.current.closeModal()}
-            >
-              Cancel
-            </button>
-            <button
-              className='bg-accent py-2 px-5 rounded-md text-white font-medium'
-              onClick={() => handleDeleteUser(user._id)}
-            >
-              Yes
-            </button>
-          </div>
-        </div>
-      </ModalWrapper>
-    </>
   )
 }
 
