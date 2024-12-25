@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef, useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'motion/react'
 import { SlClose } from 'react-icons/sl'
 
 import ReactDOM from 'react-dom'
@@ -15,7 +16,7 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setIsOpen(false)
+      setTimeout(() => setIsOpen(false), 100)
     }
   }
 
@@ -30,21 +31,38 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
 
   if (!isOpen) return null
 
+  const dropIn = {
+    hidden: { opacity: 0, y: '-20%' },
+    visible: {
+      opacity: 1,
+      y: '0',
+      transition: { duration: 0.2, ease: 'easeOut' },
+    },
+  }
+
   return ReactDOM.createPortal(
-    <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-[#00000020] flex justify-center items-center'>
-      <div
-        className='bg-white p-5 rounded-xl relative w-full md:w-auto mx-5'
-        ref={modalRef}
-      >
-        <button
-          className='absolute top-2 right-2 rounded-tr-xl '
-          onClick={() => setIsOpen(false)}
-        >
-          <SlClose size={24} />
-        </button>
-        {children}
-      </div>
-    </div>,
+    <AnimatePresence mode='wait'>
+      {isOpen && (
+        <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-[#00000020] flex justify-center items-center'>
+          <motion.div
+            initial='hidden'
+            animate='visible'
+            exit='hidden'
+            variants={dropIn}
+            className='bg-white p-5 rounded-xl relative w-full md:w-auto mx-5 '
+            ref={modalRef}
+          >
+            <button
+              className='absolute top-2 right-2 rounded-tr-xl '
+              onClick={() => setIsOpen(false)}
+            >
+              <SlClose size={24} />
+            </button>
+            {children}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>,
     document.getElementById('modal'),
   )
 })

@@ -73,8 +73,7 @@ const UserTables = ({ users }) => {
             {users?.map((user, index) => (
               <tr
                 key={user._id}
-                className={`${index % 2 === 0 ? 'bg-background' : 'bg-secondary'}
-                            border-b border-black`}
+                className={`${index % 2 === 0 ? 'bg-background' : 'bg-secondary'} border-b border-black`}
               >
                 <td className={`${tableRowClass}`}>{user._id}</td>
                 <td className={`${tableRowClass}`}>

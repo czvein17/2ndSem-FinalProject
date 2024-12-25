@@ -1,17 +1,22 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { transformDate } from '../../utils/transformDate'
+import { deleteUser, updateUser } from '../../API/userDataReq'
+
+import DefaultUserImage from '../../assets/images/default-user.svg'
 import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { TbUserEdit, TbUserMinus } from 'react-icons/tb'
-import DefaultUserImage from '../../assets/images/default-user.svg'
-import { deleteUser, updateUser } from '../../API/userDataReq'
 import { IoPersonAddOutline } from 'react-icons/io5'
+
 import ModalWrapper from '../ModalWrapper'
 import DeleteModalContent from './DeleteModalContent'
 import EditUserModalContent from './EditUserModalContent'
+import { useNavigate } from 'react-router-dom'
 
 const UserCardContainer = ({ ...users }) => {
+  const navigate = useNavigate()
   const editRef = useRef()
   const deleteRef = useRef()
   const [activeDropdown, setActiveDropdown] = useState(null)
@@ -51,17 +56,48 @@ const UserCardContainer = ({ ...users }) => {
     },
   })
 
+  const containerVariants = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        ease: 'easeOut',
+      },
+    },
+  }
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0 },
+  }
+
+  const dropdownVariants = {
+    hidden: { opacity: 0, y: -10, transition: { duration: 0.1, ease: 'easeOut' } },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.1, ease: 'easeIn' } },
+  }
+
   return (
-    <section className='h-full overflow-y-auto custom-scrollbar bg-blue-500'>
-      <div className='grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'>
-        <div className='w-full relative bg-secondary rounded-xl h-[450px] lg:h-[350px] shadow-lg flex flex-col'>
-          <div className='m-auto text-center  '>
+    <section className='h-full overflow-y-auto custom-scrollbar'>
+      <motion.div
+        variants={containerVariants}
+        initial='hidden'
+        animate='visible'
+        className='grid gap-5 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'
+      >
+        <motion.div
+          className='w-full relative bg-secondary rounded-xl h-[450px] lg:h-[350px] shadow-lg flex flex-col cursor-pointer'
+          onClick={() => navigate('/admin/manage-users/create')}
+          variants={cardVariants}
+        >
+          <button className='m-auto text-center'>
             <IoPersonAddOutline size={100} />
             <p className='font-medium text-2xl mt-5'>Add User</p>
-          </div>
-        </div>
+          </button>
+        </motion.div>
         {users?.data.map((user) => (
-          <div
+          <motion.div
+            variants={cardVariants}
             key={user._id}
             className='w-full relative bg-secondary rounded-xl h-[450px] lg:h-[350px] shadow-lg flex flex-col'
           >
@@ -88,28 +124,36 @@ const UserCardContainer = ({ ...users }) => {
               />
             </ModalWrapper>
 
-            {activeDropdown === user._id && (
-              <div className='absolute top-10 right-4 w-32 bg-white shadow-md rounded-xl'>
-                <ul className='p-2 text-sm font-medium'>
-                  <li
-                    className='p-2 hover:bg-gray-200 rounded-lg flex justify-between items-center cursor-pointer'
-                    onClick={() => editRef.current.openModal()}
-                  >
-                    <TbUserEdit size={25} />
-                    <span className='w-full text-center'>Edit</span>
-                  </li>
-                  <li
-                    className='p-2 hover:bg-gray-200 rounded-lg flex justify-between items-center cursor-pointer'
-                    onClick={() => {
-                      deleteRef.current.openModal()
-                    }}
-                  >
-                    <TbUserMinus size={25} />
-                    <span className='w-full text-center'>delete</span>
-                  </li>
-                </ul>
-              </div>
-            )}
+            <AnimatePresence mode='wait'>
+              {activeDropdown === user._id && (
+                <motion.div
+                  initial='hidden'
+                  animate='visible'
+                  exit='hidden'
+                  variants={dropdownVariants}
+                  className='absolute top-10 right-4 w-32 bg-white shadow-md rounded-xl'
+                >
+                  <ul className='p-2 text-sm font-medium'>
+                    <li
+                      className='p-2 hover:bg-gray-200 rounded-lg flex justify-between items-center cursor-pointer transition-all ease-in-out'
+                      onClick={() => editRef.current.openModal()}
+                    >
+                      <TbUserEdit size={25} />
+                      <span className='w-full text-center'>Edit</span>
+                    </li>
+                    <li
+                      className='p-2 hover:bg-gray-200 rounded-lg flex justify-between items-center cursor-pointer transition-all ease-in-out'
+                      onClick={() => {
+                        deleteRef.current.openModal()
+                      }}
+                    >
+                      <TbUserMinus size={25} />
+                      <span className='w-full text-center'>delete</span>
+                    </li>
+                  </ul>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className='h-full flex justify-center items-center flex-col p-5'>
               <img
@@ -140,9 +184,9 @@ const UserCardContainer = ({ ...users }) => {
               <p className='break-words'>{user.email}</p>
               <p className='break-words'>{transformDate(user.createdAt)}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   )
 }

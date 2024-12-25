@@ -1,6 +1,6 @@
-/* eslint-disable react/prop-types */
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 import { fetchAllUsers } from '../../../API/userDataReq'
 
 import { FiTable } from 'react-icons/fi'
@@ -13,7 +13,8 @@ import UserCardContainer from '../../../components/Admin/UserCardContainer'
 import UserTables from '../../../components/Admin/UserTables'
 
 const AdminPage1 = () => {
-  const [viewMode, setViewMode] = useState('tables')
+  const navigate = useNavigate()
+  const [viewMode, setViewMode] = useState('cards')
   const [searchBy, setSearchBy] = useState('')
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
@@ -69,7 +70,10 @@ const AdminPage1 = () => {
           </div>
           <div className='md:w-full flex gap-1 md:gap-3 py-5 md:px-5 justify-end '>
             {viewMode === 'tables' && (
-              <button className='border-2 border-secondary py-1 px-2 md:py-2 md:px-5 rounded-lg shadow-md flex gap-2 justify-center items-center hover:bg-secondary transition-all ease-in-out'>
+              <button
+                className='border-2 border-secondary py-1 px-2 md:py-2 md:px-5 rounded-lg shadow-md flex gap-2 justify-center items-center hover:bg-secondary transition-all ease-in-out'
+                onClick={() => navigate('/admin/manage-users/create')}
+              >
                 <span className='text-accent'>
                   <IoIosAddCircleOutline size={24} />
                 </span>

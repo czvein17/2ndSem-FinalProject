@@ -11,6 +11,8 @@ import AdminChatBot from './page/AdminPage/subPage/AdminChatBot'
 
 // USER PAGES
 import UserPage from './page/User/UserPage'
+import { ManageUserLayout } from './layout/Admin/ManageUserLayout'
+import { CreateNewUser } from './page/AdminPage/subPage/CreateNewUser'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -18,20 +20,28 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path='/' element={<Login />} />
+      <Route path='/test' element={<h1>Test</h1>} />
 
       {isLoggedIn && (
         <>
           <Route element={<PrivateRoute roles={['admin']} />}>
-            <Route path='admin' element={<AdminPage />}>
+            <Route path='/admin' element={<AdminPage />}>
               <Route index element={<>HOME</>} />
-              <Route path='manage-users' element={<MangeUserPage />} />
-              <Route path='chat' element={<AdminChatBot />} />
-              <Route path='page4' element={<>PAGE 3</>} />
+              <Route path='/admin/manage-users' element={<ManageUserLayout />}>
+                <Route index element={<MangeUserPage />} />
+                <Route
+                  path='/admin/manage-users/create'
+                  element={<CreateNewUser />}
+                />
+              </Route>
+
+              <Route path='/admin/chat' element={<AdminChatBot />} />
+              <Route path='/admin/page4' element={<>ADD USER 3</>} />
             </Route>
           </Route>
 
           <Route element={<PrivateRoute roles={['user']} />}>
-            <Route path='user' element={<UserPage />} />
+            <Route path='/user' element={<UserPage />} />
           </Route>
         </>
       )}

@@ -198,7 +198,7 @@ const AdminChatBot = () => {
   }
 
   return (
-    <div className='flex  gap-3 w-full h-full'>
+    <div className='flex gap-3 w-full h-full py-5'>
       <div className='h-full w-full flex flex-grow flex-col'>
         <div
           className='flex-grow  overflow-y-auto p-4 custom-scrollbar'

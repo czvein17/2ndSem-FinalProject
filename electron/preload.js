@@ -7,10 +7,4 @@ contextBridge.exposeInMainWorld("electron", {
   receive: (channel, func) => {
     ipcRenderer.on(channel, (event, ...args) => func(...args));
   },
-
-  uploadFile: () => ipcRenderer.send("upload-file"),
-  onUploadFileResponse: (callback) =>
-    ipcRenderer.on("upload-file-response", (event, response) =>
-      callback(response)
-    ),
 });
