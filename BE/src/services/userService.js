@@ -10,6 +10,8 @@ const findUserByEmail = async (email) => {
 const findAllUsers = async (req) => {
   console.log(req.query);
 
+  totalCount = await User.countDocuments();
+
   const features = new APIFeatures(User.find(), req.query)
     .filter()
     .search()
@@ -17,8 +19,10 @@ const findAllUsers = async (req) => {
     .limitFields()
     .paginate();
 
+  console.log(totalCount);
+
   const users = await features.query;
-  return users;
+  return { totalCount, users };
 };
 
 const findUserByGoogleId = async (googleId) => {

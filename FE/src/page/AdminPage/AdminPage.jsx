@@ -9,7 +9,7 @@ const AdminPage = () => {
     <div className='h-screen flex  flex-row-reverse items-center justify-center bg-background font-inter relative'>
       <div className='w-full h-full flex flex-col'>
         <Header />
-        <div className='px-5 h-full overflow-auto'>
+        <div className='px-5 h-full overflow-auto bg-transparent'>
           <Outlet />
         </div>
       </div>

@@ -14,10 +14,10 @@ const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(checkAuth())
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null)
 
-  // useEffect(() => {
-  //   const isAuthenticated = checkAuth()
-  //   if (!isAuthenticated) navigate('/')
-  // }, [navigate])
+  useEffect(() => {
+    const isAuthenticated = checkAuth()
+    if (!isAuthenticated) navigate('/')
+  }, [navigate])
 
   const navigateLogin = (role) => {
     switch (role) {

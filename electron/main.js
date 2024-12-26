@@ -7,7 +7,7 @@ function createWindow() {
     title: "Final Project",
     autoHideMenuBar: true,
     width: 1800,
-    height: 1200,
+    height: 1100,
     icon: path.join(__dirname, "assets", "logo.jpg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),

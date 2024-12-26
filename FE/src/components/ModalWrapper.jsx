@@ -43,7 +43,7 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
   return ReactDOM.createPortal(
     <AnimatePresence mode='wait'>
       {isOpen && (
-        <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-[#00000020] flex justify-center items-center'>
+        <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-[#00000090] flex justify-center items-center'>
           <motion.div
             initial='hidden'
             animate='visible'

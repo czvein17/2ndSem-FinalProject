@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 import { deleteUser, updateUser } from '../../API/userDataReq'
@@ -12,7 +12,7 @@ import ModalWrapper from '../ModalWrapper'
 import DeleteModalContent from './DeleteModalContent'
 import EditUserModalContent from './EditUserModalContent'
 
-const UserTables = ({ users }) => {
+const UserTables = React.memo(({ users }) => {
   const editRef = useRef()
   const deleteRef = useRef()
 
@@ -150,6 +150,6 @@ const UserTables = ({ users }) => {
       </div>
     </div>
   )
-}
+})
 
 export default UserTables

@@ -7,6 +7,7 @@ export const fetchAllUsers = async (queryParams = {}) => {
 }
 
 export const updateUser = async (userId) => {
+  console.log(userId + ' USER DATA REQ')
   const response = await http.patch(`/users/${userId}`)
   return response.data
 }

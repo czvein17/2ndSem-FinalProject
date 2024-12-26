@@ -11,6 +11,7 @@ import { IoSearch } from 'react-icons/io5'
 import Loading from '../../../components/Loading'
 import UserCardContainer from '../../../components/Admin/UserCardContainer'
 import UserTables from '../../../components/Admin/UserTables'
+import Pagination from '../../../components/Admin/Pagination'
 
 const AdminPage1 = () => {
   const navigate = useNavigate()
@@ -18,6 +19,8 @@ const AdminPage1 = () => {
   const [searchBy, setSearchBy] = useState('')
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const usersPerPage = 10
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -35,6 +38,9 @@ const AdminPage1 = () => {
   const queryParams = {
     searchBy: searchBy,
     search: debouncedSearch,
+    limit: currentPage === 1 ? usersPerPage - 1 : usersPerPage,
+    page: currentPage,
+    sort: 'createdAt',
   }
 
   const {
@@ -48,12 +54,24 @@ const AdminPage1 = () => {
     staleTime: 2000,
   })
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page)
+  }
+
   function handleViewModeChange() {
     setViewMode((prev) => (prev === 'tables' ? 'cards' : 'tables'))
   }
 
+  // Calculate total pages dynamically
+  const totalPages = Math.ceil(users?.data.totalCount / usersPerPage)
+
+  // Get current users
+  const indexOfLastUser = currentPage * usersPerPage
+  const indexOfFirstUser = indexOfLastUser - usersPerPage
+  const currentUsers = users?.data?.users.slice(indexOfFirstUser, indexOfLastUser)
+
   return (
-    <div className='h-full flex flex-col'>
+    <div className='h-full flex flex-col '>
       <div className='h-20 '>
         <div className='h-20 flex justify-between gap-4'>
           <div className='w-full py-5'>
@@ -103,15 +121,26 @@ const AdminPage1 = () => {
       {isError && <div>{error.message}</div>}
       {isPending && <Loading message={'Getting User'} />}
       {!isError && !isPending && (
-        <div className='h-full'>
-          {viewMode === 'tables' ? (
-            //  TABLE DISPLAY
-            <UserTables users={users?.data || []} />
-          ) : (
-            //  CARD DISPLAY
-            <UserCardContainer data={users?.data || []} />
-          )}
-        </div>
+        <>
+          <div className='h-full overflow-hidden '>
+            {viewMode === 'tables' ? (
+              //  TABLE DISPLAY
+              <UserTables users={users?.data?.users || []} />
+            ) : (
+              //  CARD DISPLAY
+              <UserCardContainer
+                currentPage={currentPage}
+                data={users?.data?.users || []}
+              />
+            )}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       )}
     </div>
   )

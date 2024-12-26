@@ -3,7 +3,14 @@ const userService = require("../services/userService");
 
 const getAllUsers = asyncHandler(async (req, res) => {
   const users = await userService.findAllUsers(req);
-  res.status(200).json({ success: true, data: users });
+  res.status(200).json({
+    success: true,
+    data: {
+      totalCount: users.totalCount,
+      dataCount: users.users.length,
+      users: users.users,
+    },
+  });
 });
 
 const updateUser = asyncHandler(async (req, res, next) => {
