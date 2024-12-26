@@ -38,7 +38,8 @@ const AdminPage1 = () => {
   const queryParams = {
     searchBy: searchBy,
     search: debouncedSearch,
-    limit: currentPage === 1 ? usersPerPage - 1 : usersPerPage,
+    limit:
+      currentPage === 1 && viewMode === 'cards' ? usersPerPage - 1 : usersPerPage,
     page: currentPage,
     sort: 'createdAt',
   }
