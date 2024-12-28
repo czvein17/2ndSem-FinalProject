@@ -18,7 +18,8 @@
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
     "mongoose": "^8.8.4",
-    "openai": "^4.76.3"
+    "openai": "^4.76.3",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

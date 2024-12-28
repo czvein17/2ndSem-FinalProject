@@ -8,6 +8,7 @@ const signinRoutes = require("./routes/signinRoutes");
 const signupRoutes = require("./routes/signupRoutes");
 const userRoutes = require("./routes/userRoutes");
 const chatBotRoutes = require("./routes/chatBotRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 app.use(
   cors({
@@ -35,6 +36,7 @@ app.use("/api/v1/signin", signinRoutes);
 app.use("/api/v1/signup", signupRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/chat", chatBotRoutes);
+app.use("/api/v1/products", productRoutes);
 
 app.use(errorHandler);
 

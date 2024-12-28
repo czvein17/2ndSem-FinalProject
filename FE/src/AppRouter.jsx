@@ -13,6 +13,7 @@ import AdminChatBot from './page/AdminPage/subPage/AdminChatBot'
 import UserPage from './page/User/UserPage'
 import { ManageUserLayout } from './layout/Admin/ManageUserLayout'
 import { CreateNewUser } from './page/AdminPage/subPage/CreateNewUser'
+import HomeAdminPage from './page/AdminPage/subPage/HomeAdminPage'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -26,7 +27,7 @@ const AppRouter = () => {
         <>
           <Route element={<PrivateRoute roles={['admin']} />}>
             <Route path='/admin' element={<AdminPage />}>
-              <Route index element={<>HOME</>} />
+              <Route index element={<HomeAdminPage />} />
               <Route path='/admin/manage-users' element={<ManageUserLayout />}>
                 <Route index element={<MangeUserPage />} />
                 <Route
