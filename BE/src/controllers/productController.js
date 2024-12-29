@@ -12,7 +12,6 @@ const findAllProducts = asyncHandler(async (req, res) => {
 
 const recomendProductsByMood = asyncHandler(async (req, res) => {
   const { mood } = req.body;
-  console.log(req.body);
   const suggestion = await productService.recomendProductsByMood(mood);
 
   const products = await productService.findProductsByNames(
@@ -37,4 +36,13 @@ const recomendProductsByMood = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { findAllProducts, recomendProductsByMood };
+const getProductById = asyncHandler(async (req, res) => {
+  const product = await productService.getProductById(req.params.id);
+  res.json({
+    c: 200,
+    m: null,
+    d: product,
+  });
+});
+
+module.exports = { findAllProducts, recomendProductsByMood, getProductById };

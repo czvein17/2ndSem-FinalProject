@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Typewriter from 'typewriter-effect'
 
+import { marked } from 'marked'
+
 import { LuSend } from 'react-icons/lu'
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import { IoCreateOutline } from 'react-icons/io5'
@@ -33,7 +35,7 @@ const AdminChatBot = () => {
     mutationFn: sendChatToBot,
     onSuccess: (data) => {
       const botMessage = {
-        role: 'bot',
+        role: 'assistant',
         content: data.message.choices[0].message.content,
         coversationId: data.conversationId,
       }
@@ -222,7 +224,7 @@ const AdminChatBot = () => {
             </div>
           )}
 
-          {messages.map((message, index) => (
+          {/* {messages.map((message, index) => (
             <div
               key={index}
               className={` flex ${
@@ -230,7 +232,7 @@ const AdminChatBot = () => {
               }`}
             >
               <div
-                className={`p-4 my-2  max-w-[90%] md:max-w-[70%] text-sm
+                className={`px-4 py-2 my-2  max-w-[90%] md:max-w-[70%] text-sm
                           ${
                             message.role === 'user'
                               ? 'bg-accent text-white rounded-s-2xl rounded-br-none rounded-tr-2xl'
@@ -254,7 +256,44 @@ const AdminChatBot = () => {
                     }}
                   />
                 ) : (
-                  formatMessageContent(message.content)
+                  // formatMessageContent(message.content)
+                  <div
+                    className='message-content'
+                    dangerouslySetInnerHTML={{
+                      __html: marked.parse(message.content),
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          ))} */}
+
+          {messages.map((message, index) => (
+            <div
+              key={index}
+              className={`flex ${
+                message.role === 'user' ? 'justify-end' : 'justify-start'
+              }`}
+            >
+              <div
+                className={`px-4 py-2 my-2 max-w-[90%] md:max-w-[70%] text-sm flex justify-center items-center 
+                        ${
+                          message.role === 'user'
+                            ? 'bg-accent text-white rounded-s-2xl rounded-br-none rounded-tr-2xl'
+                            : 'bg-[#EEEEEE] text-[#656565] rounded-e-2xl rounded-tl-2xl rounded-bl-none'
+                        }`}
+              >
+                {console.log(message.role)}
+                {message.role === 'assistant' ? (
+                  <div
+                    className='message-content mx-auto my-auto flex flex-col'
+                    dangerouslySetInnerHTML={{
+                      __html: marked.parse(message.content),
+                    }}
+                  />
+                ) : (
+                  // User message is rendered as plain text (not parsed as HTML)
+                  <div className='text-white'>{message.content.trim()}</div>
                 )}
               </div>
             </div>

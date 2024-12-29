@@ -10,6 +10,8 @@ const userRoutes = require("./routes/userRoutes");
 const chatBotRoutes = require("./routes/chatBotRoutes");
 const productRoutes = require("./routes/productRoutes");
 
+const router = require("./routes/routes");
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -32,11 +34,13 @@ app.use("/example", (req, res, next) => {
   res.send("Hello from the server hi");
 });
 
-app.use("/api/v1/signin", signinRoutes);
-app.use("/api/v1/signup", signupRoutes);
-app.use("/api/v1/users", userRoutes);
-app.use("/api/v1/chat", chatBotRoutes);
-app.use("/api/v1/products", productRoutes);
+// app.use("/api/v1/signin", signinRoutes);
+// app.use("/api/v1/signup", signupRoutes);
+// app.use("/api/v1/users", userRoutes);
+// app.use("/api/v1/chat", chatBotRoutes);
+// app.use("/api/v1/products", productRoutes);
+
+app.use("/api/v1", router);
 
 app.use(errorHandler);
 

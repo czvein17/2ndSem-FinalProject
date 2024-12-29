@@ -1,13 +1,10 @@
 const Product = require("../models/Product");
 const APIFeatures = require("../utils/apiFeatures");
 const { openai } = require("../config/openai");
-
 const { zodResponseFormat } = require("openai/helpers/zod");
 const { z } = require("zod");
 
 const findAllProducts = async (req) => {
-  console.log(req.query);
-
   const features = new APIFeatures(Product.find(), req.query)
     .filter()
     .search()
@@ -29,8 +26,6 @@ const recomendProductsByMood = async (mood) => {
     .join("\n");
   const fullPrompt = `${prompt} ${options}`;
 
-  console.log(prompt + options);
-
   const responseFormat = z.object({
     data: z.array(
       z.object({
@@ -43,7 +38,8 @@ const recomendProductsByMood = async (mood) => {
   const response = await openai.chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "system", content: fullPrompt }],
-    response_format: zodResponseFormat(responseFormat, "json_schema"),
+    max_tokens: 500,
+    response_format: zodResponseFormat(responseFormat, "coffee-suggestion"),
   });
 
   const suggestion = response.choices[0].message.content.trim();
@@ -57,8 +53,17 @@ const findProductsByNames = async (names) => {
   return products;
 };
 
+const getProductById = async (id) => {
+  const product = await Product.findById(id).populate({
+    path: "reviews",
+    select: "user rating review -product",
+  });
+  return product;
+};
+
 module.exports = {
   findAllProducts,
   recomendProductsByMood,
   findProductsByNames,
+  getProductById,
 };
