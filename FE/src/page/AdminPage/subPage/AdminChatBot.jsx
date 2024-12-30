@@ -15,8 +15,11 @@ import { queryClient } from '../../../API/http'
 import { History } from '../../../components/Admin/Chatbot/History'
 import { Messages } from '../../../components/Admin/Chatbot/Messages'
 import { ChatInputForm } from '../../../components/Admin/Chatbot/ChatInputForm'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const AdminChatBot = () => {
+  const { id } = useParams()
+  const navigate = useNavigate()
   const [currentConversationId, setConversationId] = useState(null)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
@@ -40,6 +43,7 @@ const AdminChatBot = () => {
       setMessages((prevMessages) => [...prevMessages, botMessage])
       setConversationId(data.conversationId)
       queryClient.invalidateQueries(['chatHistory'])
+      navigate(`/admin/chat/${data.conversationId}`)
     },
     onError: (error) => console.error('Error fetching response from bot:', error),
   })
@@ -60,6 +64,7 @@ const AdminChatBot = () => {
       // console.log('Get Conversation by ID', data.conversation)
       setMessages(data.conversation.messages)
       setConversationId(data.conversation._id)
+      navigate(`/admin/chat/${data.conversation._id}`)
     },
     onError: (error) => console.error('Error fetching conversation:', error),
   })
@@ -70,6 +75,7 @@ const AdminChatBot = () => {
       const trimmedDeletedId = deletedConversationId.id.trim()
       if (trimmedDeletedId === currentConversationId) createNewConversation()
       queryClient.invalidateQueries(['chatHistory', 'conversation'])
+      navigate('/admin/chat')
     },
   })
 
@@ -97,11 +103,15 @@ const AdminChatBot = () => {
     setConversationId(null)
   }, [])
 
+  useEffect(() => {
+    if (id) showChatHistory(id)
+  }, [id, showChatHistory])
+
   return (
     <div className='flex gap-3 w-full h-full py-5  flex-col-reverse md:flex-row relative overflow-x-hidden'>
       <div className='h-full w-full flex flex-grow flex-col'>
         <div
-          className='flex-grow overflow-y-auto py-4 custom-scrollbar'
+          className='flex-grow  overflow-y-auto py-4 custom-scrollbar'
           ref={chatContainerRef}
         >
           {messages.length === 0 && (

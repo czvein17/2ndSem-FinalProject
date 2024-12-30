@@ -37,6 +37,8 @@ const AppRouter = () => {
               </Route>
 
               <Route path='/admin/chat' element={<AdminChatBot />} />
+              <Route path='/admin/chat/:id' element={<AdminChatBot />} />
+
               <Route path='/admin/page4' element={<>ADD USER 3</>} />
             </Route>
           </Route>

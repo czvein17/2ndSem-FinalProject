@@ -12,7 +12,7 @@ export const Messages = memo(({ messages }) => {
       {messages.map((message, index) => (
         <div
           key={index}
-          className={`flex gap-2 my-2 ${
+          className={`flex gap-2 my-3 ${
             message.role === 'user'
               ? 'justify-end flex-row-reverse '
               : 'justify-start'
@@ -24,7 +24,7 @@ export const Messages = memo(({ messages }) => {
             className='w-8 h-8 rounded-full mt-auto'
           />
           <div
-            className={`px-4 py-2  max-w-[90%] md:max-w-[70%] text-sm flex justify-center items-center 
+            className={`px-4 py-2 max-w-[80%] md:max-w-[60%] text-sm flex justify-center items-center 
                           ${
                             message.role === 'user'
                               ? 'bg-accent text-white rounded-s-2xl rounded-br-none rounded-tr-2xl ml-auto'

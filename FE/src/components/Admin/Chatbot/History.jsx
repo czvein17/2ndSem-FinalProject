@@ -29,6 +29,11 @@ export const History = React.memo(
       if (mobile) setToggleShow(false)
     }
 
+    const showChatHistory = (id) => {
+      showChat(id)
+      if (mobile) setToggleShow(false)
+    }
+
     return (
       <>
         {!toggleShow && (
@@ -73,7 +78,7 @@ export const History = React.memo(
                       <button
                         type='button'
                         className='text-left whitespace-nowrap overflow-hidden text-ellipsis py-2 pl-2'
-                        onClick={() => showChat(chat._id)}
+                        onClick={() => showChatHistory(chat._id)}
                         title={chat.conversationTitle}
                       >
                         {chat.conversationTitle}
