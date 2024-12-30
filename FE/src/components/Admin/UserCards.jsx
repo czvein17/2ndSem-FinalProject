@@ -14,6 +14,7 @@ import EditUserModalContent from './EditUserModalContent'
 import DeleteModalContent from './DeleteModalContent'
 
 const UserCards = React.memo(({ variants, user }) => {
+  console.log('USER CARDS RENDERING')
   const [dropDown, setDropDown] = useState(null)
   const editRef = useRef()
   const deleteRef = useRef()
@@ -62,7 +63,11 @@ const UserCards = React.memo(({ variants, user }) => {
   return (
     <motion.div
       variants={variants}
-      className='w-full relative bg-secondary rounded-xl h-[450px] lg:h-[350px] shadow-lg flex flex-col'
+      className='w-full relative bg-secondary rounded-xl h-[450px] lg:h-[330px] shadow-lg flex flex-col'
+      whileHover={{
+        scale: 1.02,
+        transition: { type: 'spring', stiffness: 200 },
+      }}
     >
       <button
         className='absolute top-2 right-2'
@@ -120,7 +125,7 @@ const UserCards = React.memo(({ variants, user }) => {
         <img
           src={user.googleProfilePic || DefaultUserImage}
           alt='user'
-          className='w-28 h-28 object-cover rounded-full'
+          className='w-20 h-20 object-cover rounded-full'
         />
 
         <div className='flex flex-col justify-center items-center'>

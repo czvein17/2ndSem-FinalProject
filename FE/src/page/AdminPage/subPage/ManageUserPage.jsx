@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { fetchAllUsers } from '../../../API/userDataReq'
@@ -8,12 +8,14 @@ import { IoIdCardOutline } from 'react-icons/io5'
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { IoSearch } from 'react-icons/io5'
 
-import Loading from '../../../components/Loading'
+import { Loading } from '../../../components/Loading'
 import UserCardContainer from '../../../components/Admin/UserCardContainer'
 import UserTables from '../../../components/Admin/UserTables'
 import Pagination from '../../../components/Admin/Pagination'
+import { useMemo } from 'react'
 
 const AdminPage1 = () => {
+  console.log('MANAGE USER PAGE RENDERING')
   const navigate = useNavigate()
   const [viewMode, setViewMode] = useState('cards')
   const [searchBy, setSearchBy] = useState('')
@@ -35,14 +37,16 @@ const AdminPage1 = () => {
     else setSearchBy('fullname')
   }, [debouncedSearch])
 
-  const queryParams = {
-    searchBy: searchBy,
-    search: debouncedSearch,
-    limit:
-      currentPage === 1 && viewMode === 'cards' ? usersPerPage - 1 : usersPerPage,
-    page: currentPage,
-    sort: 'createdAt',
-  }
+  const queryParams = useMemo(() => {
+    return {
+      searchBy: searchBy,
+      search: debouncedSearch,
+      limit:
+        currentPage === 1 && viewMode === 'cards' ? usersPerPage - 1 : usersPerPage,
+      page: currentPage,
+      sort: 'createdAt',
+    }
+  })
 
   const {
     data: users,
@@ -55,21 +59,25 @@ const AdminPage1 = () => {
     staleTime: 2000,
   })
 
-  const handlePageChange = (page) => {
+  const handlePageChange = useCallback((page) => {
     setCurrentPage(page)
-  }
+  }, [])
 
-  function handleViewModeChange() {
+  const handleViewModeChange = useCallback(() => {
     setViewMode((prev) => (prev === 'tables' ? 'cards' : 'tables'))
-  }
+  }, [])
 
   // Calculate total pages dynamically
-  const totalPages = Math.ceil(users?.data.totalCount / usersPerPage)
+  const totalPages = useMemo(() => {
+    return Math.ceil(users?.data.totalCount / usersPerPage)
+  }, [users, usersPerPage])
 
   // Get current users
-  const indexOfLastUser = currentPage * usersPerPage
-  const indexOfFirstUser = indexOfLastUser - usersPerPage
-  const currentUsers = users?.data?.users.slice(indexOfFirstUser, indexOfLastUser)
+  const currentUsers = useMemo(() => {
+    const indexOfLastUser = currentPage * usersPerPage
+    const indexOfFirstUser = indexOfLastUser - usersPerPage
+    return users?.data?.users.slice(indexOfFirstUser, indexOfLastUser)
+  }, [users, currentPage, usersPerPage])
 
   return (
     <div className='h-full flex flex-col '>
@@ -126,12 +134,13 @@ const AdminPage1 = () => {
           <div className='h-full overflow-hidden '>
             {viewMode === 'tables' ? (
               //  TABLE DISPLAY
-              <UserTables users={users?.data?.users || []} />
+              <UserTables users={users?.data?.users} />
             ) : (
               //  CARD DISPLAY
               <UserCardContainer
                 currentPage={currentPage}
-                data={users?.data?.users || []}
+                data={users?.data?.users}
+                search={debouncedSearch}
               />
             )}
           </div>

@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/prop-types
-const Loading = ({ message }) => {
+export const Loading = ({ message }) => {
   return (
     <div className='w-full h-full flex flex-col gap-2 justify-center items-center  '>
       <div className='flex flex-row gap-2'>
@@ -11,5 +11,3 @@ const Loading = ({ message }) => {
     </div>
   )
 }
-
-export default Loading

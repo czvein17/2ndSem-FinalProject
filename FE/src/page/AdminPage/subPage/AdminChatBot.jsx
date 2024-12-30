@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Typewriter from 'typewriter-effect'
 
 import UnderConstruction from '../../../assets/images/under-construction.svg'
 
+import { queryClient } from '../../../API/http'
 import {
   sendChatToBot,
   getChatHistory,
   getConversationById,
   deleteConversationById,
 } from '../../../API/chat'
-import { queryClient } from '../../../API/http'
 
 import { History } from '../../../components/Admin/Chatbot/History'
 import { Messages } from '../../../components/Admin/Chatbot/Messages'
 import { ChatInputForm } from '../../../components/Admin/Chatbot/ChatInputForm'
-import { useNavigate, useParams } from 'react-router-dom'
-import Loading from '../../../components/Loading'
+import { Loading } from '../../../components/Loading'
 
 const AdminChatBot = () => {
   const { id } = useParams()
