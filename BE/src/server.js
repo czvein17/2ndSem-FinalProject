@@ -8,7 +8,8 @@ const errorHandler = require("./middlewares/errorHandler");
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: "http://localhost:5501",
     credentials: true,
   })
 );
@@ -31,6 +32,10 @@ app.use("/example", (req, res, next) => {
 });
 
 app.use("/api/v1", router);
+
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../../FE/dist", "index.html"));
+// });
 
 app.use(errorHandler);
 

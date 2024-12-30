@@ -36,3 +36,4 @@ coverage/
 
 # Ignore specific files and directories
 # Add any other files or directories you want to ignore here
+.vercel
