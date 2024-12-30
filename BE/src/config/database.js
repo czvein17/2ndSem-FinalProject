@@ -29,7 +29,7 @@ const connectDB = async () => {
       break;
   }
 
-  console.log(`mongoDB connected: ${conn.connection.host}`);
+  // console.log(`mongoDB connected: ${conn.connection.host}`);
 
   return conn;
 };

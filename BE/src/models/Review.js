@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { path } = require("../server");
 
 const ReviewSchema = new mongoose.Schema({
   user: {

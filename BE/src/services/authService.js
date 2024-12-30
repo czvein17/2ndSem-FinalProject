@@ -14,7 +14,6 @@ const loginEmailAndPassword = async (email, password) => {
 };
 
 const loginViaGoogle = async (req) => {
-  console.log(req.body);
   let user;
 
   const firstName = req.body?.userInfo?.given_name;

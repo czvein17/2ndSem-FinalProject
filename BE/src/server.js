@@ -1,16 +1,10 @@
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
 const app = express();
 
-const errorHandler = require("./middlewares/errorHandler");
-
-const signinRoutes = require("./routes/signinRoutes");
-const signupRoutes = require("./routes/signupRoutes");
-const userRoutes = require("./routes/userRoutes");
-const chatBotRoutes = require("./routes/chatBotRoutes");
-const productRoutes = require("./routes/productRoutes");
-
 const router = require("./routes/routes");
+const errorHandler = require("./middlewares/errorHandler");
 
 app.use(
   cors({
@@ -30,15 +24,11 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
+
 app.use("/example", (req, res, next) => {
   res.send("Hello from the server hi");
 });
-
-// app.use("/api/v1/signin", signinRoutes);
-// app.use("/api/v1/signup", signupRoutes);
-// app.use("/api/v1/users", userRoutes);
-// app.use("/api/v1/chat", chatBotRoutes);
-// app.use("/api/v1/products", productRoutes);
 
 app.use("/api/v1", router);
 
