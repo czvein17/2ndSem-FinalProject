@@ -1,12 +1,24 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect } from 'react'
 import { marked } from 'marked'
 import { useAuth } from '../../../hooks/useAuth'
 import ChatBot from '../../../assets/images/chatbot.jpg'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github-dark.css' //
 
 export const Messages = memo(({ messages }) => {
   console.log('Messages Rendered')
   const { user } = useAuth()
   const userPhoto = user?.googleProfilePic || user?.profilePic
+
+  useEffect(() => {
+    // Highlight the code after the component mounts and the content is rendered
+    const codeBlocks = document.querySelectorAll('pre code')
+    codeBlocks.forEach((block) => {
+      hljs.highlightElement(block)
+    })
+    console.log(messages.content)
+  }, [messages])
+
   return (
     <>
       {messages.map((message, index) => (
@@ -23,6 +35,7 @@ export const Messages = memo(({ messages }) => {
             alt='User Photo'
             className='w-8 h-8 rounded-full mt-auto'
           />
+
           <div
             className={`px-4 py-2 max-w-[80%] md:max-w-[60%] text-sm flex justify-center items-center 
                           ${
@@ -36,7 +49,7 @@ export const Messages = memo(({ messages }) => {
               <div
                 className={`message-content mx-auto my-auto flex flex-col`}
                 dangerouslySetInnerHTML={{
-                  __html: marked.parse(message.content),
+                  __html: marked(message.content),
                 }}
               />
             ) : (
