@@ -1,14 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Typewriter from 'typewriter-effect'
-import { marked } from 'marked'
 
-import { LuSend } from 'react-icons/lu'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import UnderConstruction from '../../../assets/images/under-construction.svg'
-import ChatBot from '../../../assets/images/chatbot.jpg'
 
-import { useAuth } from '../../../hooks/useAuth'
 import {
   sendChatToBot,
   getChatHistory,
@@ -18,15 +13,14 @@ import {
 import { queryClient } from '../../../API/http'
 
 import { History } from '../../../components/Admin/Chatbot/History'
+import { Messages } from '../../../components/Admin/Chatbot/Messages'
+import { ChatInputForm } from '../../../components/Admin/Chatbot/ChatInputForm'
 
 const AdminChatBot = () => {
-  const { user } = useAuth()
   const [currentConversationId, setConversationId] = useState(null)
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const chatContainerRef = useRef(null)
-
-  const userPhoto = user?.googleProfilePic || user?.profilePic
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -104,10 +98,10 @@ const AdminChatBot = () => {
   }, [])
 
   return (
-    <div className='flex gap-3 w-full h-full py-5'>
+    <div className='flex gap-3 w-full h-full py-5  flex-col-reverse md:flex-row relative overflow-x-hidden'>
       <div className='h-full w-full flex flex-grow flex-col'>
         <div
-          className='flex-grow  overflow-y-auto p-4 custom-scrollbar'
+          className='flex-grow overflow-y-auto py-4 custom-scrollbar'
           ref={chatContainerRef}
         >
           {messages.length === 0 && (
@@ -172,67 +166,15 @@ const AdminChatBot = () => {
             </div>
           ))} */}
 
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`flex gap-2 my-2 ${
-                message.role === 'user'
-                  ? 'justify-end flex-row-reverse '
-                  : 'justify-start'
-              }`}
-            >
-              <img
-                src={`${message.role === 'user' ? userPhoto : ChatBot}`}
-                alt='User Photo'
-                className='w-8 h-8 rounded-full mt-auto'
-              />
-              <div
-                className={`px-4 py-2  max-w-[90%] md:max-w-[70%] text-sm flex justify-center items-center 
-                        ${
-                          message.role === 'user'
-                            ? 'bg-accent text-white rounded-s-2xl rounded-br-none rounded-tr-2xl ml-auto'
-                            : 'bg-[#EEEEEE] text-[#656565] rounded-e-2xl rounded-tl-2xl rounded-bl-none'
-                        }`}
-              >
-                {/* {console.log(message.role)} */}
-                {message.role === 'assistant' ? (
-                  <div
-                    className={`message-content mx-auto my-auto flex flex-col`}
-                    dangerouslySetInnerHTML={{
-                      __html: marked.parse(message.content),
-                    }}
-                  />
-                ) : (
-                  // User message is rendered as plain text (not parsed as HTML)
-                  <div className='text-white'>{message.content.trim()}</div>
-                )}
-              </div>
-            </div>
-          ))}
+          <Messages messages={messages} />
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className='flex gap-5 bg-secondary py-2 px-4  rounded-xl justify-center items-center'
-        >
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder='Type your message...'
-            className='w-full bg-transparent outline-none py-2 text-sm overflow-hidden resize-none '
-          />
-          <button type='submit' className='bg-accent p-3 rounded-lg'>
-            <span className='text-white flex justify-center items-center gap-2'>
-              {isSendingMessage ? (
-                <span className='text-white animate-spin'>
-                  <AiOutlineLoading3Quarters size={20} />
-                </span>
-              ) : (
-                <LuSend size={20} />
-              )}
-            </span>
-          </button>
-        </form>
+        <ChatInputForm
+          handleSubmit={handleSubmit}
+          value={input}
+          setValue={setInput}
+          isSending={isSendingMessage}
+        />
       </div>
 
       <History
