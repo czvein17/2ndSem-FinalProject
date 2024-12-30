@@ -16,6 +16,7 @@ const getSignedToken = async (user, res) => {
     httpOnly: false,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
+    domain: ".czveinlei.systems",
   };
 
   if (process.env.NODE_ENV === "production") cookieOption.secure = true;
