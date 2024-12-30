@@ -6,10 +6,17 @@ const app = express();
 const router = require("./routes/routes");
 const errorHandler = require("./middlewares/errorHandler");
 
+// app.use(
+//   cors({
+//     // origin: "http://localhost:5173",
+//     origin: process.env.CORS_ORIGIN,
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    // origin: "http://localhost:5173",
-    origin: process.env.CORS_ORIGIN,
+    origin: true,
     credentials: true,
   })
 );
