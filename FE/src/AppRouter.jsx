@@ -14,6 +14,7 @@ import UserPage from './page/User/UserPage'
 import { ManageUserLayout } from './layout/Admin/ManageUserLayout'
 import { CreateNewUser } from './page/AdminPage/subPage/CreateNewUser'
 import HomeAdminPage from './page/AdminPage/subPage/HomeAdminPage'
+import { NotFound404 } from './components/NotFound404'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -49,7 +50,7 @@ const AppRouter = () => {
         </>
       )}
 
-      <Route path='*' element={<>404 NOT FOUND</>} />
+      <Route path='*' element={<NotFound404 />} />
     </Routes>
   )
 }
