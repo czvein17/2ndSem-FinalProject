@@ -9,7 +9,7 @@ const errorHandler = require("./middlewares/errorHandler");
 app.use(
   cors({
     // origin: "http://localhost:5173",
-    origin: "http://localhost:5501",
+    origin: process.env.CORS_ORIGIN,
     credentials: true,
   })
 );
