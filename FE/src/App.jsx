@@ -7,6 +7,7 @@ import { AuthProvider } from './context/authContext'
 import { useEffect } from 'react'
 
 function App() {
+  console.log('IM AM ON VERCEl')
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
