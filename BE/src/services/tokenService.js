@@ -16,7 +16,13 @@ const getSignedToken = async (user, res) => {
     httpOnly: false,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
-    domain: ".czveinlei.systems",
+    domain:
+      process.env.NODE_ENV === "production"
+        ? process.env.CORS_ORIGIN.replace(/^https?:\/\//, "").replace(
+            /^www\./,
+            ""
+          ) // Remove http:// or https:// and www. in production
+        : "", // Use "localhost" for local development
   };
 
   if (process.env.NODE_ENV === "production") cookieOption.secure = true;
