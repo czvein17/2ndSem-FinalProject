@@ -1,9 +1,9 @@
 const chatBotService = require("../services/chatBotService");
 const { asyncHandler } = require("../middlewares/asyncHandler");
+const { formatBytes } = require("../utils/convertByteToReadableFormat");
 const ErrorResponse = require("../utils/ErrorResponse");
 
 const sendChatToBot = asyncHandler(async (req, res, next) => {
-  console.log(req.body);
   const { message, conversationId } = req.body;
   const userId = req.user._id;
   const { response, conversationId: _id } = await chatBotService.chatCompletion(
@@ -11,8 +11,6 @@ const sendChatToBot = asyncHandler(async (req, res, next) => {
     message,
     conversationId
   );
-
-  console.log(response.choices[0].message.content);
 
   res.status(200).json({ conversationId: _id, message: response });
 });
@@ -46,16 +44,6 @@ const getConversationById = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ conversation });
 });
-
-// Utility function to convert bytes to a human-readable format
-const formatBytes = (bytes, decimals = 2) => {
-  if (bytes === 0) return "0 Bytes";
-  const k = 1024;
-  const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-};
 
 const deleteConversationById = asyncHandler(async (req, res, next) => {
   const conversationId = req.params.id;

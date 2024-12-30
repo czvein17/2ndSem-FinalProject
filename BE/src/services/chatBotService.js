@@ -4,10 +4,6 @@ const Conversation = require("../models/Conversation");
 const chatCompletion = async (userId, message, conversationId = null) => {
   let conversation;
 
-  console.log("userId", userId);
-  console.log("conversationId", conversationId);
-  console.log("message", message);
-
   // Find the conversation by ID
   if (conversationId)
     conversation = await Conversation.findById({ _id: conversationId });

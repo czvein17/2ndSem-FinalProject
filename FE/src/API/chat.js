@@ -14,7 +14,6 @@ export const getConversationById = async (id) => {
   const response = await http.get(`/chat/${id}`)
   return response.data
 }
-
 export const deleteConversationById = async (id) => {
   const response = await http.delete(`/chat/${id}`)
   return response.data

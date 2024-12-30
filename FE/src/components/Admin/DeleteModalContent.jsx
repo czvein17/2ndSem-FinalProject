@@ -1,14 +1,12 @@
 import React, { useRef } from 'react'
 import ModalWrapper from '../ModalWrapper'
 
-const DeleteModalContent = ({ user, onClose, onDelete }) => {
+const DeleteModalContent = ({ message, onClose, onDelete }) => {
   return (
     <div className='w-[300px] flex flex-col gap-5 items-center justify-center '>
       <p className='text-center text-lg  w-[80%]'>
         Are you sure you want to delete{' '}
-        <span className='font-medium'>
-          {user.firstName} {user.middleName} {user.lastName}
-        </span>
+        <span className='font-medium'>{message}</span>
       </p>
 
       <div className='flex gap-3'>

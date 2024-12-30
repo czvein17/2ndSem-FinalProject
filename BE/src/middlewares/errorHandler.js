@@ -33,6 +33,7 @@ const sendErrorDev = (err, req, res) => {
 };
 
 const sendErrorProd = (err, res) => {
+  console.log(err);
   if (err.isOperational) {
     return res.status(err.statusCode).json({
       status: err.status,
@@ -56,9 +57,10 @@ module.exports = (err, req, res, next) => {
   }
 
   if (process.env.NODE_ENV === "production") {
+    // if (err instanceof ErrorResponse) err.isOperational = true;
     if (err.name === "CastError") err = handleCastErrorDB(err);
     if (err.code === 11000) err = handleDuplicateFieldsDB(err);
-    if (err.name === "ValidationError") err = handleValidatioNErrorDB(err);
+    if (err.name === "ValidationError") err = handleDuplicateFieldsDB(err);
     if (err.name === "JsonWebTokenError") err = handleJWTError();
     if (err.name === "TokenExpiredError") err = handleJWTExpiredError();
 

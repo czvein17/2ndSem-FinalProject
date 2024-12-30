@@ -16,6 +16,7 @@ import { History } from '../../../components/Admin/Chatbot/History'
 import { Messages } from '../../../components/Admin/Chatbot/Messages'
 import { ChatInputForm } from '../../../components/Admin/Chatbot/ChatInputForm'
 import { useNavigate, useParams } from 'react-router-dom'
+import Loading from '../../../components/Loading'
 
 const AdminChatBot = () => {
   const { id } = useParams()
@@ -24,12 +25,6 @@ const AdminChatBot = () => {
   const [messages, setMessages] = useState([])
   const [input, setInput] = useState('')
   const chatContainerRef = useRef(null)
-
-  useEffect(() => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
-    }
-  }, [messages])
 
   // Send message to bot
   const { mutate: sendMessage, isPending: isSendingMessage } = useMutation({
@@ -57,16 +52,18 @@ const AdminChatBot = () => {
   })
 
   // Fetch conversation by ID and Update the messages state
-  const { mutate: showChatHistory } = useMutation({
+  const { mutate: showChatHistory, isPending: isHistoryLoading } = useMutation({
     queryKey: ['conversation'],
     mutationFn: getConversationById,
     onSuccess: (data) => {
-      // console.log('Get Conversation by ID', data.conversation)
       setMessages(data.conversation.messages)
       setConversationId(data.conversation._id)
       navigate(`/admin/chat/${data.conversation._id}`)
     },
-    onError: (error) => console.error('Error fetching conversation:', error),
+    onError: (error) => {
+      navigate('/admin/chat')
+      console.error('Error fetching conversation:', error)
+    },
   })
 
   const { mutate: deleteConversation } = useMutation({
@@ -79,29 +76,39 @@ const AdminChatBot = () => {
     },
   })
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    if (isSendingMessage) return
-    if (!input.trim()) return
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault()
+      if (isSendingMessage) return
+      if (!input.trim()) return
 
-    const userMessage = {
-      role: 'user',
-      content: input,
-    }
-    setMessages((prevMessages) => [...prevMessages, userMessage])
-    setInput('')
+      const userMessage = {
+        role: 'user',
+        content: input,
+      }
+      setMessages((prevMessages) => [...prevMessages, userMessage])
+      setInput('')
 
-    console.log(currentConversationId)
-    sendMessage({
-      message: input,
-      conversationId: currentConversationId,
-    })
-  }
+      console.log(currentConversationId)
+      sendMessage({
+        message: input,
+        conversationId: currentConversationId,
+      })
+    },
+    [input, sendMessage, currentConversationId, isSendingMessage],
+  )
 
   const createNewConversation = useCallback(() => {
+    navigate('/admin/chat')
     setMessages([])
     setConversationId(null)
-  }, [])
+  }, [navigate])
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }, [messages])
 
   useEffect(() => {
     if (id) showChatHistory(id)
@@ -114,7 +121,9 @@ const AdminChatBot = () => {
           className='flex-grow  overflow-y-auto py-4 custom-scrollbar'
           ref={chatContainerRef}
         >
-          {messages.length === 0 && (
+          {isHistoryLoading && <Loading />}
+
+          {!isHistoryLoading && messages.length === 0 && (
             <div className='h-full flex flex-col justify-center items-center p-4  rounded-lg'>
               <img
                 src={UnderConstruction}
@@ -131,6 +140,8 @@ const AdminChatBot = () => {
               </p>
             </div>
           )}
+
+          <Messages messages={messages} />
 
           {/* {messages.map((message, index) => (
             <div
@@ -175,8 +186,6 @@ const AdminChatBot = () => {
               </div>
             </div>
           ))} */}
-
-          <Messages messages={messages} />
         </div>
 
         <ChatInputForm

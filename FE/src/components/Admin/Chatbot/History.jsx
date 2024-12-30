@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { IoCreateOutline } from 'react-icons/io5'
 import { MdDeleteOutline } from 'react-icons/md'
 import { FiSidebar } from 'react-icons/fi'
+import ModalWrapper from '../../ModalWrapper'
+import DeleteModalContent from '../DeleteModalContent'
 
 export const History = React.memo(
   ({ chatHistory, showChat, createNew, deleteChat }) => {
     console.log('chatHistory Rendered')
+    const deleteRef = useRef(null)
     const [toggleShow, setToggleShow] = useState(false)
     const [mobile, setMobile] = useState(false)
 
@@ -86,11 +89,21 @@ export const History = React.memo(
                       <button
                         type='button'
                         className='hover:text-red-500 hover:bg-secondary p-1 m-1 rounded-md'
-                        onClick={() => deleteChat(chat._id)}
+                        onClick={() => deleteRef.current.openModal()}
                         title='Delete'
                       >
                         <MdDeleteOutline size={20} />
                       </button>
+
+                      <ModalWrapper ref={deleteRef}>
+                        <DeleteModalContent
+                          message={chat.conversationTitle}
+                          onClose={() => {
+                            deleteRef.current.closeModal()
+                          }}
+                          onDelete={() => deleteChat(chat._id)}
+                        />
+                      </ModalWrapper>
                     </li>
                   ))}
                 </ul>
