@@ -73,3 +73,29 @@
 .message-content:last-child {
   margin-bottom: 0;
 }
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.typewriter {
+  overflow: hidden;
+  border-right: 0.15em solid orange; /* Adjust the color as needed */
+  white-space: nowrap;
+  margin: 0 auto;
+  letter-spacing: 0.15em;
+  animation:
+    typewriter 4s steps(40, end),
+    blink 0.75s step-end infinite;
+}
