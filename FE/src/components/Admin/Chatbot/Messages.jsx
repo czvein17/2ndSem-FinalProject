@@ -3,7 +3,14 @@ import { marked } from 'marked'
 import { useAuth } from '../../../hooks/useAuth'
 import ChatBot from '../../../assets/images/chatbot.jpg'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/github-dark.css' //
+import 'highlight.js/styles/atom-one-dark.css'
+
+marked.setOptions({
+  highlight: function (code, lang) {
+    const language = hljs.getLanguage(lang) ? lang : 'plaintext'
+    return hljs.highlight(code, { language }).value
+  },
+})
 
 export const Messages = memo(({ messages }) => {
   console.log('Messages Rendered')
@@ -16,7 +23,6 @@ export const Messages = memo(({ messages }) => {
     codeBlocks.forEach((block) => {
       hljs.highlightElement(block)
     })
-    console.log(messages.content)
   }, [messages])
 
   return (
