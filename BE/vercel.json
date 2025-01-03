@@ -8,6 +8,9 @@
         "functions": {
           "controllers/*.js": {
             "maxDuration": 60
+          },
+          "src/**/*.js": {
+            "maxDuration": 60
           }
         }
       }
