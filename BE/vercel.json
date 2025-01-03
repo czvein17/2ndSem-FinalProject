@@ -9,7 +9,7 @@
           "controllers/*.js": {
             "maxDuration": 60
           },
-          "src/**/*.js": {
+          "src/index.js": {
             "maxDuration": 60
           }
         }
