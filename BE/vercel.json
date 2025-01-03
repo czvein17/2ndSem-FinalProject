@@ -1,9 +1,9 @@
 {
   "version": 2,
   "functions": {
-    "api/**/*.js": {
+    "src/**/*.js": {
       "maxDuration": 30
     }
   },
-  "routes": [{ "src": "/(.*)", "dest": "api/index.js" }]
+  "routes": [{ "src": "/(.*)", "dest": "src/index.js" }]
 }
