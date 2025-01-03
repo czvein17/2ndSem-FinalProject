@@ -3,7 +3,7 @@
   "builds": [{ "src": "src/index.js", "use": "@vercel/node" }],
   "routes": [{ "src": "/(.*)", "dest": "src/index.js" }],
   "functions": {
-    "src/index.js": {
+    "index.js": {
       "maxDuration": 20
     }
   }
