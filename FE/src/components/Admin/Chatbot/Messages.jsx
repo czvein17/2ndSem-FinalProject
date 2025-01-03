@@ -1,9 +1,10 @@
 import React, { memo, useEffect } from 'react'
 import { marked } from 'marked'
-import { useAuth } from '../../../hooks/useAuth'
-import ChatBot from '../../../assets/images/chatbot.jpg'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
+
+import { useAuth } from '../../../hooks/useAuth'
+import ChatBot from '../../../assets/images/chatbot.jpg'
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -39,7 +40,7 @@ export const Messages = memo(({ messages }) => {
           <img
             src={`${message.role === 'user' ? userPhoto : ChatBot}`}
             alt='User Photo'
-            className='w-8 h-8 rounded-full mt-auto'
+            className='w-8 h-8 mt-auto rounded-full '
           />
 
           <div
@@ -53,7 +54,7 @@ export const Messages = memo(({ messages }) => {
             {/* {console.log(message.role)} */}
             {message.role === 'assistant' ? (
               <div
-                className={`message-content mx-auto my-auto flex flex-col`}
+                className='flex flex-col mx-auto my-auto message-content'
                 dangerouslySetInnerHTML={{
                   __html: marked(message.content),
                 }}
@@ -63,6 +64,7 @@ export const Messages = memo(({ messages }) => {
               <div className='text-white'>{message.content.trim()}</div>
             )}
           </div>
+          <div className='flex items-center gap-4 text-red-100 bg-red-500'></div>
         </div>
       ))}
     </>

@@ -54,6 +54,8 @@ const chatCompletion = async (userId, message, conversationId = null) => {
     messages,
   });
 
+  // console.log(response.choices[0].message.content);
+
   // Add the assistant's response to the conversation history
   const botMessage = {
     role: "assistant",

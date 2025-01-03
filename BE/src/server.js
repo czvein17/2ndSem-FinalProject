@@ -15,6 +15,10 @@ const errorHandler = require("./middlewares/errorHandler");
 //   })
 // );
 
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(
   cors({
     origin: true,
@@ -28,10 +32,6 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
-
-app.use(express.static("public"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 

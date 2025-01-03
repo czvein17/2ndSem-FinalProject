@@ -4,7 +4,6 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './API/http'
 import AppRouter from './AppRouter'
 import { AuthProvider } from './context/authContext'
-import { useEffect } from 'react'
 
 function App() {
   console.log('IM AM ON VERCEl')
