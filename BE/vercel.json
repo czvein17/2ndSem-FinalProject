@@ -7,7 +7,7 @@
     }
   ],
   "functions": {
-    "api/**/*.js": {
+    "src/**/*.js": {
       "maxDuration": 30
     }
   },
