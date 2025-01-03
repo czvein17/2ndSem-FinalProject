@@ -36,23 +36,6 @@ app.use((req, res, next) => {
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
-// Add a middleware to handle timeouts
-app.use((req, res, next) => {
-  console.log("Request received");
-  const timeout = setTimeout(() => {
-    Console.log("Request timed out");
-    if (!res.headersSent) {
-      res.status(504).json({ error: "Request timed out" });
-    }
-  }, 5000); // 5 seconds
-
-  res.on("finish", () => {
-    clearTimeout(timeout);
-  });
-
-  next();
-});
-
 app.use("/example", (req, res, next) => {
   res.send("Hello from the server hi");
 });
