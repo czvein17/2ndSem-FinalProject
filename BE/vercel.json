@@ -4,7 +4,7 @@
   "routes": [{ "src": "/(.*)", "dest": "src/index.js" }],
   "functions": {
     "src/index.js": {
-      "maxDuration": 60
+      "maxDuration": 20
     }
   }
 }
