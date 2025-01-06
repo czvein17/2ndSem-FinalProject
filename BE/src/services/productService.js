@@ -20,7 +20,7 @@ const findAllProducts = async (req) => {
 const recomendProductsByMood = async (mood) => {
   const coffees = await Product.find();
 
-  const prompt = `Based on the mood '${mood}', suggest a 5 coffees from the following options:\n\n`;
+  const prompt = `Based on the mood '${mood}', suggest a 3 coffees from the following options:\n\n`;
   const options = coffees
     .map((coffee) => `- ${coffee.name}: ${coffee.moodTags.join(", ")}`)
     .join("\n");
@@ -41,6 +41,8 @@ const recomendProductsByMood = async (mood) => {
     max_tokens: 500,
     response_format: zodResponseFormat(responseFormat, "coffee-suggestion"),
   });
+
+  console.log(response.choices[0].message);
 
   const suggestion = response.choices[0].message.content.trim();
   const parsedSuggestions = JSON.parse(suggestion);

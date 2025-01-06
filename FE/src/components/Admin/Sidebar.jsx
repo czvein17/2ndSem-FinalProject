@@ -25,8 +25,8 @@ const Sidebar = () => {
       icon: <IoChatbubblesOutline size={20} />,
     },
     {
-      path: '/admin/page4',
-      name: 'Page 4',
+      path: '/admin/recommend',
+      name: 'Recommendation',
       icon: <RxDashboard size={20} />,
     },
   ]

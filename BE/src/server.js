@@ -20,9 +20,16 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.use(
+//   cors({
+//     origin: true,
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: true,
+    origin: "http://localhost:5173", // Allow requests from this origin
     credentials: true,
   })
 );
@@ -31,6 +38,7 @@ app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
   res.header("Access-Control-Allow-Credentials", "true");
+
   next();
 });
 

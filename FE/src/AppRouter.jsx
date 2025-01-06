@@ -15,6 +15,7 @@ import { ManageUserLayout } from './layout/Admin/ManageUserLayout'
 import { CreateNewUser } from './page/AdminPage/subPage/CreateNewUser'
 import HomeAdminPage from './page/AdminPage/subPage/HomeAdminPage'
 import { NotFound404 } from './components/NotFound404'
+import { RecomendProduct } from './page/AdminPage/subPage/RecomendProduct'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -39,6 +40,8 @@ const AppRouter = () => {
 
               <Route path='/admin/chat' element={<AdminChatBot />} />
               <Route path='/admin/chat/:id' element={<AdminChatBot />} />
+
+              <Route path='/admin/recommend' element={<RecomendProduct />} />
 
               <Route path='/admin/page4' element={<>ADD USER 3</>} />
             </Route>

@@ -1,5 +1,5 @@
 // Utility function to convert bytes to a human-readable format
-export const formatBytes = (bytes, decimals = 2) => {
+const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return "0 Bytes";
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
@@ -7,3 +7,5 @@ export const formatBytes = (bytes, decimals = 2) => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
 };
+
+module.exports = { formatBytes };
