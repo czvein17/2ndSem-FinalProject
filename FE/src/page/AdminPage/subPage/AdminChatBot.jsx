@@ -48,6 +48,7 @@ const AdminChatBot = () => {
     queryKey: ['chatHistory'],
     queryFn: getChatHistory,
     refetchOnWindowFocus: false,
+    onSuccess: () => console.log('Chat history fetched successfully'),
     onError: (error) => console.error('Error fetching chat history:', error),
   })
 
@@ -115,19 +116,19 @@ const AdminChatBot = () => {
   }, [id, showChatHistory])
 
   return (
-    <div className='flex gap-3 w-full h-full py-5  flex-col-reverse md:flex-row relative overflow-x-hidden'>
-      <div className='h-full w-full flex flex-grow flex-col'>
+    <div className='relative flex flex-col-reverse w-full h-full gap-3 py-5 overflow-x-hidden md:flex-row'>
+      <div className='flex flex-col flex-grow w-full h-full'>
         <div
-          className='flex-grow  overflow-y-auto py-4 custom-scrollbar'
+          className='flex-grow py-4 overflow-y-auto custom-scrollbar'
           ref={chatContainerRef}
         >
           {isHistoryLoading && <Loading />}
 
           {!isHistoryLoading && messages.length === 0 && (
-            <div className='h-full flex flex-col justify-center items-center p-4  rounded-lg'>
+            <div className='flex flex-col items-center justify-center h-full p-4 rounded-lg'>
               <img
                 src={UnderConstruction}
-                className='h-20 w-20 '
+                className='w-20 h-20 '
                 alt='under-construction'
               />
               <h1 className='text-lg font-bold text-accent'>
@@ -142,50 +143,6 @@ const AdminChatBot = () => {
           )}
 
           <Messages messages={messages} />
-
-          {/* {messages.map((message, index) => (
-            <div
-              key={index}
-              className={` flex ${
-                message.role === 'user' ? ' justify-end' : 'justify-start'
-              }`}
-            >
-              <div
-                className={`px-4 py-2 my-2  max-w-[90%] md:max-w-[70%] text-sm
-                          ${
-                            message.role === 'user'
-                              ? 'bg-accent text-white rounded-s-2xl rounded-br-none rounded-tr-2xl'
-                              : 'bg-[#EEEEEE] text-[#656565] rounded-e-2xl rounded-tl-2xl rounded-bl-none'
-                          }`}
-              >
-                {message.role === 'bot' ? (
-                  <Typewriter
-                    options={{
-                      autoStart: true,
-                      loop: false,
-                      delay: 10,
-                    }}
-                    onInit={(typewriter) => {
-                      typewriter
-                        .typeString(message.content)
-                        .callFunction(() => {
-                          typewriter.stop()
-                        })
-                        .start()
-                    }}
-                  />
-                ) : (
-                  // formatMessageContent(message.content)
-                  <div
-                    className='message-content'
-                    dangerouslySetInnerHTML={{
-                      __html: marked.parse(message.content),
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-          ))} */}
         </div>
 
         <ChatInputForm
