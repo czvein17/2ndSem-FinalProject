@@ -36,8 +36,8 @@ function createWindow() {
   });
 
   mainWindow.webContents.openDevTools();
-  // mainWindow.loadURL("http://localhost:5173/");
-  mainWindow.loadFile(path.join(__dirname, "../electron/dist/index.html"));
+  mainWindow.loadURL("http://localhost:5173/");
+  // mainWindow.loadFile(path.join(__dirname, "../electron/dist/index.html"));
 
   mainWindow.setMenu(null);
 
