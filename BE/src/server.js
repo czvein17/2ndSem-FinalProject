@@ -6,26 +6,10 @@ const app = express();
 
 const router = require("./routes/routes");
 const errorHandler = require("./middlewares/errorHandler");
-const { Console } = require("console");
 
-// app.use(
-//   cors({
-//     // origin: "http://localhost:5173",
-//     origin: process.env.CORS_ORIGIN,
-//     credentials: true,
-//   })
-// );
-
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// app.use(
-//   cors({
-//     origin: true,
-//     credentials: true,
-//   })
-// );
 
 app.use(
   cors({
@@ -49,11 +33,6 @@ app.use("/example", (req, res, next) => {
 });
 
 app.use("/api/v1", router);
-
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../../FE/dist", "index.html"));
-// });
-
 app.use(errorHandler);
 
 module.exports = app;

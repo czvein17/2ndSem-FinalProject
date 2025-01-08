@@ -5,13 +5,17 @@ export default {
     extend: {
       colors: {
         background: '#FFFFFF',
+        secondBg: '#f8f8f8',
         primary: '#1DA1F2',
         secondary: '#EEEEEE',
         accent: '#1f32d6',
-        // foreground: "#F5F8FA",s
+
+        orange: '#ffae82',
+        textBlack: '#3b3b3b',
       },
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
       },
 
       screens: {

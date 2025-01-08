@@ -5,19 +5,19 @@ import { useNavigate } from 'react-router-dom'
 
 import { checkAuth } from '../utils/checkAuth'
 
-const AuthContext = createContext()
+export const AuthContext = createContext()
 
 // eslint-disable-next-line react/prop-types
-const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }) => {
   const navigate = useNavigate()
   const [error, setError] = useState('')
   const [isLoggedIn, setIsLoggedIn] = useState(checkAuth())
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null)
 
-  useEffect(() => {
-    const isAuthenticated = checkAuth()
-    if (!isAuthenticated) navigate('/')
-  }, [navigate])
+  // useEffect(() => {
+  //   const isAuthenticated = checkAuth()
+  //   if (!isAuthenticated) navigate('/')
+  // }, [navigate])
 
   const navigateLogin = (role) => {
     switch (role) {
@@ -69,5 +69,3 @@ const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   )
 }
-
-export { AuthProvider, AuthContext }

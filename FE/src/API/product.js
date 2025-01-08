@@ -6,3 +6,9 @@ export const recommendProduct = async (emotion) => {
   const response = await http.post('/products', { mood })
   return response.data
 }
+
+export const getAllProducts = async () => {
+  const coffees = await http.get('/products')
+  console.log(coffees)
+  return coffees.data
+}
