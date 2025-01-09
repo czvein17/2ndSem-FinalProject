@@ -21,6 +21,11 @@ const IngredientSchema = new mongoose.Schema({
     required: true,
     default: 10,
   },
+  supplier: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Supplier",
+    required: true,
+  },
 });
 
 const Ingredient = mongoose.model("Ingredient", IngredientSchema);
