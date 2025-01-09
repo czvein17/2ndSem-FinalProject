@@ -21,6 +21,7 @@ export const UserHomePage = () => {
     queryKey: ['coffees'],
     queryFn: getAllProducts,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
 
   const handleCategory = (category) => setSelectedCategory(category)

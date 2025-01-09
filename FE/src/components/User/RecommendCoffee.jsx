@@ -128,8 +128,6 @@ export const RecommendCoffee = () => {
             Submit
           </button>
 
-          {/* create note here for how to use */}
-
           <div className='flex items-center justify-center gap-2 text-center'>
             <IoInformationCircleOutline size={30} />
             <p className='text-center '>

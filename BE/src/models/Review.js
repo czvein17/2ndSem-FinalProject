@@ -17,9 +17,9 @@ const ReviewSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  __v: {
-    type: Number,
-    select: false,
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

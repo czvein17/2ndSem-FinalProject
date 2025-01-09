@@ -11,6 +11,10 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    price: {
+      type: Number,
+      required: true,
+    },
     moodTags: {
       type: [String],
       required: true,
@@ -18,23 +22,24 @@ const ProductSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    ingredients: [
+      {
+        ingredient: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Ingredient",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
   },
   {
     timestamps: true,
-    toJSON: {
-      virtuals: true,
-      transform: (doc, ret) => {
-        delete ret.id; // Remove the virtual id field
-        return ret;
-      },
-    },
-    toObject: {
-      virtuals: true,
-      transform: (doc, ret) => {
-        delete ret.id; // Remove the virtual id field
-        return ret;
-      },
-    },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 

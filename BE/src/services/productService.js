@@ -56,10 +56,14 @@ const findProductsByNames = async (names) => {
 };
 
 const getProductById = async (id) => {
-  const product = await Product.findById(id).populate({
-    path: "reviews",
-    select: "user rating review -product",
-  });
+  const product = await Product.findById(id)
+    .populate({
+      path: "reviews",
+      select: "user rating review -product",
+    })
+    .populate({
+      path: "ingredients.ingredient",
+    });
   return product;
 };
 
