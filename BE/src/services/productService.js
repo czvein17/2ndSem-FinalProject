@@ -4,6 +4,11 @@ const { openai } = require("../config/openai");
 const { zodResponseFormat } = require("openai/helpers/zod");
 const { z } = require("zod");
 
+const createProduct = async (product) => {
+  const newProduct = await Product.create(product);
+  return newProduct;
+};
+
 const findAllProducts = async (req) => {
   const features = new APIFeatures(Product.find(), req.query)
     .filter()
@@ -68,6 +73,7 @@ const getProductById = async (id) => {
 };
 
 module.exports = {
+  createProduct,
   findAllProducts,
   recomendProductsByMood,
   findProductsByNames,

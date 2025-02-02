@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 import { LuSearch } from 'react-icons/lu'
@@ -13,19 +13,25 @@ import { CoffeeCard } from '../../components/User/CoffeeCard'
 import { CartContainer } from '../../components/User/CartContainer'
 
 export const UserHomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  console.log('USet Home Page Rendered')
   const { isLoggedIn, user } = useAuth()
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
 
-  const { data: coffees } = useQuery({
-    queryKey: ['coffees'],
-    queryFn: getAllProducts,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  })
+  useEffect(() => {
+    if (!searchParams.has('category')) {
+      searchParams.set('category', 'all')
+      setSearchParams(searchParams)
+    }
+  }, [searchParams, setSearchParams])
+  console.log(searchParams.toString())
 
-  const handleCategory = (category) => setSelectedCategory(category)
+  const handleCategory = (category) => {
+    searchParams.set('category', category)
+    navigate(`/user?${searchParams.toString()}`)
+  }
 
+  const categoryParams = searchParams.get('category')
   const catergory = [
     { name: 'All', value: 'all' },
     { name: 'Recommend', value: 'recommend' },
@@ -34,6 +40,15 @@ export const UserHomePage = () => {
     { name: 'Milk', value: 'milk' },
     { name: 'Juice', value: 'juice' },
   ]
+  const queryParams = {
+    category: categoryParams === 'all' ? null : categoryParams,
+  }
+  const { data: coffees } = useQuery({
+    queryKey: ['coffees', queryParams],
+    queryFn: () => getAllProducts(queryParams),
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
 
   return (
     <section className='flex flex-col w-full h-full text-textBlack'>
@@ -89,7 +104,7 @@ export const UserHomePage = () => {
                   key={index}
                   className={`px-8 py-2 text-sm font-medium transition-all duration-150 ease-in-out border rounded-full cursor-pointer  text-textBlack hover:bg-orange hover:border-orange hover:text-white 
                     ${
-                      selectedCategory === catergory.value
+                      categoryParams === catergory.value
                         ? 'bg-orange border-orange text-white'
                         : 'border-[#3b3b3b80]'
                     }`}
@@ -102,7 +117,7 @@ export const UserHomePage = () => {
           </div>
 
           {/* Coffees */}
-          {selectedCategory !== 'recommend' ? (
+          {categoryParams !== 'recommend' ? (
             <div className='grid gap-5 p-2 overflow-y-auto xl:grid-cols-2 2xl:grid-cols-3 custom-scrollbar auto-rows-min'>
               {coffees?.d?.map((coffee) => (
                 <CoffeeCard key={coffee._id} coffee={coffee} />

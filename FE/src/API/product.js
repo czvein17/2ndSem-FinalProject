@@ -7,8 +7,7 @@ export const recommendProduct = async (emotion) => {
   return response.data
 }
 
-export const getAllProducts = async () => {
-  const coffees = await http.get('/products')
-  console.log(coffees)
+export const getAllProducts = async (queryParams = {}) => {
+  const coffees = await http.get('/products', { params: queryParams })
   return coffees.data
 }

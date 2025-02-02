@@ -1,6 +1,24 @@
-import { IoAddOutline } from 'react-icons/io5'
-export const CoffeeCard = ({ coffee }) => {
+import { IoAddOutline, IoRemove } from 'react-icons/io5'
+import { useCartContext } from '../../hooks/useCartContext'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+
+export const CoffeeCard = memo(({ coffee }) => {
+  const { cart, addToCart, removeFromCart } = useCartContext()
+  const [size, setSize] = useState()
   const sizes = ['small', 'medium', 'large']
+
+  const findCoffee = useMemo(() => {
+    return cart.items.find((cartItem) => cartItem._id === coffee._id)
+  }, [cart.items, coffee._id])
+
+  // const setCoffeeSize = useCallback((newSize) => {
+  //   // console.log('Setting size:', newSize)
+  //   setSize(newSize)
+  // }, [])
+
+  const setCoffeeSize = (newSize) => setSize(newSize)
+
+  console.log('Current size:', size)
 
   return (
     <div className='min-h-[300px] bg-white rounded-xl flex p-3 text-sm gap-3  shadow-md'>
@@ -15,13 +33,21 @@ export const CoffeeCard = ({ coffee }) => {
           </div>
         </div>
         <div className='flex items-center justify-center h-20 gap-2 '>
-          <button className='flex items-center justify-center w-8 h-8 border-2 rounded-full'>
-            <IoAddOutline size={24} />
+          <button
+            className='flex items-center justify-center w-8 h-8 border-2 rounded-full'
+            onClick={() => removeFromCart(coffee._id)}
+          >
+            <IoRemove size={24} />
           </button>
 
-          <p>10</p>
+          {/* <p>10</p> */}
 
-          <button className='flex items-center justify-center w-8 h-8 border-2 rounded-full'>
+          <p>{findCoffee ? findCoffee.quantity : 0}</p>
+
+          <button
+            className='flex items-center justify-center w-8 h-8 border-2 rounded-full'
+            onClick={() => addToCart(coffee)}
+          >
             <IoAddOutline size={24} />
           </button>
         </div>
@@ -29,7 +55,8 @@ export const CoffeeCard = ({ coffee }) => {
       <div className='flex flex-col justify-between w-full gap-2 py-3'>
         <div>
           <h3 className='text-lg font-semibold'>
-            {coffee.name} <span className='font-medium text-orange'>$ 10</span>
+            {coffee.name}{' '}
+            <span className='font-medium text-orange'>${coffee.price}</span>
           </h3>
 
           <p className='text-sm font-medium  text-[#3b3b3b80]'>
@@ -40,26 +67,42 @@ export const CoffeeCard = ({ coffee }) => {
         <div className='flex flex-col w-full gap-2'>
           <div className='flex flex-wrap gap-2'>
             {sizes.map((size, index) => (
-              <Label key={index} name='size' value={size} />
+              <Label
+                key={index}
+                name='size'
+                value={size}
+                setCoffeeSize={setCoffeeSize}
+              />
             ))}
           </div>
 
-          <button className='w-full px-3 py-2 font-medium transition-all duration-150 ease-in-out border-2 rounded-full text-orange border-orange hover:bg-orange hover:text-white'>
-            Add to cart
+          <button
+            className={`w-full px-3 py-2 font-medium transition-all duration-150 ease-in-out border-2 rounded-full text-orange border-orange hover:bg-orange hover:text-white ${findCoffee ? 'bg-orange text-white' : ''}`}
+            onClick={() => addToCart(coffee, size)}
+          >
+            {/* Add to cart
+             */}
+            {findCoffee ? 'Added to Cart' : 'Add to cart'}
           </button>
         </div>
       </div>
     </div>
   )
-}
+})
 
-const Label = ({ name, value }) => {
+const Label = memo(({ name, value, setCoffeeSize }) => {
   return (
     <label className='flex gap-10 cursor-pointer'>
-      <input type='radio' name={name} value={value} className='hidden peer' />
+      <input
+        type='radio'
+        name={name}
+        value={value}
+        className='hidden peer'
+        onClick={() => setCoffeeSize(value)}
+      />
       <span className='px-3 py-2 text-xs border border-gray-300 rounded-full peer-checked:bg-black peer-checked:text-white'>
         {value}
       </span>
     </label>
   )
-}
+})

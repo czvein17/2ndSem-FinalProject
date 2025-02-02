@@ -1,6 +1,26 @@
 const productService = require("../services/productService");
 const { asyncHandler } = require("../middlewares/asyncHandler");
 
+const createProduct = asyncHandler(async (req, res, next) => {
+  const payload = {
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category,
+    moodTags: req.body.moodTags,
+    image: req.body.image,
+    ingredients: req.body.ingredients,
+  };
+
+  const product = await productService.createProduct(payload);
+
+  res.json({
+    c: 200,
+    m: null,
+    d: product,
+  });
+});
+
 const findAllProducts = asyncHandler(async (req, res) => {
   const products = await productService.findAllProducts(req);
   res.json({
@@ -45,4 +65,9 @@ const getProductById = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { findAllProducts, recomendProductsByMood, getProductById };
+module.exports = {
+  createProduct,
+  findAllProducts,
+  recomendProductsByMood,
+  getProductById,
+};

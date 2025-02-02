@@ -68,16 +68,16 @@ const Login = () => {
   }, [error])
 
   return (
-    <div className='flex flex-col-reverse md:flex-row items-center justify-center h-screen font-inter'>
-      <div className='md:w-1/2 p-5 md:p-10 md:m-10 h-full flex flex-col justify-center'>
+    <div className='flex flex-col-reverse items-center justify-center h-screen md:flex-row font-inter'>
+      <div className='flex flex-col justify-center h-full p-5 md:w-1/2 md:p-10 md:m-10'>
         <h1 className='text-3xl font-bold'>LOGIN</h1>
         <p className='pt-3 text-[16px]'>Please login to continue</p>
 
         <form className='flex flex-col gap-8 pt-10 ' onSubmit={handleLogin}>
           <div>
-            <p className='text-red-600 h-5'>{error}</p>
+            <p className='h-5 text-red-600'>{error}</p>
             <p className='font-bold'>Email : </p>
-            <div className='bg-secondary rounded-md py-2 mt-3'>
+            <div className='py-2 mt-3 rounded-md bg-secondary'>
               <input
                 placeholder='Enter email'
                 className='border p-2 w-full outline-none bg-transparent border-none text-[16px]'
@@ -89,7 +89,7 @@ const Login = () => {
 
           <div>
             <p className='font-bold'>Password : </p>
-            <div className='bg-secondary rounded-md py-2 mt-3 relative'>
+            <div className='relative py-2 mt-3 rounded-md bg-secondary'>
               {!showPassword ? (
                 <input
                   type='password'
@@ -137,7 +137,7 @@ const Login = () => {
 
           <button
             type='submit'
-            className='bg-black text-white p-5 rounded-lg font-bold'
+            className='p-5 font-bold text-white bg-black rounded-lg'
           >
             {isLoginViaEmailPending || isLoginViaGooglePending
               ? 'Loading...'
@@ -146,26 +146,21 @@ const Login = () => {
         </form>
 
         <div className='flex items-center justify-center pt-10'>
-          <div className='border-t border-black flex-grow mr-3'></div>
-          <span className='text-black text-lg '>or</span>
-          <div className='border-t border-black flex-grow ml-3'></div>
+          <div className='flex-grow mr-3 border-t border-black'></div>
+          <span className='text-lg text-black '>or</span>
+          <div className='flex-grow ml-3 border-t border-black'></div>
         </div>
 
         <div className='flex justify-center gap-10 pt-10'>
-          <button className='p-5 flex gap-3 justify-center items-center border border-black rounded-lg font-semibold w-full hover:bg-black hover:text-white ease-in-out duration-100'>
-            <img src={facebook} alt='facebook' className='w-[24px]' />
-            <span>Login with Facebook</span>
-          </button>
-
           <GoogleLoginButton onClick={() => googleLogin()} />
         </div>
 
-        <p className='text-center pt-10'>
+        <p className='pt-10 text-center'>
           Don&apos;t have an account ?{' '}
-          <span className='text-black font-semibold cursor-pointer'>Sign Up</span>
+          <span className='font-semibold text-black cursor-pointer'>Sign Up</span>
         </p>
       </div>
-      <div className='w-full md:w-1/2 bg-black md:h-full'>1</div>
+      <div className='w-full bg-black md:w-1/2 md:h-full'>1</div>
     </div>
   )
 }

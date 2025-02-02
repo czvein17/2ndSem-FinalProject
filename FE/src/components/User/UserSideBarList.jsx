@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useCartContext } from '../../hooks/useCartContext'
 
 export const UserSideBarList = ({ index, item }) => {
+  const { cart } = useCartContext()
+
   return (
     <NavLink
       end
@@ -16,6 +19,11 @@ export const UserSideBarList = ({ index, item }) => {
           whileHover={{ color: '#FFA500' }}
         >
           {item.icon} {item.name}
+          {item.name === 'Orders' && (
+            <span className='flex items-center justify-center w-8 h-8 p-2 text-white rounded-full bg-orange'>
+              {cart.items.length}
+            </span>
+          )}
           {isActive && (
             <motion.div
               className='absolute right-0 w-[3px] h-full rounded-l-xl bg-orange'
