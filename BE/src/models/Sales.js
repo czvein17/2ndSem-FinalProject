@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const SalesSchema = new mongoose.Schema(
   {
+    refNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
@@ -23,6 +28,12 @@ const SalesSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+
+    recievedAmount: {
+      type: Number,
+      required: true,
+    },
+
     discountType: {
       type: String,
       enum: ["pwd", "senior", "promo", "none"],
@@ -33,11 +44,25 @@ const SalesSchema = new mongoose.Schema(
       enum: ["cash", "card", "paymaya", "gcash"],
       required: true,
     },
-    status: {
+
+    paymentStatus: {
       type: String,
       enum: ["paid", "pending", "refunded"],
       required: true,
       default: "pending",
+    },
+    transactionId: {
+      type: String,
+      required: true,
+    },
+    paymentDate: {
+      type: Date,
+      required: true,
+    },
+
+    paymentDetails: {
+      type: String,
+      required: true,
     },
     createdAt: {
       type: Date,
