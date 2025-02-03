@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { IoCreateOutline } from 'react-icons/io5'
 import { MdDeleteOutline } from 'react-icons/md'
 import { FiSidebar } from 'react-icons/fi'
-import ModalWrapper from '../../ModalWrapper'
+import { ModalWrapper } from '../../ModalWrapper'
 import DeleteModalContent from '../DeleteModalContent'
 
 export const History = React.memo(
@@ -60,11 +60,10 @@ export const History = React.memo(
               <button className='absolute top-3 right-3 md:left-3 text-accent'>
                 <FiSidebar size={22} onClick={() => setToggleShow(!toggleShow)} />
               </button>
-              <h1 className='text-xl p-2 font-meduim'>History</h1>
+              <h1 className='p-2 text-xl font-meduim'>History</h1>
 
               <button
-                className='w-full py-2 bg-accent rounded-md mb-2 text-white text-sm flex justify-center items-center
-                gap-2 hover:cursor-pointer'
+                className='flex items-center justify-center w-full gap-2 py-2 mb-2 text-sm text-white rounded-md bg-accent hover:cursor-pointer'
                 onClick={createNewConversation}
               >
                 <IoCreateOutline size={20} />
@@ -75,12 +74,12 @@ export const History = React.memo(
                   {chatHistory?.conversation?.map((chat, index) => (
                     <li
                       key={chat._id}
-                      className='w-full bg-accent rounded-lg my-2 text-white flex justify-between'
+                      className='flex justify-between w-full my-2 text-white rounded-lg bg-accent'
                       style={{ width: '100%' }}
                     >
                       <button
                         type='button'
-                        className='text-left whitespace-nowrap overflow-hidden text-ellipsis py-2 pl-2'
+                        className='py-2 pl-2 overflow-hidden text-left whitespace-nowrap text-ellipsis'
                         onClick={() => showChatHistory(chat._id)}
                         title={chat.conversationTitle}
                       >
@@ -88,7 +87,7 @@ export const History = React.memo(
                       </button>
                       <button
                         type='button'
-                        className='hover:text-red-500 hover:bg-secondary p-1 m-1 rounded-md'
+                        className='p-1 m-1 rounded-md hover:text-red-500 hover:bg-secondary'
                         onClick={() => deleteRef.current.openModal()}
                         title='Delete'
                       >
