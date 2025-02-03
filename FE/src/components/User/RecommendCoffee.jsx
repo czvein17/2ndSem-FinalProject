@@ -110,6 +110,9 @@ export const RecommendCoffee = () => {
                   alt={icon.name}
                   className='w-24 h-24 md:w-[200px] md:h-[200px] drop-shadow-2xl cursor-pointer'
                   onClick={() => handleEmotionClick(icon.name)}
+                  animate={{
+                    scale: selectedEmotion.includes(icon.name) ? 1.2 : 1,
+                  }}
                   whileHover={{
                     scale: 1.2,
                     transition: {
