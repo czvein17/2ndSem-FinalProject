@@ -13,11 +13,6 @@ export const CoffeeCard = memo(({ coffee }) => {
     return cart.items.find((cartItem) => cartItem._id === coffee._id)
   }, [cart.items, coffee._id])
 
-  // const setCoffeeSize = useCallback((newSize) => {
-  //   // console.log('Setting size:', newSize)
-  //   setSize(newSize)
-  // }, [])
-
   const setCoffeeSize = (newSize) => setSize(newSize)
 
   const handleAddToCart = (e) => {
