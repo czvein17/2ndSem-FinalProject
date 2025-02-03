@@ -8,7 +8,7 @@ import DefaultUserPic from '../../assets/images/default-user.svg'
 import { FiEdit2 } from 'react-icons/fi'
 import { MdOutlineDeleteOutline } from 'react-icons/md'
 
-import ModalWrapper from '../ModalWrapper'
+import { ModalWrapper } from '../ModalWrapper'
 import DeleteModalContent from './DeleteModalContent'
 import EditUserModalContent from './EditUserModalContent'
 
@@ -52,7 +52,7 @@ const UserTables = React.memo(({ users }) => {
   const tableRowClass = 'py-3 px-5 whitespace-nowrap'
 
   return (
-    <div className='h-full w-full overflow-x-auto overflow-y-auto'>
+    <div className='w-full h-full overflow-x-auto overflow-y-auto'>
       <table className='md:table-fixed lg:w-full'>
         <thead className={`${tableHeadClass} w-full sticky top-0 `}>
           <tr className=''>
@@ -76,11 +76,11 @@ const UserTables = React.memo(({ users }) => {
             >
               <td className={`${tableRowClass}`}>{user._id}</td>
               <td className={`${tableRowClass}`}>
-                <div className='flex gap-2 items-center'>
+                <div className='flex items-center gap-2'>
                   <img
                     src={user.googleProfilePic || user.profilePic || DefaultUserPic}
                     alt='user profile pic'
-                    className='h-7 w-7 rounded-full'
+                    className='rounded-full h-7 w-7'
                   />
                   {`${user.firstName} 
                       ${
@@ -107,7 +107,7 @@ const UserTables = React.memo(({ users }) => {
                 {transformDate(user.createdAt)}
               </td>
               <td className={`${tableRowClass}  w-[300px] `}>
-                <div className='flex gap-2 justify-center'>
+                <div className='flex justify-center gap-2'>
                   <button
                     className=''
                     title='Edit'
