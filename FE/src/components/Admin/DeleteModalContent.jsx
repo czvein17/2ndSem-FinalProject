@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import ModalWrapper from '../ModalWrapper'
 
 const DeleteModalContent = ({ message, onClose, onDelete }) => {
   return (
@@ -11,13 +10,13 @@ const DeleteModalContent = ({ message, onClose, onDelete }) => {
 
       <div className='flex gap-3'>
         <button
-          className='bg-secondary py-2 px-5 rounded-md font-medium'
+          className='px-5 py-2 font-medium rounded-md bg-secondary'
           onClick={onClose}
         >
           Cancel
         </button>
         <button
-          className='bg-accent py-2 px-5 rounded-md text-white font-medium'
+          className='px-5 py-2 font-medium text-white rounded-md bg-accent'
           onClick={onDelete}
         >
           Yes
