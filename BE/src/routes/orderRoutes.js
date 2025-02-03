@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { createOrder } = require("../controllers/orderController");
+const { createOrder, getOrderById } = require("../controllers/orderController");
 
 const { protectAuth } = require("../middlewares/protectAuth");
 
-router.post("/", protectAuth, createOrder);
+router.use(protectAuth);
+router.post("/", createOrder);
+router.route("/:id").get(getOrderById);
 
 module.exports = router;
