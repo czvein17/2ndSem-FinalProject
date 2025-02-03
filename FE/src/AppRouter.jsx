@@ -17,7 +17,6 @@ import { NotFound404 } from './components/NotFound404'
 import { RecomendProduct } from './page/AdminPage/subPage/RecomendProduct'
 import { UserLayout } from './layout/User/UserLayout'
 import { UserHomePage } from './page/User/UserHomePage'
-import { PaymentModal } from './components/User/PaymentModal'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
