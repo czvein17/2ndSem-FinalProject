@@ -5,7 +5,7 @@ import { SlClose } from 'react-icons/sl'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 
-const ModalWrapper = forwardRef(({ children }, ref) => {
+export const ModalWrapper = forwardRef(({ children }, ref) => {
   const [isOpen, setIsOpen] = useState(false)
   const modalRef = useRef()
 
@@ -49,7 +49,7 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
             animate='visible'
             exit='hidden'
             variants={dropIn}
-            className='bg-white p-5 rounded-xl relative w-full md:w-auto mx-5 '
+            className='relative w-full p-5 mx-5 bg-white rounded-xl md:w-auto '
             ref={modalRef}
           >
             <button
@@ -70,5 +70,3 @@ const ModalWrapper = forwardRef(({ children }, ref) => {
 ModalWrapper.propTypes = {
   children: PropTypes.node.isRequired,
 }
-
-export default ModalWrapper
