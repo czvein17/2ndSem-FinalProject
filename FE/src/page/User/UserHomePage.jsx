@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 
 import { LuSearch } from 'react-icons/lu'
@@ -11,16 +11,25 @@ import { getAllProducts } from '../../API/product'
 import { RecommendCoffee } from '../../components/User/RecommendCoffee'
 import { CoffeeCard } from '../../components/User/CoffeeCard'
 import { CartContainer } from '../../components/User/CartContainer'
+import { PaymentModal } from '../../components/User/PaymentModal'
 
 export const UserHomePage = () => {
   console.log('USet Home Page Rendered')
   const { isLoggedIn, user } = useAuth()
   const [searchParams, setSearchParams] = useSearchParams()
+  const location = useLocation()
   const navigate = useNavigate()
+
+  const pathMatch = location.pathname.match(/^\/user\/[a-fA-F0-9]{24}$/)
 
   useEffect(() => {
     if (!searchParams.has('category')) {
       searchParams.set('category', 'all')
+      const order = searchParams.get('order')
+      if (order) {
+        searchParams.delete('order')
+        searchParams.set('order', order)
+      }
       setSearchParams(searchParams)
     }
   }, [searchParams, setSearchParams])
@@ -64,7 +73,7 @@ export const UserHomePage = () => {
             />
           </div>
         </div>
-        <div className='w-[500px] border-l-2 px-5 flex'>
+        <div className='w-[400px] border-l-2 px-5 flex flex-shrink-0'>
           {!isLoggedIn ? (
             <button
               className='px-10 py-2 mx-auto my-auto text-white transition-all duration-150 ease-in-out border border-transparent rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
@@ -94,11 +103,12 @@ export const UserHomePage = () => {
         </div>
       </div>
 
-      <div className='flex h-full overflow-hidden border-b-2'>
+      <div className='flex h-full max-w-full overflow-hidden border-b-2'>
         {/* PRODUCTS */}
         <div className='flex flex-col w-full h-full gap-2 px-3 py-5'>
-          <div className='flex items-center flex-shrink-0 px-2 h-14 '>
-            <ul className='flex gap-5'>
+          {/* THERE A PROBLEM HERE WHEN IT COME IN RESPONSIVENESS */}
+          <div className='flex items-center flex-shrink-0 px-2 h-14'>
+            <ul className='flex flex-wrap gap-5'>
               {catergory.map((catergory, index) => (
                 <li
                   key={index}
@@ -131,6 +141,8 @@ export const UserHomePage = () => {
 
         {/* CART */}
         <CartContainer />
+
+        <PaymentModal />
       </div>
     </section>
   )
