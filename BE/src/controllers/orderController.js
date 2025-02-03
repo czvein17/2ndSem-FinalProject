@@ -5,28 +5,26 @@ const ErrorResponse = require("../utils/ErrorResponse");
 
 const createOrder = asyncHandler(async (req, res, next) => {
   const user = req.user;
-  const { orderItems, modeOfPayment } = req.body;
+  const { orderItems } = req.body;
 
+  console.log(orderItems);
   const orderItemsDetails = [];
-  let totalAmount = 0;
+  let subtotal = 0;
 
   for (const item of orderItems) {
-    const { productId, quantity } = item;
-    const product = await productService.getProductById(productId);
+    const { id, size, quantity } = item;
+    const product = await productService.getProductById(id);
 
     if (!product) {
-      return next(
-        new ErrorResponse(404, `Product not found with id ${productId}`)
-      );
+      return next(new ErrorResponse(404, `Product not found with id ${id}`));
     }
 
-    console.log(product);
-
     const itemTotal = product.price * quantity;
-    totalAmount += itemTotal;
+    subtotal += itemTotal;
 
     orderItemsDetails.push({
       product: product._id,
+      size,
       quantity,
       price: product.price * quantity,
     });
@@ -35,8 +33,6 @@ const createOrder = asyncHandler(async (req, res, next) => {
   const payload = {
     user: user.id,
     orderItems: orderItemsDetails,
-    totalAmount,
-    modeOfPayment,
   };
 
   const order = await orderService.createOrder(payload);
@@ -44,10 +40,27 @@ const createOrder = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     c: 201,
     m: "Order created successfully",
-    d: null,
+    d: order,
+  });
+});
+
+const getOrderById = asyncHandler(async (req, res, next) => {
+  const orderId = req.params.id;
+
+  const order = await orderService.findOrderById(orderId);
+
+  if (!order) {
+    return next(new ErrorResponse(404, `Order not found with id ${orderId}`));
+  }
+
+  res.status(200).json({
+    c: 200,
+    m: "Order fetched successfully",
+    d: order,
   });
 });
 
 module.exports = {
   createOrder,
+  getOrderById,
 };
