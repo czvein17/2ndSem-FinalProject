@@ -17,6 +17,7 @@ import { NotFound404 } from './components/NotFound404'
 import { RecomendProduct } from './page/AdminPage/subPage/RecomendProduct'
 import { UserLayout } from './layout/User/UserLayout'
 import { UserHomePage } from './page/User/UserHomePage'
+import { PaymentModal } from './components/User/PaymentModal'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -25,7 +26,6 @@ const AppRouter = () => {
     <Routes>
       <Route path='/' element={<Login />} />
       <Route path='/test' element={<h1>Test</h1>} />
-
       {isLoggedIn && (
         <>
           <Route element={<PrivateRoute roles={['admin']} />}>
@@ -49,7 +49,6 @@ const AppRouter = () => {
           </Route>
         </>
       )}
-
       <Route path='/user' element={<UserLayout />}>
         <Route index element={<UserHomePage />} />
         <Route path='/user/menu' element={<>menu</>} />
