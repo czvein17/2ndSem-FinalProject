@@ -1,8 +1,10 @@
 import { IoAddOutline, IoRemove } from 'react-icons/io5'
 import { useCartContext } from '../../hooks/useCartContext'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { ModalWrapper } from '../ModalWrapper'
 
 export const CoffeeCard = memo(({ coffee }) => {
+  const coffeeSizeRef = useRef()
   const { cart, addToCart, removeFromCart } = useCartContext()
   const [size, setSize] = useState()
   const sizes = ['small', 'medium', 'large']
@@ -18,7 +20,16 @@ export const CoffeeCard = memo(({ coffee }) => {
 
   const setCoffeeSize = (newSize) => setSize(newSize)
 
-  console.log('Current size:', size)
+  const handleAddToCart = (e) => {
+    e.preventDefault()
+
+    if (!size) {
+      coffeeSizeRef.current.openModal()
+      return
+    }
+
+    addToCart(coffee, size)
+  }
 
   return (
     <div className='min-h-[300px] bg-white rounded-xl flex p-3 text-sm gap-3  shadow-md'>
@@ -78,13 +89,27 @@ export const CoffeeCard = memo(({ coffee }) => {
 
           <button
             className={`w-full px-3 py-2 font-medium transition-all duration-150 ease-in-out border-2 rounded-full text-orange border-orange hover:bg-orange hover:text-white ${findCoffee ? 'bg-orange text-white' : ''}`}
-            onClick={() => addToCart(coffee, size)}
+            onClick={handleAddToCart}
           >
-            {/* Add to cart
-             */}
             {findCoffee ? 'Added to Cart' : 'Add to cart'}
           </button>
         </div>
+
+        <ModalWrapper ref={coffeeSizeRef}>
+          <div className='flex flex-col gap-5 m-4'>
+            <h1 className='font-medium'>
+              Please select a size before adding the coffee to your cart.
+            </h1>
+            <button>
+              <button
+                className='px-3 py-2 my-auto font-medium transition-all duration-150 ease-in-out border-2 rounded-xl text-orange border-orange hover:bg-orange hover:text-white'
+                onClick={() => coffeeSizeRef.current.closeModal()}
+              >
+                Go Back
+              </button>
+            </button>
+          </div>
+        </ModalWrapper>
       </div>
     </div>
   )
