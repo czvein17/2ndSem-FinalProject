@@ -6,6 +6,12 @@ const OrderItemSchema = new mongoose.Schema({
     ref: "Product",
     required: true,
   },
+  size: {
+    type: String,
+    required: true,
+    enum: ["small", "medium", "large"],
+  },
+
   quantity: {
     type: Number,
     required: true,
@@ -24,18 +30,9 @@ const OrderSchema = new mongoose.Schema(
       required: true,
     },
     orderItems: [OrderItemSchema],
-    totalAmount: {
-      type: Number,
-      required: true,
-    },
-    modeOfPayment: {
-      type: String,
-      enum: ["cash", "Card", "paymaya", "gcash"],
-      required: true,
-    },
     status: {
       type: String,
-      enum: ["pending", "completed", "Cancelled"],
+      enum: ["pending", "completed", "cancelled"],
       required: true,
       default: "pending",
     },
@@ -45,6 +42,7 @@ const OrderSchema = new mongoose.Schema(
     },
   },
   {
+    timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
