@@ -37,7 +37,6 @@ export const CartContainer = () => {
 
               <div className='w-20 h-20 my-auto'>
                 <img
-                  // src={`${import.meta.env.VITE_API_URL.replace('/api/v1', '')}/images/coffee-image/${item.image}`}
                   src={`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}/images/coffee-image/${item.image}`}
                   alt=''
                   className='object-contain w-full h-full rounded-xl'
