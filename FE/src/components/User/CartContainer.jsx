@@ -1,8 +1,39 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useCartContext } from '../../hooks/useCartContext'
+import { useMutation } from '@tanstack/react-query'
+import { createOrder } from '../../API/order'
+import { ModalWrapper } from '../ModalWrapper'
+import { useNavigate } from 'react-router-dom'
 
 export const CartContainer = () => {
   const { cart } = useCartContext()
+  const loadingModalRef = useRef()
+
+  const navigate = useNavigate()
+
+  const toggleModal = (modal) => modal.current.openModal()
+  const closeModals = (modal) => modal.current.closeModal()
+
+  const {
+    mutate: postOrder,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: createOrder,
+    onSuccess: (data) => {
+      console.log(data.d)
+      closeModals(loadingModalRef)
+      navigate(`/user?order=${data.d._id}`)
+    },
+  })
+
+  const handleConfirmOrder = (e) => {
+    e.preventDefault()
+
+    if (cart.items.length === 0) return
+    postOrder(cart.items)
+  }
 
   const prices = [
     {
@@ -23,8 +54,10 @@ export const CartContainer = () => {
     },
   ]
 
+  if (isPending) toggleModal(loadingModalRef)
+
   return (
-    <div className='w-[500px] border-l-2 bg-white px-5 h-full flex flex-col space-y-10 py-10'>
+    <div className='w-[400px] border-l-2 bg-white px-5 h-full flex flex-col space-y-10 py-10 flex-shrink-0'>
       <h1 className='mx-auto text-2xl font-medium uppercase'>Cart Orders</h1>
       <div className='h-full overflow-hidden '>
         <div className='h-full p-2 space-y-2 overflow-y-auto'>
@@ -69,9 +102,20 @@ export const CartContainer = () => {
         ))}
       </div>
 
-      <button className='flex-shrink-0 px-3 py-4 text-lg text-white transition-all duration-150 ease-in-out border bg-orange rounded-2xl hover:bg-transparent hover:border-orange hover:text-orange'>
-        Checkout
+      <button
+        className='flex-shrink-0 px-3 py-4 text-lg text-white transition-all duration-150 ease-in-out border bg-orange rounded-2xl hover:bg-transparent hover:border-orange hover:text-orange'
+        onClick={handleConfirmOrder}
+      >
+        Confirm Order
       </button>
+
+      <ModalWrapper ref={loadingModalRef}>
+        <h1>Loading...</h1>
+      </ModalWrapper>
+
+      {/* <ModalWrapper ref={paymentModalRef}>
+        <h1>Success</h1>
+      </ModalWrapper> */}
     </div>
   )
 }
