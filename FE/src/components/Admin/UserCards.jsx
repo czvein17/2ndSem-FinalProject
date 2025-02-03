@@ -9,7 +9,7 @@ import { HiOutlineDotsVertical } from 'react-icons/hi'
 import { TbUserEdit, TbUserMinus } from 'react-icons/tb'
 import { transformDate } from '../../utils/transformDate'
 
-import ModalWrapper from '../ModalWrapper'
+import { ModalWrapper } from '../ModalWrapper'
 import EditUserModalContent from './EditUserModalContent'
 import DeleteModalContent from './DeleteModalContent'
 
@@ -83,18 +83,18 @@ const UserCards = React.memo(({ variants, user }) => {
             animate='visible'
             exit='hidden'
             variants={dropdownVariants}
-            className='absolute top-10 right-4 w-32 bg-white shadow-md rounded-xl'
+            className='absolute w-32 bg-white shadow-md top-10 right-4 rounded-xl'
           >
             <ul className='p-2 text-sm font-medium'>
               <li
-                className='p-2 hover:bg-gray-200 rounded-lg flex justify-between items-center cursor-pointer transition-all ease-in-out'
+                className='flex items-center justify-between p-2 transition-all ease-in-out rounded-lg cursor-pointer hover:bg-gray-200'
                 onClick={() => showModal(editRef)}
               >
                 <TbUserEdit size={25} />
                 <span className='w-full text-center'>Edit</span>
               </li>
               <li
-                className='p-2 hover:bg-gray-200 rounded-lg flex justify-between items-center cursor-pointer transition-all ease-in-out'
+                className='flex items-center justify-between p-2 transition-all ease-in-out rounded-lg cursor-pointer hover:bg-gray-200'
                 onClick={() => showModal(deleteRef)}
               >
                 <TbUserMinus size={25} />
@@ -121,15 +121,15 @@ const UserCards = React.memo(({ variants, user }) => {
         />
       </ModalWrapper>
 
-      <div className='h-full flex justify-center items-center flex-col p-5'>
+      <div className='flex flex-col items-center justify-center h-full p-5'>
         <img
           src={user.googleProfilePic || DefaultUserImage}
           alt='user'
-          className='w-20 h-20 object-cover rounded-full'
+          className='object-cover w-20 h-20 rounded-full'
         />
 
-        <div className='flex flex-col justify-center items-center'>
-          <h1 className='font-bold my-2'>
+        <div className='flex flex-col items-center justify-center'>
+          <h1 className='my-2 font-bold'>
             {user.firstName}{' '}
             {user.middleName !== '' ? `${user.middleName.charAt(0)}.` : ''}{' '}
             {user.lastName}
@@ -146,7 +146,7 @@ const UserCards = React.memo(({ variants, user }) => {
           </p>
         </div>
       </div>
-      <div className='h-full px-4 w-full '>
+      <div className='w-full h-full px-4 '>
         <p className='break-words'>{user.email}</p>
         <p className='break-words'>{transformDate(user.createdAt)}</p>
       </div>
