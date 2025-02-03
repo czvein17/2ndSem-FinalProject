@@ -19,8 +19,8 @@ export const UserSideBarList = ({ index, item }) => {
           whileHover={{ color: '#FFA500' }}
         >
           {item.icon} {item.name}
-          {item.name === 'Orders' && (
-            <span className='flex items-center justify-center w-8 h-8 p-2 text-white rounded-full bg-orange'>
+          {item.name === 'Orders' && cart.items.length > 0 && (
+            <span className='flex items-center justify-center w-6 h-6 p-2 text-white rounded-full bg-orange'>
               {cart.items.length}
             </span>
           )}
