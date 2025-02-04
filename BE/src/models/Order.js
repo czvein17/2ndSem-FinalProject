@@ -57,6 +57,9 @@ const OrderSchema = new mongoose.Schema(
       required: true,
       default: "pending",
     },
+    checkoutId: {
+      type: String,
+    },
     createdAt: {
       type: Date,
       default: Date.now,
