@@ -2,16 +2,16 @@ import { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ReactDOM from 'react-dom'
 
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getOrder } from '../../API/order'
 
 import { SlClose } from 'react-icons/sl'
-import { ModalWrapper } from '../ModalWrapper'
 import CashLogo from '../../assets/icons/cash-logo.svg'
 import MayaLogo from '../../assets/icons/maya-logo.svg'
 
 import { OrderSummaryCards } from './Cards/OrderSummaryCards'
 import { PaymentOrderItemsCard } from './Cards/PaymentOrderItemsCard'
+import { payWithPayMaya } from '../../API/payment'
 
 export const PaymentModal = () => {
   const navigate = useNavigate()
@@ -39,6 +39,13 @@ export const PaymentModal = () => {
     enabled: !!orderId,
   })
 
+  const { mutate: handlePaymayaPayment } = useMutation({
+    mutationFn: () => payWithPayMaya(order),
+    onSuccess: (data) => {
+      window.location.href = data.d.redirectUrl
+    },
+  })
+
   const orderSummary = [
     {
       title: 'Sub-Total',
@@ -61,6 +68,11 @@ export const PaymentModal = () => {
       title: 'Total',
       value: order?.d?.totalAmount,
     },
+
+    // {
+    //   title: 'Total',
+    //   value: order?.d?.checkoutId,
+    // },
   ]
 
   const paymentOptions = [
@@ -71,6 +83,7 @@ export const PaymentModal = () => {
     {
       title: 'PayMaya',
       icon: MayaLogo,
+      onClick: handlePaymayaPayment,
     },
   ]
 
@@ -161,6 +174,7 @@ export const PaymentModal = () => {
                       <button
                         key={index}
                         className='flex items-center justify-center p-2 transition-transform duration-150 ease-in-out border-2 border-orange rounded-xl hover:scale-105'
+                        onClick={option.onClick}
                       >
                         <img
                           className='h-10 my-auto max-w-20'
