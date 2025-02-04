@@ -90,16 +90,16 @@ export const CartContainer = () => {
                 </div>
 
                 <div className='flex justify-between text-base'>
-                  <h1 className='font-medium '>₱{item.price}</h1>
+                  <h1 className='font-medium text-orange'>₱{item.price}</h1>
 
-                  <div className='flex items-center justify-center space-x-2'>
-                    <button className='w-6 h-6 ml-auto text-white rounded-full bg-orange'>
+                  <div className='flex items-center justify-center space-x-2 text-[#3D3D3D]'>
+                    <button className='w-8 h-8 ml-auto border-2 border-[#D9D9D9] rounded-full'>
                       +
                     </button>
 
                     <h1 className='text-md'>{item.quantity}</h1>
 
-                    <button className='w-6 h-6 ml-auto text-white rounded-full bg-orange'>
+                    <button className='w-8 h-8 ml-auto border border-[#D9D9D9] rounded-full'>
                       -
                     </button>
                   </div>
