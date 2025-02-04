@@ -9,6 +9,7 @@ const productRoutes = require("./productRoutes");
 const ingredientRoutes = require("./ingredientRoutes");
 const reviewRoutes = require("./reviewRoutes");
 const orderRoutes = require("./orderRoutes");
+const salesRoutes = require("./salesRoutes");
 const router = express.Router();
 
 router.use("/signin", signinRoutes);
@@ -19,5 +20,6 @@ router.use("/products", productRoutes);
 router.use("/ingredients", ingredientRoutes);
 router.use("/reviews", reviewRoutes);
 router.use("/orders", orderRoutes);
+router.use("/sales", salesRoutes);
 
 module.exports = router;
