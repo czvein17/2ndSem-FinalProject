@@ -30,6 +30,27 @@ const OrderSchema = new mongoose.Schema(
       required: true,
     },
     orderItems: [OrderItemSchema],
+    subTotal: {
+      type: Number,
+      required: true,
+    },
+    tax: {
+      type: Number,
+      required: true,
+    },
+    discountAmount: {
+      type: Number,
+      default: 0,
+    },
+    totalAmount: {
+      type: Number,
+      required: true,
+    },
+    discountType: {
+      type: String,
+      enum: ["pwd", "senior", "coupon", "none"],
+      default: "none",
+    },
     status: {
       type: String,
       enum: ["pending", "completed", "cancelled"],
