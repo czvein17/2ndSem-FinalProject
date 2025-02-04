@@ -46,8 +46,6 @@ export const CoffeeCard = memo(({ coffee }) => {
             <IoRemove size={24} />
           </button>
 
-          {/* <p>10</p> */}
-
           <p>{findCoffee ? findCoffee.quantity : 0}</p>
 
           <button
@@ -120,8 +118,8 @@ const Label = memo(({ name, value, setCoffeeSize }) => {
         className='hidden peer'
         onClick={() => setCoffeeSize(value)}
       />
-      <span className='px-3 py-2 text-xs border border-gray-300 rounded-full peer-checked:bg-black peer-checked:text-white'>
-        {value}
+      <span className='h-8 w-8 text-xs border border-gray-300 rounded-full peer-checked:bg-[#3D3D3D] peer-checked:text-white uppercase vertical-align-middle flex items-center justify-center'>
+        {value.charAt(0)}
       </span>
     </label>
   )
