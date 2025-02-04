@@ -5,13 +5,15 @@ export const CartContext = createContext()
 // Create a provider component
 export const CartProvider = ({ children }) => {
   const [isDiscountApplicable, setIsDiscountApplicable] = useState(false)
-  const [taxRate, setTaxRate] = useState(0.1) // 10%
-  const [discountRate, setDiscountRate] = useState(0.05) // 5%
+  const [taxRate, setTaxRate] = useState(0.12) // 12%
+  // const [discountRate, setDiscountRate] = useState(0.05) // 5%
   const [cart, setCart] = useState({
+    discountType: '',
     items: [],
     subtotal: 0,
     tax: 0,
     total: 0,
+    discount: 0,
   })
 
   useEffect(() => {
@@ -19,12 +21,12 @@ export const CartProvider = ({ children }) => {
       (acc, item) => acc + item.price * item.quantity,
       0,
     )
-    const discount = isDiscountApplicable ? subtotal * discountRate : 0
-    const tax = subtotal * taxRate
-    const total = subtotal + tax
+    const discount = isDiscountApplicable ? subtotal * cart.discount : 0
+    const tax = parseFloat((subtotal * taxRate).toFixed(2))
+    const total = parseFloat((subtotal + tax - discount).toFixed(2))
 
     setCart((prevCart) => ({ ...prevCart, subtotal, tax, total, discount }))
-  }, [cart.items, taxRate, discountRate, isDiscountApplicable])
+  }, [cart.items, taxRate, isDiscountApplicable])
 
   console.log(cart.items)
 
@@ -79,18 +81,31 @@ export const CartProvider = ({ children }) => {
     })
   }
 
-  const applyDiscount = () => {
+  const applyDiscount = (discountType) => {
     setCart((prevCart) => {
-      const discount = prevCart.total * discountRate
+      let discount = 0
+      if (discountType === 'pwd' || discountType === 'senior') {
+        discount = prevCart.subtotal * 0.2 // 20% discount
+      } else if (discountType === 'promo') {
+        discount = prevCart.subtotal * 0.1 // 10% discount
+      }
+
+      const total = parseFloat(
+        (prevCart.subtotal + prevCart.tax - discount).toFixed(2),
+      )
+
       return {
         ...prevCart,
-        total: prevCart.total - discount,
+        discountType,
+        discount,
+        total,
       }
     })
   }
 
   const clearCart = () => {
     setCart({
+      discountType: '',
       items: [],
       subtotal: 0,
       tax: 0,
@@ -101,7 +116,14 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, applyDiscount, clearCart }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        applyDiscount,
+        clearCart,
+        setIsDiscountApplicable,
+      }}
     >
       {children}
     </CartContext.Provider>
