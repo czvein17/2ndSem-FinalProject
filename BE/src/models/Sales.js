@@ -2,10 +2,9 @@ const mongoose = require("mongoose");
 
 const SalesSchema = new mongoose.Schema(
   {
-    refNumber: {
+    transactionId: {
       type: String,
       required: true,
-      unique: true,
     },
     order: {
       type: mongoose.Schema.Types.ObjectId,
@@ -33,7 +32,6 @@ const SalesSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-
     discountType: {
       type: String,
       enum: ["pwd", "senior", "promo", "none"],
@@ -51,10 +49,7 @@ const SalesSchema = new mongoose.Schema(
       required: true,
       default: "pending",
     },
-    transactionId: {
-      type: String,
-      required: true,
-    },
+
     paymentDate: {
       type: Date,
       required: true,
