@@ -6,7 +6,8 @@ import { ModalWrapper } from '../ModalWrapper'
 import { useNavigate } from 'react-router-dom'
 
 export const CartContainer = () => {
-  const { cart } = useCartContext()
+  const { cart, applyDiscount } = useCartContext()
+  const discountModalRef = useRef()
   const loadingModalRef = useRef()
   const cartContainerRef = useRef()
 
@@ -29,13 +30,31 @@ export const CartContainer = () => {
     },
   })
 
+  const handleDiscountChange = (event) => {
+    const discountType = event.target.value
+    applyDiscount(discountType)
+  }
+
   const handleConfirmOrder = (e) => {
     e.preventDefault()
 
-    if (cart.items.length === 0) return
-    postOrder(cart.items)
-  }
+    console.log('Confirm Order Triggered')
+    console.log('Cart Items:', cart.items)
 
+    if (cart.items.length === 0) {
+      console.log('Cart is empty')
+      return
+    }
+
+    console.log('Posting Order:', cart)
+
+    const payload = {
+      discountType: cart.discountType,
+      orderItems: cart.items,
+    }
+
+    postOrder(payload)
+  }
   const prices = [
     {
       title: 'Subtotal',
@@ -49,6 +68,7 @@ export const CartContainer = () => {
     {
       title: 'Discount',
       price: cart.discount,
+      button: 'Apply Discount',
     },
   ]
 
@@ -61,7 +81,7 @@ export const CartContainer = () => {
   if (isPending) toggleModal(loadingModalRef)
 
   return (
-    <div className='w-[400px] border-l-2 bg-white px-5 h-full flex flex-col space-y-10 py-10 flex-shrink-0'>
+    <div className='w-[400px] border-l-2 bg-white px-5 h-full flex flex-col space-y-5 py-10 flex-shrink-0'>
       {/* <h1 className='mx-auto text-2xl font-medium uppercase'>Cart Orders</h1> */}
       <div className='h-full overflow-hidden '>
         <div
@@ -113,7 +133,7 @@ export const CartContainer = () => {
       <div className='flex-shrink-0 space-y-1'>
         {prices.map((price, index) => (
           <div key={index} className={`flex justify-between px-2 py-2`}>
-            <h1 className='text-gray-500'>{price.title} :</h1>
+            <h1 className='text-gray-500'>{price.title} : </h1>
             <h1 className='font-demibold'>₱{price.price} </h1>
           </div>
         ))}
@@ -124,12 +144,32 @@ export const CartContainer = () => {
         </div>
       </div>
 
-      <button
-        className='flex-shrink-0 px-3 py-4 text-lg text-white transition-all duration-150 ease-in-out border rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
-        onClick={handleConfirmOrder}
-      >
-        Place an Order
-      </button>
+      <div className='flex flex-col flex-shrink-0 w-full gap-2 transition-all duration-150 ease-in-out'>
+        <button
+          className='my-auto ml-3 mr-auto text-gray-500 hover:text-orange'
+          onClick={() => toggleModal(discountModalRef)}
+        >
+          Apply Discount
+        </button>
+        <button
+          className='w-full px-3 py-4 text-lg text-white transition-all duration-150 ease-in-out border rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
+          onClick={handleConfirmOrder}
+        >
+          Place an Order
+        </button>
+      </div>
+
+      <ModalWrapper ref={discountModalRef}>
+        <div className='m-5'>
+          <h2>Select Discount Type</h2>
+          <select onChange={handleDiscountChange}>
+            <option value='none'>None</option>
+            <option value='pwd'>PWD (20%)</option>
+            <option value='senior'>Senior (20%)</option>
+            <option value='promo'>Promo (10%)</option>
+          </select>
+        </div>
+      </ModalWrapper>
 
       <ModalWrapper ref={loadingModalRef}>
         <h1>Loading...</h1>
