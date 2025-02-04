@@ -1,12 +1,19 @@
 const Order = require("../models/Order");
+const APIFeatures = require("../utils/apiFeatures");
 
 const createOrder = async (payload) => {
   const order = await Order.create(payload);
   return order;
 };
 
-const findAllOrders = async () => {
-  const orders = await Order.find();
+const findAllOrders = async (req) => {
+  const features = new APIFeatures(Order.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const orders = await features.query;
   return orders;
 };
 
