@@ -17,6 +17,7 @@ import { NotFound404 } from './components/NotFound404'
 import { RecomendProduct } from './page/AdminPage/subPage/RecomendProduct'
 import { UserLayout } from './layout/User/UserLayout'
 import { UserHomePage } from './page/User/UserHomePage'
+import { Success } from './components/Success'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -62,6 +63,10 @@ const AppRouter = () => {
           </Route>
         )}
       </Route>
+
+      <Route path='/success' element={<Success />} />
+      <Route path='/failure' element={<h1>Success</h1>} />
+      <Route path='/cancel' element={<h1>Success</h1>} />
 
       <Route path='*' element={<NotFound404 />} />
     </Routes>
