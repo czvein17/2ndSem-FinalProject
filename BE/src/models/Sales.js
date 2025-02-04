@@ -6,58 +6,34 @@ const SalesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
       required: true,
     },
-    subTotal: {
+    receivedAmount: {
       type: Number,
       required: true,
     },
-    tax: {
+    change: {
       type: Number,
       required: true,
-    },
-    discountAmount: {
-      type: Number,
-      default: 0,
-    },
-    totalAmount: {
-      type: Number,
-      required: true,
-    },
-
-    recievedAmount: {
-      type: Number,
-      required: true,
-    },
-    discountType: {
-      type: String,
-      enum: ["pwd", "senior", "promo", "none"],
-      default: "none",
     },
     modeOfPayment: {
       type: String,
       enum: ["cash", "card", "paymaya", "gcash"],
       required: true,
     },
-
     paymentStatus: {
       type: String,
       enum: ["paid", "pending", "refunded"],
       required: true,
       default: "pending",
-    },
-
-    paymentDate: {
-      type: Date,
-      required: true,
-    },
-
-    paymentDetails: {
-      type: String,
-      required: true,
     },
     createdAt: {
       type: Date,
