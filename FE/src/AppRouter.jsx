@@ -64,10 +64,6 @@ const AppRouter = () => {
         )}
       </Route>
 
-      <Route path='/success' element={<Success />} />
-      <Route path='/failure' element={<h1>Success</h1>} />
-      <Route path='/cancel' element={<h1>Success</h1>} />
-
       <Route path='*' element={<NotFound404 />} />
     </Routes>
   )
