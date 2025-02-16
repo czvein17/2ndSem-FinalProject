@@ -12,6 +12,7 @@ import { RecommendCoffee } from '../../components/User/RecommendCoffee'
 import { CoffeeCard } from '../../components/User/CoffeeCard'
 import { CartContainer } from '../../components/User/CartContainer'
 import { PaymentModal } from '../../components/User/PaymentModal'
+import { Success } from '../../components/Success'
 
 export const UserHomePage = () => {
   console.log('USet Home Page Rendered')
@@ -41,6 +42,9 @@ export const UserHomePage = () => {
   }
 
   const categoryParams = searchParams.get('category')
+  const paymentStatus = searchParams.get('payment')
+  const orderId = searchParams.get('order')
+
   const catergory = [
     { name: 'All', value: 'all' },
     { name: 'Recommend', value: 'recommend' },
@@ -141,7 +145,6 @@ export const UserHomePage = () => {
 
         {/* CART */}
         <CartContainer />
-
         <PaymentModal />
       </div>
     </section>
