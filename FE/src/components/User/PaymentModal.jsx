@@ -8,6 +8,7 @@ import { getOrder } from '../../API/order'
 import { SlClose } from 'react-icons/sl'
 import CashLogo from '../../assets/icons/cash-logo.svg'
 import MayaLogo from '../../assets/icons/maya-logo.svg'
+import PAYMENT_SUCCESS from '../../assets/images/payment_success.gif'
 
 import { OrderSummaryCards } from './Cards/OrderSummaryCards'
 import { PaymentOrderItemsCard } from './Cards/PaymentOrderItemsCard'
@@ -16,12 +17,13 @@ import { payWithPayMaya } from '../../API/payment'
 export const PaymentModal = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
   const [orderId, setOrderId] = useState(null)
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
     const orderId = searchParams.get('order')
+
     if (orderId) {
       setOrderId(orderId)
       setIsPaymentModalOpen(true)
@@ -136,7 +138,7 @@ export const PaymentModal = () => {
 
               <div className='w-1 h-full mx-3 bg-[#D9D9D9] rounded-full' />
 
-              <div className='flex flex-col justify-between w-full'>
+              <div className='flex flex-col justify-between w-full h-full'>
                 {/* ORDER SUMMARY */}
                 <div className='flex flex-col p-5 space-y-8 rounded-xl'>
                   <h1
@@ -167,24 +169,46 @@ export const PaymentModal = () => {
                   </div>
                 </div>
                 {/* PAYMENT OPTION */}
-                <div className='space-y-2'>
-                  <h1 className='font-medium'>Payment Option :</h1>
-                  <div className='flex gap-2'>
-                    {paymentOptions.map((option, index) => (
-                      <button
-                        key={index}
-                        className='flex items-center justify-center p-2 transition-transform duration-150 ease-in-out border-2 border-orange rounded-xl hover:scale-105'
-                        onClick={option.onClick}
-                      >
-                        <img
-                          className='h-10 my-auto max-w-20'
-                          src={option.icon}
-                          alt={option.title}
-                        />
-                      </button>
-                    ))}
+                {order?.d?.sales ? (
+                  <div className='flex flex-col h-full mx-auto space-y-5 '>
+                    <div className='w-full h-40'>
+                      <img
+                        src={PAYMENT_SUCCESS}
+                        alt='Payment Success'
+                        className='object-contain w-full h-full'
+                      />
+                    </div>
+                    <h1 className='text-xl font-medium text-center'>
+                      Payment Success
+                    </h1>
+
+                    <button
+                      className='py-2 text-white bg-orange rounded-xl'
+                      onClick={closePaymentModal}
+                    >
+                      Close
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <div className='space-y-2'>
+                    <h1 className='font-medium'>Payment Option :</h1>
+                    <div className='flex gap-2'>
+                      {paymentOptions.map((option, index) => (
+                        <button
+                          key={index}
+                          className='flex items-center justify-center p-2 transition-transform duration-150 ease-in-out border-2 border-orange rounded-xl hover:scale-105'
+                          onClick={option.onClick}
+                        >
+                          <img
+                            className='h-10 my-auto max-w-20'
+                            src={option.icon}
+                            alt={option.title}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </>
