@@ -6,7 +6,7 @@ import { ModalWrapper } from '../ModalWrapper'
 import { useNavigate } from 'react-router-dom'
 
 export const CartContainer = () => {
-  const { cart, applyDiscount } = useCartContext()
+  const { cart, applyDiscount, clearCart } = useCartContext()
   const discountModalRef = useRef()
   const loadingModalRef = useRef()
   const cartContainerRef = useRef()
@@ -27,6 +27,7 @@ export const CartContainer = () => {
       console.log(data.d)
       closeModals(loadingModalRef)
       navigate(`/user?order=${data.d._id}`)
+      clearCart()
     },
   })
 
@@ -144,7 +145,7 @@ export const CartContainer = () => {
         </div>
       </div>
 
-      <div className='flex flex-col flex-shrink-0 w-full gap-2 transition-all duration-150 ease-in-out'>
+      <div className='flex flex-col flex-shrink-0 w-full gap-4 transition-all duration-150 ease-in-out'>
         <button
           className='my-auto ml-3 mr-auto text-gray-500 hover:text-orange'
           onClick={() => toggleModal(discountModalRef)}
@@ -152,7 +153,7 @@ export const CartContainer = () => {
           Apply Discount
         </button>
         <button
-          className='w-full px-3 py-4 text-lg text-white transition-all duration-150 ease-in-out border rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
+          className='px-20 py-3 mx-auto text-lg text-white transition-all duration-150 ease-in-out border rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
           onClick={handleConfirmOrder}
         >
           Place an Order
