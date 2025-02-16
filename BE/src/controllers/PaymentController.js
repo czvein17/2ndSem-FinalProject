@@ -1,7 +1,10 @@
 const axios = require("axios");
 const orderService = require("../services/orderService");
+const salesService = require("../services/salesService");
 const { asyncHandler } = require("../middlewares/asyncHandler");
 const ErrorResponse = require("../utils/errorResponse");
+
+const { generateTransactionId } = require("../utils/utils.js");
 
 require("dotenv").config();
 
@@ -30,7 +33,7 @@ const payWithPayMaya = asyncHandler(async (req, res, next) => {
       },
 
       redirectUrl: {
-        success: `http://localhost:5173/user?order=${orderId}&payment=success`,
+        success: `http://localhost:5173/user?order=${orderId}`,
         failure: "http://localhost:5173/failure",
         cancel: "http://localhost:5173/cancel",
       },
@@ -57,11 +60,17 @@ const payWithPayMaya = asyncHandler(async (req, res, next) => {
     },
   });
 
-  await orderService.updateOrder(orderId, {
+  await salesService.createSale({
+    transactionId: generateTransactionId(),
     checkoutId: response.data.checkoutId,
+    user: order.user,
+    order: order._id,
+    receivedAmount: 0,
+    change: 0,
+    modeOfPayment: "paymaya",
   });
 
-  res.status(200).json({
+  await res.status(200).json({
     c: 200,
     m: "Payment request created successfully",
     d: response.data,
@@ -69,9 +78,15 @@ const payWithPayMaya = asyncHandler(async (req, res, next) => {
 });
 
 const confirmPayment = asyncHandler(async (req, res, next) => {
-  const { checkoutId } = req.params;
+  const { orderId } = req.params;
 
-  const mayaAPI = `https://pg-sandbox.paymaya.com/payments/v1/payments/${checkoutId}`;
+  const sales = await salesService.findSaleByOrderId(orderId);
+
+  if (!sales) {
+    return next(new ErrorResponse(404, "Sales not found"));
+  }
+
+  const mayaAPI = `https://pg-sandbox.paymaya.com/payments/v1/payments/${sales.checkoutId}`;
 
   const response = await axios.get(mayaAPI, {
     headers: {
@@ -80,10 +95,20 @@ const confirmPayment = asyncHandler(async (req, res, next) => {
     },
   });
 
+  console.log(response.data);
+
+  if (response.data.status !== "PAYMENT_SUCCESS")
+    return next(new ErrorResponse(400, "Payment failed"));
+
+  const updatedSales = await salesService.updateSales(sales._id, {
+    receivedAmount: response.data.amount,
+    paymentStatus: "paid",
+  });
+
   res.status(200).json({
     c: 200,
     m: "Payment confirmed successfully",
-    d: response.data,
+    d: updatedSales,
   });
 });
 
