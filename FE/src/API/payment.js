@@ -6,7 +6,7 @@ export const payWithPayMaya = async (order) => {
   return response.data
 }
 
-export const confirmPayment = async (checkoutId) => {
-  const response = await http.get(`/payment/maya-confirm/${checkoutId}`)
+export const confirmPayment = async (orderId) => {
+  const response = await http.get(`/payment/maya-confirm/${orderId}`)
   return response.data
 }
