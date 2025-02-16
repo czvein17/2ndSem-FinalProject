@@ -18,11 +18,15 @@ const findAllOrders = async (req) => {
 };
 
 const findOrderById = async (id) => {
-  const order = await Order.findById(id).populate({
-    // path: "",
-    path: "orderItems.product",
-    select: "name price image",
-  });
+  const order = await Order.findById(id)
+    .populate({
+      // path: "",
+      path: "orderItems.product",
+      select: "name price image",
+    })
+    .populate({
+      path: "sales",
+    });
   return order;
 };
 
