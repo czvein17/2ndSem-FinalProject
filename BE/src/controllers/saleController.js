@@ -54,6 +54,7 @@ const getSales = asyncHandler(async (req, res, next) => {
   const sales = await salesService.getSales(req);
   res.status(200).json({
     c: 200,
+    l: sales.length,
     m: "Get sales successfully",
     d: sales,
   });
