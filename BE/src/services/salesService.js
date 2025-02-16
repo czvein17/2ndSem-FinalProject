@@ -27,9 +27,19 @@ const findSaleByOrderId = async (orderId) => {
   return sale;
 };
 
+const updateSales = async (id, payload) => {
+  const sale = await Sales.findByIdAndUpdate(id, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return sale;
+};
+
 module.exports = {
   createSale,
   getSales,
   getSaleById,
   findSaleByOrderId,
+  updateSales,
 };
