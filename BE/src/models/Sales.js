@@ -6,6 +6,9 @@ const SalesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    checkoutId: {
+      type: String, // Only for paymaya
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -31,7 +34,7 @@ const SalesSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["paid", "pending", "refunded"],
+      enum: ["pending", "paid", "refunded"],
       required: true,
       default: "pending",
     },
