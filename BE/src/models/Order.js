@@ -57,9 +57,7 @@ const OrderSchema = new mongoose.Schema(
       required: true,
       default: "pending",
     },
-    checkoutId: {
-      type: String,
-    },
+
     createdAt: {
       type: Date,
       default: Date.now,
@@ -71,6 +69,13 @@ const OrderSchema = new mongoose.Schema(
     toObject: { virtuals: true },
   }
 );
+
+OrderSchema.virtual("sales", {
+  ref: "Sales",
+  localField: "_id",
+  foreignField: "order",
+  justOne: true,
+});
 
 const Order = mongoose.model("Order", OrderSchema);
 module.exports = Order;
