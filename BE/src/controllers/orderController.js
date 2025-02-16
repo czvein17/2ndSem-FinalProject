@@ -3,7 +3,8 @@ const orderService = require("../services/orderService");
 const salesService = require("../services/salesService");
 
 const { asyncHandler } = require("../middlewares/asyncHandler");
-const ErrorResponse = require("../utils/ErrorResponse");
+const ErrorResponse = require("../utils/errorResponse");
+const { validateMayaPayment } = require("../utils/payment");
 
 const createOrder = asyncHandler(async (req, res, next) => {
   const user = req.user;
@@ -66,6 +67,10 @@ const getOrderById = asyncHandler(async (req, res, next) => {
 
   if (!order) {
     return next(new ErrorResponse(404, `Order not found with id ${orderId}`));
+  }
+
+  if (order.sales && order.sales.checkoutId) {
+    await validateMayaPayment(order.sales);
   }
 
   res.status(200).json({
