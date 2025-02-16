@@ -8,6 +8,6 @@ const {
 const router = express.Router();
 
 router.post("/maya/:orderId", payWithPayMaya);
-router.get("/maya-confirm/:checkoutId", confirmPayment);
+router.get("/maya-confirm/:orderId", confirmPayment);
 
 module.exports = router;
