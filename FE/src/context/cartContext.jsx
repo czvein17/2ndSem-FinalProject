@@ -7,13 +7,19 @@ export const CartProvider = ({ children }) => {
   const [isDiscountApplicable, setIsDiscountApplicable] = useState(false)
   const [taxRate, setTaxRate] = useState(0.12) // 12%
   // const [discountRate, setDiscountRate] = useState(0.05) // 5%
-  const [cart, setCart] = useState({
-    discountType: '',
-    items: [],
-    subtotal: 0,
-    tax: 0,
-    total: 0,
-    discount: 0,
+  const [cart, setCart] = useState(() => {
+    // Load cart data from localStorage if available
+    const savedCart = localStorage.getItem('cart')
+    return savedCart
+      ? JSON.parse(savedCart)
+      : {
+          discountType: '',
+          items: [],
+          subtotal: 0,
+          tax: 0,
+          total: 0,
+          discount: 0,
+        }
   })
 
   useEffect(() => {
@@ -27,6 +33,11 @@ export const CartProvider = ({ children }) => {
 
     setCart((prevCart) => ({ ...prevCart, subtotal, tax, total, discount }))
   }, [cart.items, taxRate, isDiscountApplicable])
+
+  // Save cart data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart))
+  }, [cart])
 
   console.log(cart.items)
 
