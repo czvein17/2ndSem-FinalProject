@@ -2,22 +2,28 @@ import React, { useEffect } from 'react'
 import axios from 'axios'
 
 import { confirmPayment } from '../API/payment'
+import { useQuery } from '@tanstack/react-query'
 
 export const Success = () => {
-  useEffect(() => {
-    const confirmPayment = async () => {
-      const params = new URLSearchParams(location.search)
-      const checkoutId = params.get('id')
+  const {
+    data: paymentDetails,
+    isPending,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['confirmPayment'],
+    queryFn: confirmPayment,
+  })
 
-      try {
-        const response = await confirmPayment(checkoutId)
-        console.log('Payment confirmed:', response.data)
-      } catch (error) {
-        console.error('Error confirming payment:', error)
-      }
+  useEffect(() => {
+    const confirmPaymentAndCreateSales = async () => {
+      const params = new URLSearchParams(location.search)
+      const orderId = params.get('order')
+
+      paymentDetails(orderId)
     }
 
-    confirmPayment()
+    confirmPaymentAndCreateSales()
   }, [location])
   return <div>Success</div>
 }
