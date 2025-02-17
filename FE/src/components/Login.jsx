@@ -4,6 +4,8 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { loginViaEmailAndPassword, loginViaGoogle } from '../API/login'
 
 import facebook from '../assets/icons/facebook.svg'
+import CUP_OF_CHI from '../assets/images/logo.svg'
+
 import { FaEye } from 'react-icons/fa6'
 import { FaEyeSlash } from 'react-icons/fa6'
 import { GoogleLoginButton } from './button/GoogleLoginButton'
@@ -70,17 +72,21 @@ const Login = () => {
   return (
     <div className='flex flex-col-reverse items-center justify-center h-screen md:flex-row font-inter'>
       <div className='flex flex-col justify-center h-full p-5 md:w-1/2 md:p-10 md:m-10'>
+        <div className='w-64 h-64 mx-auto'>
+          <img src={CUP_OF_CHI} alt='Facebook Logo' className='object-contain' />
+        </div>
+
         <h1 className='text-3xl font-bold'>LOGIN</h1>
         <p className='pt-3 text-[16px]'>Please login to continue</p>
 
         <form className='flex flex-col gap-8 pt-10 ' onSubmit={handleLogin}>
           <div>
             <p className='h-5 text-red-600'>{error}</p>
-            <p className='font-bold'>Email : </p>
-            <div className='py-2 mt-3 rounded-md bg-secondary'>
+            <p className='text-base font-bold'>Email : </p>
+            <div className='py-1 mt-3 rounded-md shadow-lg bg-secondary'>
               <input
                 placeholder='Enter email'
-                className='border p-2 w-full outline-none bg-transparent border-none text-[16px]'
+                className='w-full p-2 text-base bg-transparent border border-none outline-none'
                 value={data.username}
                 onChange={(e) => setData({ ...data, username: e.target.value })}
               />
@@ -160,7 +166,9 @@ const Login = () => {
           <span className='font-semibold text-black cursor-pointer'>Sign Up</span>
         </p>
       </div>
-      <div className='w-full bg-black md:w-1/2 md:h-full'>1</div>
+      <div className='flex w-full p-5 md:w-1/2 md:h-full'>
+        <img src={CUP_OF_CHI} alt='Cup of Chi Logo' className='object-contain' />
+      </div>
     </div>
   )
 }
