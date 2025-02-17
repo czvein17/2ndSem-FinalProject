@@ -17,6 +17,9 @@ import { Success } from '../../components/Success'
 export const UserHomePage = () => {
   console.log('USet Home Page Rendered')
   const { isLoggedIn, user } = useAuth()
+  const [search, setSearch] = useState('')
+  const [debounceSearch, setDebounceSearch] = useState('')
+
   const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
   const navigate = useNavigate()
@@ -35,6 +38,14 @@ export const UserHomePage = () => {
     }
   }, [searchParams, setSearchParams])
   console.log(searchParams.toString())
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebounceSearch(search)
+    }, 1000)
+
+    return () => clearTimeout(handler)
+  }, [search])
 
   const handleCategory = (category) => {
     searchParams.set('category', category)
@@ -55,6 +66,8 @@ export const UserHomePage = () => {
   ]
   const queryParams = {
     category: categoryParams === 'all' ? null : categoryParams,
+    searchBy: 'name',
+    search: debounceSearch,
   }
   const { data: coffees } = useQuery({
     queryKey: ['coffees', queryParams],
@@ -68,12 +81,17 @@ export const UserHomePage = () => {
       {/* header */}
       <div className='flex h-20 bg-white border-b-2'>
         <div className='w-full px-5 my-auto'>
-          <div className='w-[300px] bg-secondBg py-2 px-3 flex items-center rounded-full gap-2 shadow-md'>
+          <div
+            className='w-[300px] bg-secondBg py-2 px-3 flex items-center rounded-full gap-2 '
+            style={{ boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.1)' }}
+          >
             <LuSearch size={24} />
             <input
               type='text'
               placeholder='Search'
               className='w-full text-sm font-medium bg-transparent border-none outline-none'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
@@ -140,6 +158,12 @@ export const UserHomePage = () => {
           ) : (
             // Recommend Coffees Based on their mood
             <RecommendCoffee />
+          )}
+
+          {coffees?.d?.length === 0 && categoryParams !== 'recommend' && (
+            <h1 className='text-center text-lg font-medium text-[#3b3b3b80]'>
+              No Coffee Found
+            </h1>
           )}
         </div>
 
