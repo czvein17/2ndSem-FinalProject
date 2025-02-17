@@ -125,8 +125,9 @@ export const RecommendCoffee = () => {
             </motion.div>
           </AnimatePresence>
           <button
-            className='px-10 py-2 mx-auto text-white transition-all duration-150 ease-in-out border rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
+            className='px-10 py-2 mx-auto text-white transition-all duration-150 ease-in-out border rounded-full shadow-xl bg-orange hover:bg-transparent border-orange hover:text-orange'
             onClick={handleRecommendation}
+            // style={{ boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.1)' }}
           >
             Submit
           </button>
