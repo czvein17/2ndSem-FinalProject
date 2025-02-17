@@ -34,7 +34,7 @@ const SalesSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ["pending", "paid", "refunded"],
+      enum: ["pending", "paid", "refunded", "failed"],
       required: true,
       default: "pending",
     },
