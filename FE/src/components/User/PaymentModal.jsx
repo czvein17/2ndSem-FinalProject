@@ -6,6 +6,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { getOrder } from '../../API/order'
 
 import { SlClose } from 'react-icons/sl'
+import CUP_OF_CHI from '../../assets/images/logo.svg'
 import CashLogo from '../../assets/icons/cash-logo.svg'
 import MayaLogo from '../../assets/icons/maya-logo.svg'
 import PAYMENT_SUCCESS from '../../assets/images/payment_success.gif'
@@ -13,6 +14,15 @@ import PAYMENT_SUCCESS from '../../assets/images/payment_success.gif'
 import { OrderSummaryCards } from './Cards/OrderSummaryCards'
 import { PaymentOrderItemsCard } from './Cards/PaymentOrderItemsCard'
 import { payWithPayMaya } from '../../API/payment'
+
+// Utility function to detect if running in Electron
+const isElectron = () => {
+  return (
+    typeof window !== 'undefined' &&
+    window.process &&
+    window.process.type === 'renderer'
+  )
+}
 
 export const PaymentModal = () => {
   const navigate = useNavigate()
@@ -39,12 +49,21 @@ export const PaymentModal = () => {
     queryKey: ['order'],
     queryFn: () => getOrder(orderId),
     enabled: !!orderId,
+    staleTime: 0, // Data is considered stale immediately
+    cacheTime: 0, // Data is not cached
   })
 
   const { mutate: handlePaymayaPayment } = useMutation({
     mutationFn: () => payWithPayMaya(order),
     onSuccess: (data) => {
-      window.location.href = data.d.redirectUrl
+      if (isElectron()) {
+        // Handle redirection in Electron
+        const { shell } = require('electron')
+        shell.openExternal(data.d.redirectUrl)
+      } else {
+        // Handle redirection in a web browser
+        window.location.href = data.d.redirectUrl
+      }
     },
   })
 
@@ -141,13 +160,20 @@ export const PaymentModal = () => {
               <div className='flex flex-col justify-between w-full h-full'>
                 {/* ORDER SUMMARY */}
                 <div className='flex flex-col p-5 space-y-8 rounded-xl'>
-                  <h1
+                  <div className='w-full h-28 '>
+                    <img
+                      src={CUP_OF_CHI}
+                      alt=''
+                      className='object-contain w-full h-full'
+                    />
+                  </div>
+                  {/* <h1
                     className='mx-auto text-5xl font-medium'
                     style={{ textShadow: '1px 1px 10px rgba(0, 0, 0, 0.5)' }}
                   >
                     <span className='text-orange'>Chi'</span>
                     Coffee
-                  </h1>
+                  </h1> */}
 
                   <div className='uppercase'>
                     <h1 className='font-medium'>
@@ -169,7 +195,7 @@ export const PaymentModal = () => {
                   </div>
                 </div>
                 {/* PAYMENT OPTION */}
-                {order?.d?.sales ? (
+                {order.d.sales && order.d.sales.paymentStatus === 'paid' ? (
                   <div className='flex flex-col h-full mx-auto space-y-5 '>
                     <div className='w-full h-40'>
                       <img
