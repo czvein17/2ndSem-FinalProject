@@ -29,11 +29,24 @@ class APIFeatures {
     if (this.queryString.search && this.queryString.searchBy) {
       const searchField = this.queryString.searchBy;
       const searchValue = this.queryString.search;
-      const searchQuery = {
-        [searchField]: { $regex: searchValue, $options: "i" },
-      };
 
-      this.query = this.query.find(searchQuery);
+      // Check if the search field is a string type
+      const schemaPaths = this.query.schema.paths;
+      if (
+        schemaPaths[searchField] &&
+        schemaPaths[searchField].instance === "String"
+      ) {
+        const searchQuery = {
+          [searchField]: { $regex: searchValue, $options: "i" },
+        };
+        this.query = this.query.find(searchQuery);
+      } else {
+        // If the field is not a string, use exact match
+        const searchQuery = {
+          [searchField]: searchValue,
+        };
+        this.query = this.query.find(searchQuery);
+      }
     }
 
     return this;
