@@ -13,7 +13,7 @@ const protectAuth = asyncHandler(async (req, res, next) => {
   let token = req.headers.authorization.split(" ")[1];
 
   const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(decoded);
+  // console.log(decoded);
 
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) return next(new ErrorResponse(401, "Unauthorized access"));
