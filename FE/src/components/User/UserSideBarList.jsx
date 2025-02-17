@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { useCartContext } from '../../hooks/useCartContext'
 
 export const UserSideBarList = ({ index, item }) => {
-  const { cart } = useCartContext()
+  const { cart, pendingOrdersCount } = useCartContext()
 
   return (
     <NavLink
@@ -19,9 +19,11 @@ export const UserSideBarList = ({ index, item }) => {
           whileHover={{ color: '#FFA500' }}
         >
           {item.icon} {item.name}
-          {item.name === 'Orders' && cart.items.length > 0 && (
+          {item.name === 'Orders' && (
             <span className='flex items-center justify-center w-6 h-6 p-2 text-white rounded-full bg-orange'>
-              {cart.items.length}
+              {/* {cart.items.length} */}
+              {console.log(pendingOrdersCount)}
+              {pendingOrdersCount}
             </span>
           )}
           {isActive && (
