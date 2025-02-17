@@ -29,6 +29,10 @@ const OrderSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    recipient: {
+      type: String,
+      required: true,
+    },
     orderItems: [OrderItemSchema],
     subTotal: {
       type: Number,
