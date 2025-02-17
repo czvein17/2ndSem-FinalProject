@@ -18,6 +18,7 @@ import { RecomendProduct } from './page/AdminPage/subPage/RecomendProduct'
 import { UserLayout } from './layout/User/UserLayout'
 import { UserHomePage } from './page/User/UserHomePage'
 import { Success } from './components/Success'
+import { OrderPage } from './page/POS/Order/OrderPage'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -55,7 +56,7 @@ const AppRouter = () => {
 
         {isLoggedIn && (
           <Route element={<PrivateRoute roles={['user']} />}>
-            <Route path='/user/orders' element={<>orders</>} />
+            <Route path='/user/orders' element={<OrderPage />} />
             <Route path='/user/history' element={<>history</>} />
 
             <Route path='/user/profile' element={<>profile</>} />
