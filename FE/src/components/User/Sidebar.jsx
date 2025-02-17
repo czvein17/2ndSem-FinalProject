@@ -8,6 +8,8 @@ import {
   TbLogout,
 } from 'react-icons/tb'
 
+import CUP_OF_CHI from '../../assets/images/logo.svg'
+
 import { UserSideBarList } from './UserSideBarList'
 import { useAuth } from '../../hooks/useAuth'
 
@@ -54,9 +56,12 @@ export const Sidebar = () => {
   const filterSidebar = isLoggedIn ? sidebarList : sidebarList.slice(0, 2)
 
   return (
-    <nav className='flex flex-col justify-between w-64 py-10 bg-white border-r-2 border-gray-100'>
-      <div className='mx-auto'>LOGO HERE</div>
-      <div className='mt-32 mb-auto'>
+    <nav className='flex flex-col justify-between w-64 bg-white border-r-2 border-gray-100'>
+      <div className='w-full h-40 p-5 mx-auto '>
+        <img src={CUP_OF_CHI} alt='logo' className='object-contain w-full h-full ' />
+      </div>
+
+      <div className='mt-10 mb-auto'>
         <ul className='space-y-4 text-textBlack'>
           {filterSidebar.map((item, index) => (
             <UserSideBarList key={index} item={item} />
@@ -75,7 +80,7 @@ export const Sidebar = () => {
         )}
       </div>
       <button
-        className='flex items-center gap-3 px-5 py-3 mx-auto text-sm transition-all duration-150 ease-in-out hover:text-orange rounded-xl hover:bg-secondary'
+        className='flex items-center gap-3 px-5 py-3 mx-auto mb-10 text-sm transition-all duration-150 ease-in-out hover:text-orange rounded-xl hover:bg-secondary'
         onClick={logout}
       >
         <TbLogout size={26} />
