@@ -1,17 +1,19 @@
 import { IoAddOutline, IoRemove } from 'react-icons/io5'
 import { useCartContext } from '../../hooks/useCartContext'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { ModalWrapper } from '../ModalWrapper'
 
 export const CoffeeCard = memo(({ coffee }) => {
   const coffeeSizeRef = useRef()
   const { cart, addToCart, removeFromCart } = useCartContext()
-  const [size, setSize] = useState()
+  const [size, setSize] = useState('')
   const sizes = ['small', 'medium', 'large']
 
   const findCoffee = useMemo(() => {
-    return cart.items.find((cartItem) => cartItem._id === coffee._id)
-  }, [cart.items, coffee._id])
+    return cart.items.find(
+      (cartItem) => cartItem._id === coffee._id && cartItem.size === size,
+    )
+  }, [cart.items, coffee._id, size])
 
   const setCoffeeSize = (newSize) => setSize(newSize)
 
@@ -40,17 +42,19 @@ export const CoffeeCard = memo(({ coffee }) => {
         </div>
         <div className='flex items-center justify-center h-20 gap-2 '>
           <button
-            className='flex items-center justify-center w-8 h-8 border-2 rounded-full'
-            onClick={() => removeFromCart(coffee._id)}
+            className='flex items-center justify-center w-8 h-8 border-2 border-[#D9D9D9] rounded-full '
+            onClick={() => removeFromCart(coffee._id, size)}
           >
             <IoRemove size={24} />
           </button>
 
-          <p>{findCoffee ? findCoffee.quantity : 0}</p>
+          <p className='w-4 text-center text-md'>
+            {findCoffee ? findCoffee.quantity : 0}
+          </p>
 
           <button
-            className='flex items-center justify-center w-8 h-8 border-2 rounded-full'
-            onClick={() => addToCart(coffee)}
+            className='flex items-center justify-center w-8 h-8 border-2 border-[#D9D9D9] rounded-full'
+            onClick={handleAddToCart}
           >
             <IoAddOutline size={24} />
           </button>
@@ -73,7 +77,7 @@ export const CoffeeCard = memo(({ coffee }) => {
             {sizes.map((size, index) => (
               <Label
                 key={index}
-                name='size'
+                name={`size-${coffee._id}`}
                 value={size}
                 setCoffeeSize={setCoffeeSize}
               />
@@ -118,7 +122,7 @@ const Label = memo(({ name, value, setCoffeeSize }) => {
         className='hidden peer'
         onClick={() => setCoffeeSize(value)}
       />
-      <span className='h-8 w-8 text-xs border border-gray-300 rounded-full peer-checked:bg-[#3D3D3D] peer-checked:text-white uppercase vertical-align-middle flex items-center justify-center'>
+      <span className='h-8 w-8 text-xs border border-[#D9D9D9] rounded-full peer-checked:bg-[#3D3D3D] peer-checked:text-white uppercase vertical-align-middle flex items-center justify-center'>
         {value.charAt(0)}
       </span>
     </label>
