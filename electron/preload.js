@@ -7,4 +7,5 @@ contextBridge.exposeInMainWorld("electron", {
   receive: (channel, func) => {
     ipcRenderer.on(channel, (event, ...args) => func(...args));
   },
+  isElectron: true,
 });
