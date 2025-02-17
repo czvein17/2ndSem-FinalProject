@@ -7,7 +7,6 @@ let mainWindow;
 let loadingWindow;
 
 function createWindow() {
-  // Create the loading window
   loadingWindow = new BrowserWindow({
     width: 400,
     height: 300,
@@ -22,7 +21,8 @@ function createWindow() {
 
   loadingWindow.loadFile(path.join(__dirname, "loading.html"));
 
-  const mainWindow = new BrowserWindow({
+  // REMOVE `const` to update the global variable
+  mainWindow = new BrowserWindow({
     title: "Final Project",
     autoHideMenuBar: true,
     width: 1800,
@@ -30,27 +30,35 @@ function createWindow() {
     icon: path.join(__dirname, "assets", "logo.jpg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      contextIsolation: true, // Enable context isolation
-      nodeIntegration: false, // Disable node integration
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   });
 
   mainWindow.webContents.openDevTools();
   mainWindow.loadURL("http://localhost:5173/");
-  // mainWindow.loadFile(path.join(__dirname, "../electron/dist/index.html"));
-
   mainWindow.setMenu(null);
 
   mainWindow.webContents.on("did-finish-load", () => {
-    // Close the loading window and show the main window
-    if (loadingWindow) loadingWindow.close();
+    if (loadingWindow) {
+      loadingWindow.close();
+      loadingWindow = null;
+    }
     mainWindow.show();
     mainWindow.webContents.openDevTools();
+  });
+
+  mainWindow.on("closed", () => {
+    mainWindow = null; // Prevent further access to a destroyed object
   });
 
   app.commandLine.appendSwitch("enable-gpu-rasterization");
   app.commandLine.appendSwitch("enable-zero-copy");
   app.commandLine.appendSwitch("ignore-gpu-blacklist");
+}
+
+if (mainWindow && !mainWindow.isDestroyed()) {
+  mainWindow.webContents.openDevTools();
 }
 
 app.on("ready", createWindow);
