@@ -1,12 +1,17 @@
-import React, { useEffect, useRef } from 'react'
-import { useCartContext } from '../../hooks/useCartContext'
+import { useEffect, useRef } from 'react'
+
 import { useMutation } from '@tanstack/react-query'
-import { createOrder } from '../../API/order'
-import { ModalWrapper } from '../ModalWrapper'
 import { useNavigate } from 'react-router-dom'
 
+import { useCartContext } from '../../hooks/useCartContext'
+import { createOrder } from '../../API/order'
+
+import { IoAddOutline, IoRemove } from 'react-icons/io5'
+
+import { ModalWrapper } from '../ModalWrapper'
 export const CartContainer = () => {
-  const { cart, applyDiscount, clearCart } = useCartContext()
+  const { cart, applyDiscount, clearCart, addToCart, removeFromCart } =
+    useCartContext()
   const discountModalRef = useRef()
   const loadingModalRef = useRef()
   const cartContainerRef = useRef()
@@ -91,11 +96,9 @@ export const CartContainer = () => {
         >
           {cart.items.map((item, index) => (
             <div
-              key={item._id}
+              key={item._id + item.size}
               className='flex px-3 py-6 space-x-2 border-b-2 border-[#D9D9D9]'
             >
-              {console.log(item)}
-
               <div className='flex-shrink-0 w-24 h-24 my-auto bg-secondBg rounded-xl'>
                 <img
                   src={`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}/images/coffee-image/${item.image}`}
@@ -114,14 +117,18 @@ export const CartContainer = () => {
                   <h1 className='font-medium text-orange'>₱{item.price}</h1>
 
                   <div className='flex items-center justify-center space-x-2 text-[#3D3D3D]'>
-                    <button className='w-8 h-8 ml-auto border-2 border-[#D9D9D9] rounded-full'>
-                      +
+                    <button
+                      className='w-7 h-7 ml-auto border-2 border-[#D9D9D9] rounded-full flex justify-center items-center'
+                      onClick={() => removeFromCart(item._id, item.size)}
+                    >
+                      <IoRemove size={20} />
                     </button>
-
-                    <h1 className='text-md'>{item.quantity}</h1>
-
-                    <button className='w-8 h-8 ml-auto border border-[#D9D9D9] rounded-full'>
-                      -
+                    <h1 className='w-4 text-center text-md'>{item.quantity}</h1>
+                    <button
+                      className='flex items-center justify-center w-7 h-7 border-2 border-[#D9D9D9] rounded-full'
+                      onClick={() => addToCart(item, item.size)}
+                    >
+                      <IoAddOutline size={20} />
                     </button>
                   </div>
                 </div>
@@ -153,7 +160,7 @@ export const CartContainer = () => {
           Apply Discount
         </button>
         <button
-          className='px-20 py-3 mx-auto text-lg text-white transition-all duration-150 ease-in-out border rounded-full bg-orange hover:bg-transparent hover:border-orange hover:text-orange'
+          className='px-20 py-3 mx-auto text-lg text-white transition-all duration-150 ease-in-out border rounded-full shadow-xl bg-orange hover:bg-transparent border-orange hover:text-orange'
           onClick={handleConfirmOrder}
         >
           Place an Order
