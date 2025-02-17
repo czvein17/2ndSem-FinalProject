@@ -8,12 +8,15 @@ const createOrder = async (payload) => {
 
 const findAllOrders = async (req) => {
   const features = new APIFeatures(Order.find(), req.query)
+    .search()
     .filter()
     .sort()
     .limitFields()
     .paginate();
 
-  const orders = await features.query;
+  const orders = await features.query.populate({
+    path: "sales",
+  });
   return orders;
 };
 
