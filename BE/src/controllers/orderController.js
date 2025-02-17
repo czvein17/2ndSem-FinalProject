@@ -3,7 +3,7 @@ const orderService = require("../services/orderService");
 const salesService = require("../services/salesService");
 
 const { asyncHandler } = require("../middlewares/asyncHandler");
-const ErrorResponse = require("../utils/errorResponse");
+const ErrorResponse = require("../utils/ErrorResponse");
 const { validateMayaPayment } = require("../utils/payment");
 
 const createOrder = asyncHandler(async (req, res, next) => {
@@ -43,6 +43,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
 
   const payload = {
     user: user.id,
+    recipient: "John Doe",
     orderItems: orderItemsDetails,
     subTotal,
     tax,
@@ -70,7 +71,11 @@ const getOrderById = asyncHandler(async (req, res, next) => {
   }
 
   if (order.sales && order.sales.checkoutId) {
-    await validateMayaPayment(order.sales);
+    const updatedSales = await validateMayaPayment(order.sales);
+    if (updatedSales) {
+      order.sales = updatedSales;
+      await order.save();
+    }
   }
 
   res.status(200).json({
