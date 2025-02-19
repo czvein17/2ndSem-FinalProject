@@ -1,4 +1,5 @@
 const Ingredient = require("../models/Ingredient");
+const mongoose = require("mongoose");
 
 const findAllIngredients = async () => {
   const ingredients = await Ingredient.find();
@@ -24,6 +25,25 @@ const updateIngredient = async (id, ingredient) => {
   return updatedIngredient;
 };
 
+const updateIngredientStock = async (ingredientId, quantityChange) => {
+  const ingredient = await findIngredientById(ingredientId);
+
+  if (!ingredient) {
+    throw new Error(`Ingredient not found with id ${ingredientId}`);
+  }
+  
+  ingredient.stock += quantityChange;
+  if (ingredient.stock < 0) {
+    throw new Error(
+      `Insufficient stock for ingredient with id ${ingredientId}`
+    );
+  }
+
+  ingredient.stock = parseFloat(ingredient.stock.toFixed(2));
+
+  await ingredient.save();
+};
+
 const deleteIngredient = async (id) => {
   const deletedIngredient = await Ingredient.findByIdAndDelete(id);
   return deletedIngredient;
@@ -35,4 +55,5 @@ module.exports = {
   createIngredient,
   updateIngredient,
   deleteIngredient,
+  updateIngredientStock,
 };
