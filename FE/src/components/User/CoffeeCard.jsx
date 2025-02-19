@@ -28,6 +28,10 @@ export const CoffeeCard = memo(({ coffee }) => {
     addToCart(coffee, size)
   }
 
+  const getPrice = () => {
+    return coffee.prices[size] || coffee.prices.small
+  }
+
   return (
     <div className='min-h-[300px] bg-white rounded-xl flex p-3 text-sm gap-3  shadow-md'>
       <div className='flex flex-col flex-shrink-0 w-40 gap-2'>
@@ -64,7 +68,8 @@ export const CoffeeCard = memo(({ coffee }) => {
         <div>
           <h3 className='text-lg font-semibold'>
             {coffee.name}{' '}
-            <span className='font-medium text-orange'>${coffee.price}</span>
+            {/* <span className='font-medium text-orange'>${coffee.price}</span> */}
+            <span className='font-medium text-orange'>${getPrice()}</span>
           </h3>
 
           <p className='text-sm font-medium  text-[#3b3b3b80]'>
@@ -80,6 +85,7 @@ export const CoffeeCard = memo(({ coffee }) => {
                 name={`size-${coffee._id}`}
                 value={size}
                 setCoffeeSize={setCoffeeSize}
+                // selectedSize={size}
               />
             ))}
           </div>
