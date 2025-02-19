@@ -24,10 +24,12 @@ const createProduct = asyncHandler(async (req, res, next) => {
 
 const findAllProducts = asyncHandler(async (req, res) => {
   const products = await productService.findAllProducts(req);
+
   res.json({
     c: 200,
     m: null,
-    d: products,
+    p: products.totalPages,
+    d: products.products,
   });
 });
 
