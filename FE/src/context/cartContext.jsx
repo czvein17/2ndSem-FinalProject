@@ -1,18 +1,15 @@
 import React, { createContext, useState, useContext, useEffect } from 'react'
 import io from 'socket.io-client'
-import { useSocket } from '../hooks/useSocket'
 
 export const CartContext = createContext()
 const socket = io(`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}`)
 
 // Create a provider component
 export const CartProvider = ({ children }) => {
-  // const pendingOrdersCount = useSocket();
   const [pendingOrdersCount, setPendingOrdersCount] = useState(0)
 
   const [isDiscountApplicable, setIsDiscountApplicable] = useState(false)
   const [taxRate, setTaxRate] = useState(0.12) // 12%
-  // const [discountRate, setDiscountRate] = useState(0.05) // 5%
   const [cart, setCart] = useState(() => {
     // Load cart data from localStorage if available
     const savedCart = localStorage.getItem('cart')
@@ -30,7 +27,7 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     const subtotal = cart.items.reduce(
-      (acc, item) => acc + item.price * item.quantity,
+      (acc, item) => acc + item.prices[item.size] * item.quantity,
       0,
     )
     const discount = isDiscountApplicable ? subtotal * cart.discount : 0
@@ -48,7 +45,6 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     console.log('Setting up WebSocket listener for pendingOrdersCount')
     socket.on('pendingOrdersCount', (count) => {
-      // console.log('Received pendingOrdersCount:', count)
       setPendingOrdersCount(count)
     })
 
@@ -77,7 +73,10 @@ export const CartProvider = ({ children }) => {
       } else {
         return {
           ...prevCart,
-          items: [...prevCart.items, { ...item, quantity: 1, size: size }],
+          items: [
+            ...prevCart.items,
+            { ...item, quantity: 1, size: size, prices: item.prices },
+          ],
         }
       }
     })
