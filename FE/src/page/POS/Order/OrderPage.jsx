@@ -6,11 +6,9 @@ import { FaRegEye } from 'react-icons/fa'
 import { MdOutlinePayments } from 'react-icons/md'
 import { CgSearch } from 'react-icons/cg'
 
-import { useSocket } from '../../../hooks/useSocket'
 import { OrderTable } from '../../../components/POS/order/orderTable'
 
 export const OrderPage = () => {
-  useSocket()
   const {
     data: orders,
     isPending,
