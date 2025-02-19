@@ -6,16 +6,18 @@ import Sidebar from '../../components/Admin/Sidebar'
 
 const AdminPage = () => {
   return (
-    <div className='h-screen flex  flex-row-reverse items-center justify-center bg-background font-inter relative'>
-      <div className='w-full h-full flex flex-col'>
+    <div className='relative flex flex-row-reverse items-center justify-center h-screen bg-background font-inter'>
+      <div className='flex flex-col w-full h-full'>
         <Header />
-        <div className='px-5 h-full overflow-auto bg-transparent'>
+
+        <div className='h-full px-5 overflow-auto bg-transparent'>
           <Outlet />
         </div>
       </div>
-      <div className='hidden lg:flex flex-none w-64 h-full border-r border-gray  p-5'>
+      <div className='flex-none hidden w-64 h-full border-r lg:flex border-gray'>
         <Sidebar />
       </div>
+
       <ToastContainer
         position='top-right'
         autoClose={2000}
