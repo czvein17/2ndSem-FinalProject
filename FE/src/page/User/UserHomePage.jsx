@@ -64,11 +64,13 @@ export const UserHomePage = () => {
     { name: 'Milk', value: 'milk' },
     { name: 'Juice', value: 'juice' },
   ]
+  
   const queryParams = {
     category: categoryParams === 'all' ? null : categoryParams,
     searchBy: 'name',
     search: debounceSearch,
   }
+  
   const { data: coffees } = useQuery({
     queryKey: ['coffees', queryParams],
     queryFn: () => getAllProducts(queryParams),

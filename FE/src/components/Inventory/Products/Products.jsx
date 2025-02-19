@@ -3,10 +3,18 @@ import { IoFilterOutline } from 'react-icons/io5'
 import { FaRegEye } from 'react-icons/fa'
 
 import { getAllProducts } from '../../../API/product'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
 export const Products = () => {
   const navigate = useNavigate()
+  const { debounceSearch } = useOutletContext()
+
+  const queryParams = {
+    // category: categoryParams === 'all' ? null : categoryParams,
+    searchBy: 'name',
+    search: debounceSearch,
+  }
 
   const {
     data: coffees,
@@ -14,15 +22,15 @@ export const Products = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ['coffees'],
-    queryFn: () => getAllProducts(),
+    queryKey: ['coffees', queryParams],
+    queryFn: () => getAllProducts(queryParams),
     staleTime: 1000 * 60 * 5,
   })
 
   return (
     <div className='flex flex-col h-full space-y-5'>
       <div className='flex-shrink-0 h-48 p-3 bg-white rounded-xl drop-shadow-lg'>
-        1
+        1{debounceSearch}
       </div>
 
       {!isPending && !isError && (
@@ -69,7 +77,6 @@ export const Products = () => {
                   </th>
                 </tr>
               </thead>
-
               <tbody>
                 {coffees?.d?.map((coffee, index) => (
                   <tr
@@ -102,6 +109,19 @@ export const Products = () => {
                   </tr>
                 ))}
               </tbody>
+
+              {coffees?.d?.length === 0 && (
+                <tfoot className='h-14'>
+                  <tr>
+                    <td
+                      colSpan='5'
+                      className='text-center text-[#3b3b3b80] font-medium'
+                    >
+                      No coffee found
+                    </td>
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
 
