@@ -18,8 +18,10 @@ const findAllProducts = async (req) => {
     .paginate();
 
   const products = await features.query;
+  const totalProducts = await Product.countDocuments();
+  const totalPages = Math.ceil(totalProducts / (req.query.limit * 1 || 10));
 
-  return products;
+  return { products, totalPages };
 };
 
 const recomendProductsByMood = async (mood) => {
