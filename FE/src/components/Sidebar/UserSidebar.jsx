@@ -57,7 +57,7 @@ export const UserSidebar = () => {
 
   return (
     <nav className='flex flex-col justify-between flex-shrink-0 w-64 bg-white border-r-2 border-gray-100'>
-      <div className='w-full h-40 p-5 mx-auto '>
+      <div className='w-full h-32 p-5 mx-auto '>
         <img src={CUP_OF_CHI} alt='logo' className='object-contain w-full h-full ' />
       </div>
 
