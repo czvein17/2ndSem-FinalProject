@@ -6,7 +6,7 @@ export const OrderTable = ({ orders }) => {
   return (
     <div className='w-full h-full overflow-x-auto'>
       <table className='table-fixed lg:w-full'>
-        <thead className='h-[50px] w-full border-b-black border-b-2 bg-orange text-white'>
+        <thead className='h-[50px] w-full border-b-black border-b-2 bg-orange text-white sticky top-0'>
           <tr className=''>
             <th scope='col' className='font-medium first:rounded-tl-2xl'>
               Order ID
