@@ -57,6 +57,7 @@ const updateIngredient = asyncHandler(async (req, res, next) => {
     stock: req.body.stock,
     unit: req.body.unit,
     lowStockThreshold: req.body.lowStockThreshold,
+    supplier: req.body.supplier,
   };
 
   const ingredient = await ingredientService.updateIngredient(
