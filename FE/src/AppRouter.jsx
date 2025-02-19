@@ -19,6 +19,13 @@ import { UserLayout } from './layout/User/UserLayout'
 import { UserHomePage } from './page/User/UserHomePage'
 import { Success } from './components/Success'
 import { OrderPage } from './page/POS/Order/OrderPage'
+import { InventoryLayout } from './layout/Inventory/InventoryLayout'
+
+// INVENTORY PAGES
+import { ProductsPage } from './page/Inventory/ProductsPage'
+import { Dashboard } from './page/Inventory/Dashboard'
+import { Products } from './components/Inventory/Products/Products'
+import { ViewProduct } from './components/Inventory/Products/ViewProduct'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -26,30 +33,43 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path='/' element={<Login />} />
-      <Route path='/test' element={<h1>Test</h1>} />
+
       {isLoggedIn && (
         <>
           <Route element={<PrivateRoute roles={['admin']} />}>
-            <Route path='/admin' element={<AdminPage />}>
+            <Route path='/inventory' element={<InventoryLayout />}>
+              <Route index element={<Dashboard />} />
+
+              <Route path='/inventory/products' element={<ProductsPage />}>
+                <Route index element={<Products />} />
+                <Route path='/inventory/products/:id' element={<ViewProduct />} />
+              </Route>
+
+              <Route path='/inventory/stocks' element={<h1>Stocks</h1>} />
+              <Route path='/inventory/orders' element={<h1>Orders</h1>} />
+              <Route path='/inventory/sales' element={<h1>Sales</h1>} />
+            </Route>
+
+            {/* <Route path='/inventory' element={<AdminPage />}>
               <Route index element={<HomeAdminPage />} />
-              <Route path='/admin/manage-users' element={<ManageUserLayout />}>
+              
+              <Route path='/inventory/manage-users' element={<ManageUserLayout />}>
                 <Route index element={<MangeUserPage />} />
                 <Route
-                  path='/admin/manage-users/create'
+                  path='/inventory/manage-users/create'
                   element={<CreateNewUser />}
                 />
               </Route>
 
-              <Route path='/admin/chat' element={<AdminChatBot />} />
-              <Route path='/admin/chat/:id' element={<AdminChatBot />} />
-
-              <Route path='/admin/recommend' element={<RecomendProduct />} />
-
-              <Route path='/admin/page4' element={<>ADD USER 3</>} />
-            </Route>
+              <Route path='/inventory/chat' element={<AdminChatBot />} />
+              <Route path='/inventory/chat/:id' element={<AdminChatBot />} />
+              <Route path='/inventory/recommend' element={<RecomendProduct />} />
+              <Route path='/inventory/page4' element={<>ADD USER 3</>} />
+            </Route> */}
           </Route>
         </>
       )}
+
       <Route path='/user' element={<UserLayout />}>
         <Route index element={<UserHomePage />} />
         <Route path='/user/menu' element={<>menu</>} />
