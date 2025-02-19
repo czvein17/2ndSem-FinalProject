@@ -1,5 +1,6 @@
 const productService = require("../services/productService");
 const orderService = require("../services/orderService");
+const ingredientService = require("../services/ingredientService");
 const salesService = require("../services/salesService");
 
 const { asyncHandler } = require("../middlewares/asyncHandler");
@@ -11,6 +12,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
   const { orderItems, discountType } = req.body;
 
   const orderItemsDetails = [];
+  const ingredientUpdates = {};
   let subTotal = 0;
 
   for (const item of orderItems) {
@@ -31,6 +33,18 @@ const createOrder = asyncHandler(async (req, res, next) => {
       quantity,
       price: itemPrice,
     });
+
+    // Calculate the total quantity required for each ingredient
+    for (const ingredient of product.ingredients) {
+      const ingredientId = ingredient.ingredient._id.toString(); //
+      const ingredientQuantity = ingredient.quantity[size] * quantity;
+
+      if (!ingredientUpdates[ingredientId]) {
+        ingredientUpdates[ingredientId] = 0;
+      }
+
+      ingredientUpdates[ingredientId] += ingredientQuantity;
+    }
   }
 
   const tax = subTotal * 0.12; // 12% tax
@@ -54,6 +68,15 @@ const createOrder = asyncHandler(async (req, res, next) => {
   };
 
   const order = await orderService.createOrder(payload);
+
+  console.log("ingredientUpdates ", ingredientUpdates);
+  // Update the stock of each ingredient
+  for (const [ingredientId, quantity] of Object.entries(ingredientUpdates)) {
+    await ingredientService.updateIngredientStock(ingredientId, -quantity);
+  }
+
+  // // Update the availability status of products
+  // await productService.updateProductAvailability();
 
   res.status(201).json({
     c: 201,
