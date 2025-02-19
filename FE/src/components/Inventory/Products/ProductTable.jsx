@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 
+import { IoFilterOutline } from 'react-icons/io5'
 import { FaRegEye } from 'react-icons/fa'
 
 import { getAllProducts } from '../../../API/product'
@@ -55,6 +56,27 @@ export const ProductTable = () => {
 
   return (
     <>
+      <div className='flex items-center justify-between flex-shrink-0 py-2 '>
+        <h1 className='text-xl font-medium uppercase'>Products</h1>
+
+        <div className='flex items-center gap-2'>
+          <button className='px-3 py-2 text-white transition-all duration-150 ease-in-out border rounded-lg border-orange bg-orange hover:bg-transparent hover:text-orange'>
+            Add Product
+          </button>
+
+          <button className='flex gap-2 px-3 py-2 transition-all duration-150 ease-in-out border rounded-lg text-orange border-orange hover:bg-orange hover:text-white'>
+            <span>
+              <IoFilterOutline size={24} />
+            </span>
+            Filters
+          </button>
+
+          <button className='flex gap-2 px-3 py-2 transition-all duration-150 ease-in-out border rounded-lg text-orange border-orange hover:bg-orange hover:text-white'>
+            Download All
+          </button>
+        </div>
+      </div>
+
       <div className='h-full overflow-auto custom-scrollbar'>
         <table className='flex-shrink-0 table-fixed lg:w-full'>
           <thead className='h-[50px] w-full bg-orange text-white sticky top-0 border-b-2 rounded-xl border-b-black'>
@@ -106,6 +128,16 @@ export const ProductTable = () => {
               </tr>
             ))}
           </tbody>
+
+          {isPending && (
+            <tfoot className='h-14'>
+              <tr>
+                <td colSpan='5' className='text-center text-[#3b3b3b80] font-medium'>
+                  Loading...
+                </td>
+              </tr>
+            </tfoot>
+          )}
 
           {coffees?.d?.length === 0 && (
             <tfoot className='h-14'>
