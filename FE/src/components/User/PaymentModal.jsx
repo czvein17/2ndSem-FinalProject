@@ -157,9 +157,9 @@ export const PaymentModal = () => {
 
               <div className='w-1 h-full mx-3 bg-[#D9D9D9] rounded-full' />
 
-              <div className='flex flex-col justify-between w-full h-full'>
+              <div className='flex flex-col justify-between w-full h-full '>
                 {/* ORDER SUMMARY */}
-                <div className='flex flex-col p-5 space-y-8 rounded-xl'>
+                <div className='flex flex-col p-5 space-y-5 rounded-xl'>
                   <div className='w-full h-28 '>
                     <img
                       src={CUP_OF_CHI}
@@ -167,13 +167,6 @@ export const PaymentModal = () => {
                       className='object-contain w-full h-full'
                     />
                   </div>
-                  {/* <h1
-                    className='mx-auto text-5xl font-medium'
-                    style={{ textShadow: '1px 1px 10px rgba(0, 0, 0, 0.5)' }}
-                  >
-                    <span className='text-orange'>Chi'</span>
-                    Coffee
-                  </h1> */}
 
                   <div className='uppercase'>
                     <h1 className='font-medium'>
@@ -196,7 +189,7 @@ export const PaymentModal = () => {
                 </div>
                 {/* PAYMENT OPTION */}
                 {order.d.sales && order.d.sales.paymentStatus === 'paid' ? (
-                  <div className='flex flex-col h-full mx-auto space-y-5 '>
+                  <div className='flex flex-col h-full mx-auto space-y-2 '>
                     <div className='w-full h-40'>
                       <img
                         src={PAYMENT_SUCCESS}
