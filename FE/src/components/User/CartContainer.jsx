@@ -114,7 +114,9 @@ export const CartContainer = () => {
                 </div>
 
                 <div className='flex justify-between text-base'>
-                  <h1 className='font-medium text-orange'>₱{item.price}</h1>
+                  <h1 className='font-medium text-orange'>
+                    ₱{item.prices[item.size]}
+                  </h1>
 
                   <div className='flex items-center justify-center space-x-2 text-[#3D3D3D]'>
                     <button
