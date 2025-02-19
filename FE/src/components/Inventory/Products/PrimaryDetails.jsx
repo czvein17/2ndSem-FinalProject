@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export const PrimaryDetails = ({ coffee }) => {
+  const [selectedSize, setSelectedSize] = useState('small')
+
   return (
     <div className='flex h-full px-5 mt-4 '>
       <div className='flex flex-col w-full space-y-10 '>
@@ -31,6 +33,46 @@ export const PrimaryDetails = ({ coffee }) => {
         </div>
 
         <div className='w-full space-y-5 text-base '>
+          <h1 className='text-lg font-semibold'>Ingredients</h1>
+          <div className='flex gap-5'>
+            <button
+              className={`px-4 py-2 rounded ${selectedSize === 'small' ? 'bg-orange text-white' : 'bg-gray-200'}`}
+              onClick={() => setSelectedSize('small')}
+            >
+              Small
+            </button>
+            <button
+              className={`px-4 py-2 rounded ${selectedSize === 'medium' ? 'bg-orange text-white' : 'bg-gray-200'}`}
+              onClick={() => setSelectedSize('medium')}
+            >
+              Medium
+            </button>
+            <button
+              className={`px-4 py-2 rounded ${selectedSize === 'large' ? 'bg-orange text-white' : 'bg-gray-200'}`}
+              onClick={() => setSelectedSize('large')}
+            >
+              Large
+            </button>
+          </div>
+          {coffee.ingredients.map((ingredient, index) => (
+            <div className='space-y-2' key={index}>
+              <div className='flex gap-20 font-medium'>
+                <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Name</p>
+                <p>{ingredient.ingredient.name}</p>
+              </div>
+
+              <div className='flex gap-20 font-medium'>
+                <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Amount</p>
+                <p className='uppercase'>
+                  {ingredient.quantity[selectedSize]} {ingredient.ingredient.unit}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* <div className='w-full space-y-5 text-base '>
           <h1 className='text-lg font-semibold'>Ingridients</h1>
           {coffee.ingredients.map((ingredient, index) => (
             <div className='space-y-2' key={index}>
@@ -48,7 +90,7 @@ export const PrimaryDetails = ({ coffee }) => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       <div className='flex flex-col items-center justify-center flex-shrink-0 w-1/4 gap-2 space-y-10'>
         <div className='p-5 border-2 border-dashed h-60 w-60 rounded-xl border-orange'>
