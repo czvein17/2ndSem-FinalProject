@@ -12,7 +12,7 @@ export const SideBarList = ({ path, children }) => {
     <NavLink
       to={path}
       className={() =>
-        `py-4 px-5 rounded-lg text-sm font-semibold flex items-center gap-5 hover:bg-secondary transition-all ease-in-out ${
+        `py-4 px-5 rounded-lg text-sm font-semibold flex items-center gap-5 hover:bg-secondary transition-all ease-in-out text-red-[#322f30] ${
           isActive ? 'bg-secondary' : 'bg-white'
         }`
       }
