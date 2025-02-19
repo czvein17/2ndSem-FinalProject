@@ -5,13 +5,14 @@ const createProduct = asyncHandler(async (req, res, next) => {
   const payload = {
     name: req.body.name,
     description: req.body.description,
-    price: req.body.price,
+    prices: req.body.prices,
     category: req.body.category,
     moodTags: req.body.moodTags,
     image: req.body.image,
     ingredients: req.body.ingredients,
   };
 
+  // t
   const product = await productService.createProduct(payload);
 
   res.json({

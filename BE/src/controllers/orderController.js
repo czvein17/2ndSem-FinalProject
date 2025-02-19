@@ -21,14 +21,15 @@ const createOrder = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(404, `Product not found with id ${id}`));
     }
 
-    const itemTotal = product.price * quantity;
+    const itemPrice = product.prices[size];
+    const itemTotal = itemPrice * quantity;
     subTotal += itemTotal;
 
     orderItemsDetails.push({
       product: product._id,
       size,
       quantity,
-      price: product.price * quantity,
+      price: itemPrice,
     });
   }
 

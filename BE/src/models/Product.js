@@ -11,9 +11,19 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    price: {
-      type: Number,
-      required: true,
+    prices: {
+      small: {
+        type: Number,
+        required: true,
+      },
+      medium: {
+        type: Number,
+        required: true,
+      },
+      large: {
+        type: Number,
+        required: true,
+      },
     },
     category: {
       type: String,
