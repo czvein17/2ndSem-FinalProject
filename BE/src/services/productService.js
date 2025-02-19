@@ -72,10 +72,37 @@ const getProductById = async (id) => {
   return product;
 };
 
+const updateProductAvailability = async () => {
+  const products = await Product.find().populate("ingredients.ingredient");
+
+  for (const product of products) {
+    let available = true;
+
+    for (const ingredient of product.ingredients) {
+      const ingredientData = await Ingredient.findById(
+        ingredient.ingredient._id
+      );
+      if (
+        !ingredientData ||
+        ingredientData.stock < ingredient.quantity.small ||
+        ingredientData.stock < ingredient.quantity.medium ||
+        ingredientData.stock < ingredient.quantity.large
+      ) {
+        available = false;
+        break;
+      }
+    }
+
+    product.availability = available ? "available" : "not available";
+    await product.save();
+  }
+};
+
 module.exports = {
   createProduct,
   findAllProducts,
   recomendProductsByMood,
   findProductsByNames,
   getProductById,
+  updateProductAvailability,
 };
