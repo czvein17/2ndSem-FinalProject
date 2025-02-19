@@ -61,6 +61,9 @@ export const Products = () => {
                   <th scope='col' className='font-medium'>
                     Category
                   </th>
+                  <th scope='col' className='font-medium'>
+                    Availability
+                  </th>
                   <th scope='col' className='font-medium last:rounded-tr-2xl'>
                     Actions
                   </th>
@@ -79,6 +82,9 @@ export const Products = () => {
                     </td>
                     <td className='px-3 py-4 text-center whitespace-nowrap'>
                       {coffee.category}
+                    </td>
+                    <td className='px-3 py-4 text-center whitespace-nowrap'>
+                      {coffee.availability}
                     </td>
                     <td className='flex px-4 whitespace-nowrap '>
                       <div className='mx-auto'>
