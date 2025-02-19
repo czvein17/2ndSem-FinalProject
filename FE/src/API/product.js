@@ -12,3 +12,9 @@ export const getAllProducts = async (queryParams = {}) => {
   console.log(coffees.data)
   return coffees.data
 }
+
+export const getProductById = async (id) => {
+  const coffee = await http.get(`/products/${id}`)
+  console.log(coffee.data)
+  return coffee.data
+}
