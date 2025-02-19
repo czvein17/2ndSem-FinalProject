@@ -5,51 +5,52 @@ import { IoChatbubblesOutline } from 'react-icons/io5'
 
 import { SideBarList } from './SideBarList'
 import { useAuth } from '../../hooks/useAuth'
+import { SidebarList } from '../Sidebar/SidebarList'
 
 const Sidebar = () => {
   const { logout } = useAuth()
   const sidebar = [
     {
-      path: '/admin',
+      path: '/inventory',
       name: 'Dashboard',
       icon: <RxDashboard size={20} />,
     },
     {
-      path: '/admin/manage-users',
+      path: '/inventory/manage-users',
       name: 'Users',
       icon: <LuUsersRound size={20} />,
     },
     {
-      path: '/admin/chat',
+      path: '/inventory/chat',
       name: 'Chat Bot',
       icon: <IoChatbubblesOutline size={20} />,
     },
     {
-      path: '/admin/recommend',
+      path: '/inventory/recommend',
       name: 'Recommendation',
       icon: <RxDashboard size={20} />,
     },
   ]
 
   return (
-    <div className='flex flex-col w-full justify-between h-full'>
+    <div className='flex flex-col justify-between w-full h-full'>
       <div className='h-1/6 '>
-        <h1 className='text-2xl text-center font-semibold text-primary'>Admin</h1>
+        <h1 className='text-2xl font-semibold text-center text-primary'>Admin</h1>
       </div>
 
-      <ul className='flex flex-col gap-3 h-full w-full'>
+      <ul className='flex flex-col w-full h-full space-y-4'>
         {sidebar.map((item) => (
-          <SideBarList path={item.path} key={item.path}>
+          <SidebarList key={item.path} item={item}>
             {item.icon}
             {item.name}
-          </SideBarList>
+          </SidebarList>
         ))}
       </ul>
 
-      <div className='flex justify-center items-center w-full'>
+      <div className='flex items-center justify-center w-full'>
         <button
           onClick={logout}
-          className='py-3 px-5 rounded-lg flex items-center gap-3 text-lg hover:bg-secondary ease-in transition'
+          className='flex items-center gap-3 px-5 py-3 text-lg transition ease-in rounded-lg hover:bg-secondary'
         >
           <AiOutlineLogout size={24} />
           Logout
