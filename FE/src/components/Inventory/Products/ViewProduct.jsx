@@ -1,11 +1,12 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 import { getProductById } from '../../../API/product'
 
 import { FiEdit2 } from 'react-icons/fi'
+import { IoIosArrowBack } from 'react-icons/io'
 
 import { PrimaryDetails } from './PrimaryDetails'
 
@@ -13,6 +14,7 @@ export const ViewProduct = () => {
   const { id } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const tabParams = searchParams.get('tab')
+  const navigate = useNavigate()
 
   const {
     data: coffee,
@@ -51,7 +53,15 @@ export const ViewProduct = () => {
       {!isPending && !isError && (
         <>
           <div className='flex items-center justify-between py-1 '>
-            <h1 className='text-3xl font-medium uppercase '>{coffee.d.name}</h1>
+            <div className='flex items-center gap-5'>
+              <button
+                onClick={() => navigate('/inventory/products')}
+                className='flex items-center gap-2 p-2 transition-all duration-100 ease-in-out rounded-full hover:bg-orange hover:text-white'
+              >
+                <IoIosArrowBack size={40} />
+              </button>
+              <h1 className='text-3xl font-medium uppercase '>{coffee.d.name}</h1>
+            </div>
 
             <div className='flex space-x-2'>
               <button className='flex items-center gap-2 px-4 py-2 transition-all duration-100 ease-in-out border rounded border-orange text-orange hover:bg-orange hover:text-white hover:border-orange'>
