@@ -75,8 +75,38 @@ const getSaleById = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getProductSales = asyncHandler(async (req, res, next) => {
+  const { productId } = req.params;
+
+  const sale = await salesService.findProductSalesById(productId);
+
+  if (!sale) {
+    return next(
+      new ErrorResponse(404, `Sale not found with product id ${productId}`)
+    );
+  }
+
+  res.status(200).json({
+    c: 200,
+    m: "Get product sales successfully",
+    d: sale,
+  });
+});
+
+const getTopPreferredProducts = asyncHandler(async (req, res, next) => {
+  const products = await salesService.getTopPreferredProducts();
+
+  res.status(200).json({
+    c: 200,
+    m: "Top 5 best selling products ",
+    d: products,
+  });
+});
+
 module.exports = {
   createSale,
   getSales,
   getSaleById,
+  getProductSales,
+  getTopPreferredProducts,
 };

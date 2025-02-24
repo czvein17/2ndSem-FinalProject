@@ -9,6 +9,7 @@ import { FiEdit2 } from 'react-icons/fi'
 import { IoIosArrowBack } from 'react-icons/io'
 
 import { PrimaryDetails } from './PrimaryDetails'
+import { ProductPurchases } from './ProductPurchases'
 
 export const ViewProduct = () => {
   const { id } = useParams()
@@ -49,7 +50,7 @@ export const ViewProduct = () => {
   ]
 
   return (
-    <div className='flex flex-col min-h-full p-5 bg-white shadow-xl rounded-xl'>
+    <div className='flex flex-col h-full p-5 bg-white shadow-xl rounded-xl'>
       {!isPending && !isError && (
         <>
           <div className='flex items-center justify-between py-1 '>
@@ -97,7 +98,7 @@ export const ViewProduct = () => {
           </ul>
 
           {tabParams === 'overview' && <PrimaryDetails coffee={coffee.d} />}
-          {tabParams === 'purchase' && <h1>Purchase</h1>}
+          {tabParams === 'purchase' && <ProductPurchases productId={coffee.d._id} />}
         </>
       )}
     </div>

@@ -26,6 +26,8 @@ import { ProductsPage } from './page/Inventory/ProductsPage'
 import { Dashboard } from './page/Inventory/Dashboard'
 import { Products } from './components/Inventory/Products/Products'
 import { ViewProduct } from './components/Inventory/Products/ViewProduct'
+import { Stocks } from './page/Inventory/Stocks'
+import { StocksLayout } from './layout/Inventory/StocksLayout'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -45,7 +47,10 @@ const AppRouter = () => {
                 <Route path='/inventory/products/:id' element={<ViewProduct />} />
               </Route>
 
-              <Route path='/inventory/stocks' element={<h1>Stocks</h1>} />
+              <Route path='/inventory/stocks' element={<StocksLayout />}>
+                <Route index element={<Stocks />} />
+              </Route>
+
               <Route path='/inventory/orders' element={<h1>Orders</h1>} />
               <Route path='/inventory/sales' element={<h1>Sales</h1>} />
             </Route>

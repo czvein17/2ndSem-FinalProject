@@ -1,8 +1,15 @@
 const Ingredient = require("../models/Ingredient");
-const mongoose = require("mongoose");
+const APIFeatures = require("../utils/apiFeatures");
 
-const findAllIngredients = async () => {
-  const ingredients = await Ingredient.find();
+const findAllIngredients = async (req) => {
+  const features = new APIFeatures(Ingredient.find(), req.query)
+    .search()
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const ingredients = await features.query;
   return ingredients;
 };
 
@@ -31,7 +38,7 @@ const updateIngredientStock = async (ingredientId, quantityChange) => {
   if (!ingredient) {
     throw new Error(`Ingredient not found with id ${ingredientId}`);
   }
-  
+
   ingredient.stock += quantityChange;
   if (ingredient.stock < 0) {
     throw new Error(

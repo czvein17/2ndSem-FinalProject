@@ -4,7 +4,8 @@ const ErrorResponse = require("../utils/ErrorResponse");
 const { asyncHandler } = require("../middlewares/asyncHandler");
 
 const findAllIngredients = asyncHandler(async (req, res, next) => {
-  const ingredients = await ingredientService.findAllIngredients();
+  const ingredients = await ingredientService.findAllIngredients(req);
+
   res.status(200).json({
     c: 200,
     m: null,

@@ -16,6 +16,9 @@ const IngredientSchema = new mongoose.Schema({
     required: true,
     default: "pcs",
   },
+  image: {
+    type: String,
+  },
   lowStockThreshold: {
     type: Number,
     required: true,

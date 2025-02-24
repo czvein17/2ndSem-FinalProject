@@ -57,7 +57,7 @@ export const ProductTable = () => {
   return (
     <>
       <div className='flex items-center justify-between flex-shrink-0 py-2 '>
-        <h1 className='text-xl font-medium uppercase'>Products</h1>
+        <h1 className='text-2xl font-medium '>Products</h1>
 
         <div className='flex items-center gap-2'>
           <button className='px-3 py-2 text-white transition-all duration-150 ease-in-out border rounded-lg border-orange bg-orange hover:bg-transparent hover:text-orange'>
