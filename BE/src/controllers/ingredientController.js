@@ -14,22 +14,19 @@ const findAllIngredients = asyncHandler(async (req, res, next) => {
 });
 
 const createIngredient = asyncHandler(async (req, res, next) => {
-  const { name, stock, unit, lowStockThreshold, supplier } = req.body;
+  console.log(req.body);
+  console.log(req.file);
 
-  const newSupplier = await supplierService.createSupplier({
-    name: supplier.name,
-    contactNumber: supplier.contactNumber,
-    email: supplier.email,
-    address: supplier.address,
-  });
+  const payload = {
+    name: req.body.name,
+    stock: req.body.stock,
+    unit: req.body.unit,
+    lowStockThreshold: req.body.lowStockThreshold,
+    supplier: req.body.supplier,
+    image: req.file.filename,
+  };
 
-  const ingredient = await ingredientService.createIngredient({
-    name,
-    stock,
-    unit,
-    lowStockThreshold,
-    supplier: newSupplier._id,
-  });
+  const ingredient = await ingredientService.createIngredient(payload);
 
   res.status(201).json({
     c: 201,

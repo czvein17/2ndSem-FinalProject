@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useOutletContext } from 'react-router-dom'
 
@@ -6,9 +6,11 @@ import { IoFilterOutline } from 'react-icons/io5'
 import { FaRegEye } from 'react-icons/fa'
 
 import { getAllProducts } from '../../../API/product'
+import { ModalWrapper } from '../../ModalWrapper'
+import { AddProductModal } from './AddProductModal'
 
 export const ProductTable = () => {
-  console.log('Product Table Rendered')
+  const addNewProductRef = useRef()
   const { debounceSearch } = useOutletContext()
   const navigate = useNavigate()
 
@@ -60,7 +62,10 @@ export const ProductTable = () => {
         <h1 className='text-2xl font-medium '>Products</h1>
 
         <div className='flex items-center gap-2'>
-          <button className='px-3 py-2 text-white transition-all duration-150 ease-in-out border rounded-lg border-orange bg-orange hover:bg-transparent hover:text-orange'>
+          <button
+            className='px-3 py-2 text-white transition-all duration-150 ease-in-out border rounded-lg border-orange bg-orange hover:bg-transparent hover:text-orange'
+            onClick={() => addNewProductRef.current.openModal()}
+          >
             Add Product
           </button>
 
@@ -76,6 +81,10 @@ export const ProductTable = () => {
           </button>
         </div>
       </div>
+
+      <ModalWrapper ref={addNewProductRef}>
+        <AddProductModal />
+      </ModalWrapper>
 
       <div className='h-full overflow-auto custom-scrollbar'>
         <table className='flex-shrink-0 table-fixed lg:w-full'>

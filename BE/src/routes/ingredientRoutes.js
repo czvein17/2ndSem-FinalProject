@@ -8,9 +8,14 @@ const {
   deleteIngredient,
 } = require("../controllers/ingredientController");
 
+const { uploadImage } = require("../middlewares/upload");
+
 const router = express.Router();
 
-router.route("/").get(findAllIngredients).post(createIngredient);
+router
+  .route("/")
+  .get(findAllIngredients)
+  .post(uploadImage("ingredients-image"), createIngredient);
 
 router
   .route("/:id")

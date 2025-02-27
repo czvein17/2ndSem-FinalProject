@@ -1,11 +1,19 @@
+import { useRef, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import React, { useRef } from 'react'
 import { getAllIngredients } from '../../API/stocks'
 import { StockCard } from '../../components/Inventory/Stocks/StockCard'
 import { ModalWrapper } from '../../components/ModalWrapper'
+import { AddNewIngredientModal } from '../../components/Inventory/Stocks/AddNewIngredientModal'
 
 export const Stocks = () => {
   const addIngredientRef = useRef()
+
+  useState({
+    name: '',
+    stocks: '',
+    unit: '',
+    threshold: '',
+  })
 
   const {
     data: ingredients,
@@ -37,11 +45,9 @@ export const Stocks = () => {
       )}
 
       <ModalWrapper ref={addIngredientRef}>
-        <div className='w-[600px]'>
-          <h1 className='text-xl font-medium uppercase text-orange'>
-            Add Ingredient
-          </h1>
-        </div>
+        <AddNewIngredientModal
+          closeModal={() => addIngredientRef.current.closeModal()}
+        />
       </ModalWrapper>
     </div>
   )

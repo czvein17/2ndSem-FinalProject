@@ -6,6 +6,12 @@ const createSupplier = async (payload) => {
   return newSupplier;
 };
 
+const getAllSupplier = async () => {
+  const suppliers = Supplier.find();
+  return suppliers;
+};
+
 module.exports = {
   createSupplier,
+  getAllSupplier,
 };

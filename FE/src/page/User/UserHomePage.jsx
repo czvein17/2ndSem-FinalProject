@@ -64,13 +64,13 @@ export const UserHomePage = () => {
     { name: 'Milk', value: 'milk' },
     { name: 'Juice', value: 'juice' },
   ]
-  
+
   const queryParams = {
     category: categoryParams === 'all' ? null : categoryParams,
     searchBy: 'name',
     search: debounceSearch,
   }
-  
+
   const { data: coffees } = useQuery({
     queryKey: ['coffees', queryParams],
     queryFn: () => getAllProducts(queryParams),
@@ -115,11 +115,11 @@ export const UserHomePage = () => {
               </div>
 
               <div className='text-sm'>
-                <p className='font-semibold'>
+                {/* <p className='font-semibold'>
                   {user.firstName}{' '}
                   {user.middleName !== '' ? `${user.middleName.charAt(0)}.` : ''}{' '}
                   {user.lastName}
-                </p>
+                </p> */}
                 <p className='text-[#3b3b3b80] font-medium text-xs'>{user.email}</p>
               </div>
             </div>

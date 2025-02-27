@@ -10,6 +10,7 @@ const ingredientRoutes = require("./ingredientRoutes");
 const reviewRoutes = require("./reviewRoutes");
 const orderRoutes = require("./orderRoutes");
 const salesRoutes = require("./salesRoutes");
+const supplierRoutes = require("./supplierRoutes");
 
 const paymentRoutes = require("./paymentRoutes");
 const router = express.Router();
@@ -23,6 +24,7 @@ router.use("/ingredients", ingredientRoutes);
 router.use("/reviews", reviewRoutes);
 router.use("/orders", orderRoutes);
 router.use("/sales", salesRoutes);
+router.use("/suppliers", supplierRoutes);
 
 router.use("/payment", paymentRoutes);
 
