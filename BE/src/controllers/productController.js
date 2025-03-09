@@ -2,17 +2,32 @@ const productService = require("../services/productService");
 const { asyncHandler } = require("../middlewares/asyncHandler");
 
 const createProduct = asyncHandler(async (req, res, next) => {
+  console.log(req.body); // Check request body
+  console.log(req.file); // Check uploaded image
+
+  let bodyData = req.body;
+
+  // Check if the request is multipart/form-data (form-data)
+  if (req.is("multipart/form-data") && req.body.data) {
+    try {
+      bodyData = JSON.parse(req.body.data); // Parse JSON string
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ c: 400, m: "Invalid JSON format", d: null });
+    }
+  }
+
   const payload = {
-    name: req.body.name,
-    description: req.body.description,
-    prices: req.body.prices,
-    category: req.body.category,
-    moodTags: req.body.moodTags,
-    image: req.body.image,
-    ingredients: req.body.ingredients,
+    name: bodyData.name,
+    description: bodyData.description,
+    prices: bodyData.prices,
+    category: bodyData.category,
+    moodTags: bodyData.moodTags,
+    image: req.file?.filename,
+    ingredients: bodyData.ingredients,
   };
 
-  // t
   const product = await productService.createProduct(payload);
 
   res.json({
@@ -68,9 +83,19 @@ const getProductById = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteProduct = asyncHandler(async (req, res, next) => {
+  await productService.deleteProduct(req.params.id);
+  res.json({
+    c: 200,
+    m: null,
+    d: null,
+  });
+});
+
 module.exports = {
   createProduct,
   findAllProducts,
   recomendProductsByMood,
   getProductById,
+  deleteProduct,
 };

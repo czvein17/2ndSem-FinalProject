@@ -28,6 +28,8 @@ const ProductSchema = new mongoose.Schema(
     },
     category: {
       type: String,
+      enum: ["Coffee", "Tea", "Juice"],
+      default: "Coffee",
       required: true,
     },
     moodTags: {

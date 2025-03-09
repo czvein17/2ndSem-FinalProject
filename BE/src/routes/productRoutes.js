@@ -5,11 +5,14 @@ const {
   findAllProducts,
   recomendProductsByMood,
   getProductById,
+  deleteProduct,
 } = require("../controllers/productController");
+const { uploadImage } = require("../middlewares/upload");
+
 const router = express.Router();
 
 router.route("/").get(findAllProducts).post(recomendProductsByMood);
-router.route("/create").post(createProduct);
-router.route("/:id").get(getProductById);
+router.route("/create").post(uploadImage("coffee-image"), createProduct);
+router.route("/:id").get(getProductById).delete(deleteProduct);
 
 module.exports = router;

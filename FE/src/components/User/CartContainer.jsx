@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
@@ -12,11 +12,16 @@ import { ModalWrapper } from '../ModalWrapper'
 export const CartContainer = () => {
   const { cart, applyDiscount, clearCart, addToCart, removeFromCart } =
     useCartContext()
+
+  const orderForModalRef = useRef()
   const discountModalRef = useRef()
   const loadingModalRef = useRef()
   const cartContainerRef = useRef()
 
   const navigate = useNavigate()
+
+  const [orderName, setOrderName] = useState('')
+  const [validateOrder, setValidateError] = useState('')
 
   const toggleModal = (modal) => modal.current.openModal()
   const closeModals = (modal) => modal.current.closeModal()
@@ -44,6 +49,11 @@ export const CartContainer = () => {
   const handleConfirmOrder = (e) => {
     e.preventDefault()
 
+    if (orderName === '') {
+      setValidateError('Please enter a name')
+      return
+    }
+
     console.log('Confirm Order Triggered')
     console.log('Cart Items:', cart.items)
 
@@ -55,12 +65,14 @@ export const CartContainer = () => {
     console.log('Posting Order:', cart)
 
     const payload = {
+      recipient: orderName,
       discountType: cart.discountType,
       orderItems: cart.items,
     }
 
     postOrder(payload)
   }
+
   const prices = [
     {
       title: 'Subtotal',
@@ -163,11 +175,33 @@ export const CartContainer = () => {
         </button>
         <button
           className='px-20 py-3 mx-auto text-lg text-white transition-all duration-150 ease-in-out border rounded-full shadow-xl bg-orange hover:bg-transparent border-orange hover:text-orange'
-          onClick={handleConfirmOrder}
+          // onClick={handleConfirmOrder}
+          onClick={() => toggleModal(orderForModalRef)}
         >
           Place an Order
         </button>
       </div>
+
+      <ModalWrapper ref={orderForModalRef}>
+        <div className='flex flex-col justify-center w-full space-y-2'>
+          <p className='h-5 text-red-500'>{validateOrder}</p>
+          <div className='flex gap-2 py-2 mx-2 border-b-2 border-orange'>
+            <p className='flex-shrink-0 font-medium'>Order For:</p>
+            <input
+              className='w-full bg-transparent outline-none'
+              type='text'
+              value={orderName}
+              onChange={(e) => setOrderName(e.target.value)}
+            />
+          </div>
+          <button
+            className='px-5 py-2 mx-auto text-sm text-white transition-all duration-150 ease-in-out border rounded-full shadow-xl bg-orange hover:bg-transparent border-orange hover:text-orange'
+            onClick={handleConfirmOrder}
+          >
+            Confirm Order
+          </button>
+        </div>
+      </ModalWrapper>
 
       <ModalWrapper ref={discountModalRef}>
         <div className='m-5'>

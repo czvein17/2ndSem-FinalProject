@@ -65,6 +65,7 @@ export const ProductPurchases = ({ productId }) => {
   }
   const options = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top',
@@ -108,10 +109,7 @@ export const ProductPurchases = ({ productId }) => {
     <div className='flex h-full '>
       {!isPending && !isError && (
         <div className='flex flex-col w-full h-full '>
-          <div
-            className='flex justify-center w-full '
-            style={{ height: '600px', width: '' }}
-          >
+          <div className='flex justify-center w-full h-full'>
             <Line data={chartData} options={options} />
           </div>
           <h1 className='flex items-center gap-2 mx-auto text-sm font-medium'>

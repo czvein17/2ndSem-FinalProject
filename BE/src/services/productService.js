@@ -100,6 +100,16 @@ const updateProductAvailability = async () => {
   }
 };
 
+const deleteProduct = async (id) => {
+  const product = await Product.findByIdAndDelete(id);
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  return product;
+};
+
 module.exports = {
   createProduct,
   findAllProducts,
@@ -107,4 +117,5 @@ module.exports = {
   findProductsByNames,
   getProductById,
   updateProductAvailability,
+  deleteProduct,
 };

@@ -58,7 +58,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
 
   const payload = {
     user: user.id,
-    recipient: "John Doe",
+    recipient: req.body.recipient,
     orderItems: orderItemsDetails,
     subTotal,
     tax,

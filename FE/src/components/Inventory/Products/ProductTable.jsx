@@ -4,18 +4,24 @@ import { useNavigate, useOutletContext } from 'react-router-dom'
 
 import { IoFilterOutline } from 'react-icons/io5'
 import { FaRegEye } from 'react-icons/fa'
+import { FaRegTrashCan } from 'react-icons/fa6'
 
 import { getAllProducts } from '../../../API/product'
 import { ModalWrapper } from '../../ModalWrapper'
 import { AddProductModal } from './AddProductModal'
+import { DeleteProductModal } from './DeleteProductModal'
 
 export const ProductTable = () => {
   const addNewProductRef = useRef()
+  const deleteProductRef = useRef()
+
   const { debounceSearch } = useOutletContext()
   const navigate = useNavigate()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+
+  const [productToDelete, setProductToDelete] = useState(null)
 
   const queryParams = useMemo(
     () => ({
@@ -56,6 +62,11 @@ export const ProductTable = () => {
     }
   }
 
+  const handleDeleteProduct = (coffee) => {
+    setProductToDelete(coffee)
+    deleteProductRef.current.openModal()
+  }
+
   return (
     <>
       <div className='flex items-center justify-between flex-shrink-0 py-2 '>
@@ -83,7 +94,7 @@ export const ProductTable = () => {
       </div>
 
       <ModalWrapper ref={addNewProductRef}>
-        <AddProductModal />
+        <AddProductModal onClose={() => addNewProductRef.current.closeModal()} />
       </ModalWrapper>
 
       <div className='h-full overflow-auto custom-scrollbar'>
@@ -132,6 +143,21 @@ export const ProductTable = () => {
                     >
                       <FaRegEye size={26} />
                     </button>
+
+                    <button
+                      className='p-2 text-red-500'
+                      title='View Product'
+                      onClick={() => handleDeleteProduct(coffee)}
+                    >
+                      <FaRegTrashCan size={26} />
+                    </button>
+                    <ModalWrapper ref={deleteProductRef}>
+                      <DeleteProductModal
+                        coffee={productToDelete}
+                        onClose={() => deleteProductRef.current.closeModal()}
+                        name={productToDelete?.name}
+                      />
+                    </ModalWrapper>
                   </div>
                 </td>
               </tr>

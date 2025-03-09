@@ -25,6 +25,16 @@
   scrollbar-width: none; /* Firefox */
 }
 
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
+}
+
 .Toastify__toast-container--top-right {
   top: 100px; /* Adjust this value to move the container lower */
   right: 20px; /* Adjust this value if needed */
