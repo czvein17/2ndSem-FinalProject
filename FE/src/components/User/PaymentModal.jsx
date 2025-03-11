@@ -29,6 +29,7 @@ export const PaymentModal = () => {
   const location = useLocation()
   const [orderId, setOrderId] = useState(null)
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+  const [castMode, setCashMode] = useState(false)
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
@@ -67,6 +68,8 @@ export const PaymentModal = () => {
     },
   })
 
+  const handleCashPayment = () => setCashMode(!castMode)
+
   const orderSummary = [
     {
       title: 'Sub-Total',
@@ -100,6 +103,7 @@ export const PaymentModal = () => {
     {
       title: 'Cash',
       icon: CashLogo,
+      onClick: handleCashPayment,
     },
     {
       title: 'PayMaya',
@@ -134,6 +138,42 @@ export const PaymentModal = () => {
   return ReactDOM.createPortal(
     <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-[#00000090] flex justify-center items-center'>
       <div className='relative w-full  mx-5 bg-background rounded-xl md:w-auto lg:w-[800px] lg:h-[800px] flex flex-col font-poppins'>
+        {/* <div className='absolute z-50 bg-black bottom-50'>CASH</div>
+         */}
+
+        {castMode && (
+          <div
+            className='absolute z-50 p-5 bg-white w-[350px] rounded-xl space-y-4 flex flex-col'
+            style={{
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.1)',
+            }}
+          >
+            <div className='flex w-full gap-2 px-3 py-2 border-b border-orange'>
+              <p className='flex-shrink-0 font-medium'>
+                Cash <span>&#8369;</span> :
+              </p>
+              <input
+                className='w-full bg-transparent outline-none no-spinner'
+                type='number'
+              />
+            </div>
+
+            <div className='flex gap-2 ml-auto'>
+              <button
+                className='px-5 py-1 mx-auto border text-orange rounded-xl border-orange'
+                onClick={handleCashPayment}
+              >
+                Cancel
+              </button>
+              <button className='px-5 py-1 mx-auto text-white rounded-xl bg-orange'>
+                Pay Now
+              </button>
+            </div>
+          </div>
+        )}
         {!isPending && !isError && order && (
           <>
             <div className='relative px-5 py-2 font-medium text-white bg-orange rounded-t-xl'>
@@ -187,6 +227,7 @@ export const PaymentModal = () => {
                     ))}
                   </div>
                 </div>
+
                 {/* PAYMENT OPTION */}
                 {order.d.sales && order.d.sales.paymentStatus === 'paid' ? (
                   <div className='flex flex-col h-full mx-auto space-y-2 '>

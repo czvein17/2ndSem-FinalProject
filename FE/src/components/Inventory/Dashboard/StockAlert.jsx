@@ -51,7 +51,7 @@ export const StockAlert = () => {
                 {item.lowStockThreshold}
               </td>
               <td className='px-6 py-4 text-sm text-gray-500 whitespace-nowrap'>
-                {item.stock} {item.unit}
+                {item.stock} <span className='uppercase'>{item.unit}</span>
               </td>
             </tr>
           ))}

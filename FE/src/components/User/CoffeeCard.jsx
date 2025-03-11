@@ -69,7 +69,10 @@ export const CoffeeCard = memo(({ coffee }) => {
           <h3 className='text-lg font-semibold'>
             {coffee.name}{' '}
             {/* <span className='font-medium text-orange'>${coffee.price}</span> */}
-            <span className='font-medium text-orange'>${getPrice()}</span>
+            <span className='font-medium text-orange'>
+              <span>&#8369;</span>
+              {getPrice()}
+            </span>
           </h3>
 
           <p className='text-sm font-medium  text-[#3b3b3b80]'>
