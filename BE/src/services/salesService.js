@@ -12,7 +12,8 @@ const getSales = async (req) => {
     .filter()
     .sort()
     .limitFields()
-    .paginate();
+    .paginate()
+    .search();
 
   const sales = await features.query.populate("user").populate("order");
   return sales;

@@ -2,18 +2,20 @@ import { useQuery } from '@tanstack/react-query'
 import React, { useMemo, useState } from 'react'
 import { getAllSales } from '../../API/sales'
 import { SalesTable } from '../../components/Inventory/Sales/SalesTable'
+import { useOutletContext } from 'react-router-dom'
 
 export const Sales = () => {
+  const { debounceSearch } = useOutletContext()
   const [currentPage, setCurrentPage] = useState(1)
 
   const queryParams = useMemo(
     () => ({
-      searchBy: 'name',
-      search: '',
+      searchBy: '_id',
+      search: debounceSearch,
       page: currentPage,
       limit: 10,
     }),
-    [currentPage],
+    [debounceSearch, currentPage],
   )
 
   const {
