@@ -1,9 +1,11 @@
+import ReactDOM from 'react-dom'
 import { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import ReactDOM from 'react-dom'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { queryClient } from '../../API/http'
 import { getOrder } from '../../API/order'
+import { payWithCash, payWithPayMaya } from '../../API/payment'
 
 import { SlClose } from 'react-icons/sl'
 import CUP_OF_CHI from '../../assets/images/logo.svg'
@@ -13,7 +15,6 @@ import PAYMENT_SUCCESS from '../../assets/images/payment_success.gif'
 
 import { OrderSummaryCards } from './Cards/OrderSummaryCards'
 import { PaymentOrderItemsCard } from './Cards/PaymentOrderItemsCard'
-import { payWithPayMaya } from '../../API/payment'
 
 // Utility function to detect if running in Electron
 const isElectron = () => {
@@ -29,7 +30,8 @@ export const PaymentModal = () => {
   const location = useLocation()
   const [orderId, setOrderId] = useState(null)
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
-  const [castMode, setCashMode] = useState(false)
+  const [cashMode, setCashMode] = useState(false)
+  const [cashAmount, setCashAmount] = useState(0)
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search)
@@ -68,7 +70,24 @@ export const PaymentModal = () => {
     },
   })
 
-  const handleCashPayment = () => setCashMode(!castMode)
+  const {
+    mutate: handleCashPaymentMutation,
+    isPending: isCashPaymentPending,
+    isError: isCashPaymentError,
+    error: cashPaymentError,
+  } = useMutation({
+    mutationFn: payWithCash,
+    onSuccess: (data) => {
+      setCashMode(false)
+      queryClient.invalidateQueries('order')
+    },
+  })
+
+  const handleCashPayment = () => setCashMode(!cashMode)
+  const postCashPayment = () => {
+    handleCashPaymentMutation({ orderId, receiveAmount: cashAmount })
+    // setCashMode(false)
+  }
 
   const orderSummary = [
     {
@@ -92,11 +111,10 @@ export const PaymentModal = () => {
       title: 'Total',
       value: order?.d?.totalAmount,
     },
-
-    // {
-    //   title: 'Total',
-    //   value: order?.d?.checkoutId,
-    // },
+    {
+      title: 'Change',
+      value: order?.d?.sales?.change || 0,
+    },
   ]
 
   const paymentOptions = [
@@ -141,9 +159,9 @@ export const PaymentModal = () => {
         {/* <div className='absolute z-50 bg-black bottom-50'>CASH</div>
          */}
 
-        {castMode && (
+        {cashMode && (
           <div
-            className='absolute z-50 p-5 bg-white w-[350px] rounded-xl space-y-4 flex flex-col'
+            className='absolute z-50 p-5 bg-white w-[350px] rounded-xl space-y-1 flex flex-col'
             style={{
               top: '50%',
               left: '50%',
@@ -151,6 +169,9 @@ export const PaymentModal = () => {
               boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.1)',
             }}
           >
+            <p className='h-5 text-sm text-center text-red-500 '>
+              {cashPaymentError?.message}
+            </p>
             <div className='flex w-full gap-2 px-3 py-2 border-b border-orange'>
               <p className='flex-shrink-0 font-medium'>
                 Cash <span>&#8369;</span> :
@@ -158,22 +179,28 @@ export const PaymentModal = () => {
               <input
                 className='w-full bg-transparent outline-none no-spinner'
                 type='number'
+                value={cashAmount}
+                onChange={(e) => setCashAmount(e.target.value)}
               />
             </div>
 
-            <div className='flex gap-2 ml-auto'>
+            <div className='flex gap-2 pt-3 ml-auto'>
               <button
                 className='px-5 py-1 mx-auto border text-orange rounded-xl border-orange'
                 onClick={handleCashPayment}
               >
                 Cancel
               </button>
-              <button className='px-5 py-1 mx-auto text-white rounded-xl bg-orange'>
+              <button
+                className='px-5 py-1 mx-auto text-white rounded-xl bg-orange'
+                onClick={postCashPayment}
+              >
                 Pay Now
               </button>
             </div>
           </div>
         )}
+
         {!isPending && !isError && order && (
           <>
             <div className='relative px-5 py-2 font-medium text-white bg-orange rounded-t-xl'>
@@ -199,7 +226,7 @@ export const PaymentModal = () => {
 
               <div className='flex flex-col justify-between w-full h-full '>
                 {/* ORDER SUMMARY */}
-                <div className='flex flex-col p-5 space-y-5 rounded-xl'>
+                <div className='flex flex-col px-5 space-y-5 rounded-xl'>
                   <div className='w-full h-28 '>
                     <img
                       src={CUP_OF_CHI}
