@@ -22,11 +22,7 @@ export const UserSidebar = () => {
       icon: <TbSmartHome size={26} />,
       path: '/user',
     },
-    {
-      name: 'Menu',
-      icon: <HiOutlineViewGrid size={26} />,
-      path: '/user/menu',
-    },
+
     {
       name: 'Orders',
       icon: <TbBookmark size={26} />,
