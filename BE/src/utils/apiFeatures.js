@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+
 class APIFeatures {
   constructor(query, queryString) {
     this.query = query;
@@ -40,6 +42,11 @@ class APIFeatures {
           [searchField]: { $regex: searchValue, $options: "i" },
         };
         this.query = this.query.find(searchQuery);
+      } else if (
+        searchField === "_id" &&
+        !mongoose.Types.ObjectId.isValid(searchValue)
+      ) {
+        this.query = this.query.find({ _id: null });
       } else {
         // If the field is not a string, use exact match
         const searchQuery = {
