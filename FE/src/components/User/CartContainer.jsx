@@ -16,6 +16,7 @@ export const CartContainer = () => {
   const orderForModalRef = useRef()
   const discountModalRef = useRef()
   const loadingModalRef = useRef()
+  const errorModalRef = useRef()
   const cartContainerRef = useRef()
 
   const navigate = useNavigate()
@@ -34,7 +35,7 @@ export const CartContainer = () => {
   } = useMutation({
     mutationFn: createOrder,
     onSuccess: (data) => {
-      console.log(data.d)
+      setOrderName('')
       closeModals(loadingModalRef)
       navigate(`/user?order=${data.d._id}`)
       clearCart()
@@ -69,7 +70,7 @@ export const CartContainer = () => {
       discountType: cart.discountType,
       orderItems: cart.items,
     }
-
+    closeModals(orderForModalRef)
     postOrder(payload)
   }
 
@@ -97,6 +98,10 @@ export const CartContainer = () => {
   }, [cart.items])
 
   if (isPending) toggleModal(loadingModalRef)
+  if (isError) {
+    closeModals(loadingModalRef)
+    toggleModal(errorModalRef)
+  }
 
   return (
     <div className='w-[400px] border-l-2 bg-white px-5 h-full flex flex-col space-y-5 py-10 flex-shrink-0'>
@@ -217,6 +222,10 @@ export const CartContainer = () => {
 
       <ModalWrapper ref={loadingModalRef}>
         <h1>Loading...</h1>
+      </ModalWrapper>
+
+      <ModalWrapper ref={errorModalRef}>
+        <h1 className='px-5 py-2 font-medium'>{error?.message}</h1>
       </ModalWrapper>
 
       {/* <ModalWrapper ref={paymentModalRef}>
