@@ -41,9 +41,7 @@ const updateIngredientStock = async (ingredientId, quantityChange) => {
 
   ingredient.stock += quantityChange;
   if (ingredient.stock < 0) {
-    throw new Error(
-      `Insufficient stock for ingredient with id ${ingredientId}`
-    );
+    throw new Error(`Insufficient stock for ingredient  ${ingredient.name}`);
   }
 
   ingredient.stock = parseFloat(ingredient.stock.toFixed(2));
