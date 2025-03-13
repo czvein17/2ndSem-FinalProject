@@ -63,7 +63,8 @@ io.on("connection", async (socket) => {
   orderChangeStream.on("change", async (change) => {
     if (
       change.operationType === "update" ||
-      change.operationType === "insert"
+      change.operationType === "insert" ||
+      change.operationType === "delete"
     ) {
       const pendingOrdersCount = await Order.countDocuments({
         status: "pending",
