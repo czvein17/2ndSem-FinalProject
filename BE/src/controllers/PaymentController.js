@@ -2,7 +2,7 @@ const axios = require("axios");
 const orderService = require("../services/orderService");
 const salesService = require("../services/salesService");
 const { asyncHandler } = require("../middlewares/asyncHandler");
-const ErrorResponse = require("../utils/errorResponse");
+const ErrorResponse = require("../utils/ErrorResponse");
 
 const { generateTransactionId } = require("../utils/utils.js");
 
@@ -35,7 +35,7 @@ const payWithPayMaya = asyncHandler(async (req, res, next) => {
       redirectUrl: {
         success: `http://localhost:5173/user?order=${orderId}`,
         failure: "http://localhost:5173/failure",
-        cancel: "http://localhost:5173/cancel",
+        cancel: `http://localhost:5173/user?order=${orderId}`,
       },
 
       items: order.orderItems.map((item) => ({
@@ -59,16 +59,26 @@ const payWithPayMaya = asyncHandler(async (req, res, next) => {
       "Content-Type": `application/json`,
     },
   });
+  console.log(response);
+  console.log(response.data);
 
-  await salesService.createSale({
-    transactionId: generateTransactionId(),
-    checkoutId: response.data.checkoutId,
-    user: order.user,
-    order: order._id,
-    receivedAmount: 0,
-    change: 0,
-    modeOfPayment: "paymaya",
-  });
+  let sale = await salesService.findSaleByOrderId(orderId);
+
+  if (!sale) {
+    await salesService.createSale({
+      transactionId: generateTransactionId(),
+      checkoutId: response.data.checkoutId,
+      user: order.user,
+      order: order._id,
+      receivedAmount: 0,
+      change: 0,
+      modeOfPayment: "paymaya",
+    });
+  } else {
+    await salesService.updateSales(sale._id, {
+      checkoutId: response.data.checkoutId,
+    });
+  }
 
   await res.status(200).json({
     c: 200,
@@ -97,8 +107,15 @@ const confirmPayment = asyncHandler(async (req, res, next) => {
 
   console.log(response.data);
 
-  if (response.data.status !== "PAYMENT_SUCCESS")
-    return next(new ErrorResponse(400, "Payment failed"));
+  if (response.data.status !== "PAYMENT_SUCCESS") {
+    // return next(new ErrorResponse(400, "Payment failed"));
+
+    return res.status(400).json({
+      c: 400,
+      m: "Payment failed",
+      d: response.data,
+    });
+  }
 
   const updatedSales = await salesService.updateSales(sales._id, {
     receivedAmount: response.data.amount,
@@ -109,7 +126,75 @@ const confirmPayment = asyncHandler(async (req, res, next) => {
     c: 200,
     m: "Payment confirmed successfully",
     d: updatedSales,
+    r: response.data,
   });
 });
 
-module.exports = { payWithPayMaya, confirmPayment };
+const debugMaya = asyncHandler(async (req, res, next) => {
+  const { checkoutId } = req.params;
+
+  const mayaAPI = `https://pg-sandbox.paymaya.com/payments/v1/payments/${checkoutId}`;
+
+  const response = await axios.get(mayaAPI, {
+    headers: {
+      Authorization: `Basic ${process.env.MAYA_SECRET_BASE64_KEY}`,
+      "Content-Type": `application/json`,
+    },
+  });
+
+  console.log(response.data);
+
+  res.status(200).json({
+    c: 200,
+    m: "Payment confirmed successfully",
+    d: response.data,
+  });
+});
+
+const payWithCash = asyncHandler(async (req, res, next) => {
+  const user = req.user;
+  const { orderId } = req.params;
+  const { receiveAmount } = req.body;
+
+  const order = await orderService.findOrderById(orderId);
+
+  if (!order) {
+    return next(new ErrorResponse(404, `Order not found with id ${orderId}`));
+  }
+
+  if (order.totalAmount > receiveAmount) {
+    return next(new ErrorResponse(400, "Insufficient amount"));
+  }
+
+  const generateTransactionId = () => {
+    const timestamp = Date.now().toString();
+    const randomString = Math.random()
+      .toString(36)
+      .substring(2, 10)
+      .toUpperCase();
+    return `TXN-${timestamp}-${randomString}`;
+  };
+
+  const totalAmount = order.totalAmount;
+  const change = Math.max(0, (receiveAmount - totalAmount).toFixed(2));
+
+  const payload = {
+    transactionId: generateTransactionId(),
+    user: user.id,
+    order: orderId,
+    receivedAmount: receiveAmount,
+    change: change,
+    modeOfPayment: "cash",
+    paymentStatus: "paid",
+  };
+
+  const sale = await salesService.createSale(payload);
+
+  res.status(201).json({
+    c: 201,
+    m: "Sale created successfully",
+    d: sale,
+  });
+});
+
+module.exports = { payWithPayMaya, confirmPayment, debugMaya, payWithCash };
