@@ -93,11 +93,11 @@ export const SalesTable = ({ sales, currentPage, setCurrentPage }) => {
             >
               <td className='whitespace-nowrap'>{sale._id}</td>
               <td className='px-3 py-4 text-center whitespace-nowrap'>
-                {sale.order.recipient}
+                {sale.order?.recipient}
               </td>
               <td className='px-3 py-4 text-center whitespace-nowrap'>
                 <span>&#8369;</span>
-                {sale.order.totalAmount}
+                {sale.order?.totalAmount}
               </td>
               <td className='px-3 py-4 text-center whitespace-nowrap'>
                 {sale.modeOfPayment}
