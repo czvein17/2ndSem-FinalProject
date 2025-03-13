@@ -1,6 +1,6 @@
 const axios = require("axios");
 const salesService = require("../services/salesService");
-const ErrorResponse = require("./errorResponse");
+const ErrorResponse = require("./ErrorResponse");
 
 const validateMayaPayment = async (sales) => {
   const mayaAPI = `https://pg-sandbox.paymaya.com/payments/v1/payments/${sales.checkoutId}`;
@@ -12,17 +12,16 @@ const validateMayaPayment = async (sales) => {
     },
   });
 
-  if (response.data.status !== "PAYMENT_SUCCESS")
-    return new ErrorResponse(400, "Payment failed");
-
-  console.log(response.data.status);
+  if (response.data.status !== "PAYMENT_SUCCESS") {
+    return { status: "failed", data: response.data };
+  }
 
   const updatedSales = await salesService.updateSales(sales._id, {
     receivedAmount: response.data.amount,
     paymentStatus: "paid",
   });
 
-  return updatedSales;
+  return { status: "success", data: updatedSales };
 };
 
 module.exports = {
