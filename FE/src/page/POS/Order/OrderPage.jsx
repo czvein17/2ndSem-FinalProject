@@ -7,16 +7,38 @@ import { MdOutlinePayments } from 'react-icons/md'
 import { CgSearch } from 'react-icons/cg'
 
 import { OrderTable } from '../../../components/POS/order/orderTable'
+import { ModalWrapper } from '../../../components/ModalWrapper'
+import { ViewOrderModal } from '../../../components/User/ViewOrderModal'
+import { useEffect, useState } from 'react'
 
 export const OrderPage = () => {
+  const [search, setSearch] = useState('')
+  const [debounceSearch, setDebounceSearch] = useState('')
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebounceSearch(search)
+    }, 1000)
+
+    return () => clearTimeout(handler)
+  }, [search])
+
+  console.log(debounceSearch)
+
+  const queryParams = {
+    sort: '-status',
+    searchBy: '_id',
+    search: debounceSearch,
+  }
+
   const {
     data: orders,
     isPending,
     isError,
     error,
   } = useQuery({
-    queryKey: ['orders'],
-    queryFn: getAllOrders,
+    queryKey: ['orders', queryParams],
+    queryFn: () => getAllOrders(queryParams),
   })
 
   return (
@@ -30,14 +52,21 @@ export const OrderPage = () => {
           <span>
             <CgSearch size={25} />
           </span>
-          <input type='text' className='w-full bg-transparent outline-none' />
+          <input
+            type='text'
+            className='w-full bg-transparent outline-none'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
         </div>
       </div>
-      {!isPending && !isError && (
-        <div className='h-full overflow-hidden'>
-          <OrderTable orders={orders} />
-        </div>
-      )}
+      {/* {!isPending && !isError && ( */}
+      <div className='h-full overflow-hidden'>
+        <OrderTable orders={orders} isOrderLoading={isPending} />
+      </div>
+      {/* )} */}
+
+      <ViewOrderModal />
     </div>
   )
 }
