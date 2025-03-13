@@ -115,11 +115,11 @@ export const UserHomePage = () => {
               </div>
 
               <div className='text-sm'>
-                {/* <p className='font-semibold'>
+                <p className='font-semibold'>
                   {user.firstName}{' '}
                   {user.middleName !== '' ? `${user.middleName.charAt(0)}.` : ''}{' '}
                   {user.lastName}
-                </p> */}
+                </p>
                 <p className='text-[#3b3b3b80] font-medium text-xs'>{user.email}</p>
               </div>
             </div>
