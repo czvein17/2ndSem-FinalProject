@@ -4,9 +4,12 @@ const {
   signAsGoogle,
 } = require("../controllers/signinController");
 
-const router = express.Router();
+const ApiRateLimit = require("../utils/apiRateLimit");
 
-router.post("/email", loginEmailAndPassword);
+const router = express.Router();
+const apiRateLimit = new ApiRateLimit();
+
+router.post("/email", apiRateLimit.loginAttempts, loginEmailAndPassword);
 router.post("/google", signAsGoogle);
 
 module.exports = router;
