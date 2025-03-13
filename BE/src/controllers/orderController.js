@@ -47,7 +47,7 @@ const createOrder = asyncHandler(async (req, res, next) => {
     }
   }
 
-  const tax = subTotal * 0.12; // 12% tax
+  const tax = parseFloat((subTotal * 0.12).toFixed(2)); // 12% tax
   let discountAmount = 0;
 
   if (discountType === "pwd" || discountType === "senior") {
@@ -75,9 +75,6 @@ const createOrder = asyncHandler(async (req, res, next) => {
     await ingredientService.updateIngredientStock(ingredientId, -quantity);
   }
 
-  // // Update the availability status of products
-  // await productService.updateProductAvailability();
-
   res.status(201).json({
     c: 201,
     m: "Order created successfully",
@@ -94,12 +91,20 @@ const getOrderById = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(404, `Order not found with id ${orderId}`));
   }
 
-  if (order.sales && order.sales.checkoutId) {
-    const updatedSales = await validateMayaPayment(order.sales);
-    if (updatedSales) {
-      order.sales = updatedSales;
+  try {
+    if (order.sales && order.sales.checkoutId) {
+      const result = await validateMayaPayment(order.sales);
+
+      if (result.status === "success") {
+        order.sales = result.data;
+      } else if (result.status === "failed") {
+        order.sales.paymentStatus = "pending";
+      }
+
       await order.save();
     }
+  } catch (error) {
+    console.error("Payment validation failed:", error.message);
   }
 
   res.status(200).json({
@@ -153,9 +158,24 @@ const updateOrder = asyncHandler(async (req, res, next) => {
   });
 });
 
+const deleteOrder = asyncHandler(async (req, res, next) => {
+  const orderId = req.params.id;
+  const order = await orderService.deleteOrder(orderId);
+  if (!order) {
+    return next(new ErrorResponse(404, `Order not found with id ${orderId}`));
+  }
+
+  res.status(200).json({
+    c: 200,
+    m: "Order deleted successfully",
+    d: null,
+  });
+});
+
 module.exports = {
   createOrder,
   getOrderById,
   getAllOrders,
   updateOrder,
+  deleteOrder,
 };
