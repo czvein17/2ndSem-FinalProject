@@ -35,8 +35,20 @@
   -moz-appearance: textfield;
 }
 
+.custom-toast-container .Toastify__toast--success .Toastify__toast-icon {
+  color: #ffae82 !important; /* Change the icon color to match the background */
+}
+
+.custom-toast-container .Toastify__toast--success .Toastify__toast-icon svg path {
+  fill: #ffae82 !important; /* Change the icon color to match the background */
+}
+
+.custom-toast-container .Toastify__progress-bar--success {
+  background-color: #ffae82 !important; /* Change the progress bar color to match the background */
+}
+
 .Toastify__toast-container--top-right {
-  top: 100px; /* Adjust this value to move the container lower */
+  top: 60px; /* Adjust this value to move the container lower */
   right: 20px; /* Adjust this value if needed */
 }
 
