@@ -5,6 +5,7 @@ import { loginViaEmailAndPassword, loginViaGoogle } from '../API/login'
 
 import facebook from '../assets/icons/facebook.svg'
 import CUP_OF_CHI from '../assets/images/logo.svg'
+import BEVERAGE from '../assets/images/beverages.svg'
 
 import { FaEye } from 'react-icons/fa6'
 import { FaEyeSlash } from 'react-icons/fa6'
@@ -70,23 +71,23 @@ const Login = () => {
   }, [error])
 
   return (
-    <div className='flex flex-col-reverse items-center justify-center h-screen md:flex-row font-inter'>
+    <div className='flex flex-col-reverse items-center justify-center h-screen md:flex-row font-poppins '>
       <div className='flex flex-col justify-center h-full p-5 md:w-1/2 md:p-10 md:m-10'>
         <div className='w-64 h-64 mx-auto'>
           <img src={CUP_OF_CHI} alt='Facebook Logo' className='object-contain' />
         </div>
 
-        <h1 className='text-3xl font-bold'>LOGIN</h1>
-        <p className='pt-3 text-[16px]'>Please login to continue</p>
+        <h1 className='text-3xl font-bold text-orange'>LOGIN</h1>
+        <p className='pt-3 text-[16px] text-[#322f30'>Please login to continue</p>
 
-        <form className='flex flex-col gap-8 pt-10 ' onSubmit={handleLogin}>
+        <form className='flex flex-col gap-8 pt-10 text-sm ' onSubmit={handleLogin}>
           <div>
             <p className='h-5 text-red-600'>{error}</p>
-            <p className='text-base font-bold'>Email : </p>
-            <div className='py-1 mt-3 rounded-md shadow-lg bg-secondary'>
+            <p className='text-base font-bold text-orange'>Email : </p>
+            <div className='py-1 mt-3   text-[#322f30] border-b-2 border-orange border-opacity-50 font-medium'>
               <input
-                placeholder='Enter email'
-                className='w-full p-2 text-base bg-transparent border border-none outline-none'
+                placeholder='Enter your email'
+                className='w-full p-2 text-base bg-transparent border border-none outline-none '
                 value={data.username}
                 onChange={(e) => setData({ ...data, username: e.target.value })}
               />
@@ -94,13 +95,13 @@ const Login = () => {
           </div>
 
           <div>
-            <p className='font-bold'>Password : </p>
-            <div className='relative py-2 mt-3 rounded-md bg-secondary'>
+            <p className='font-bold text-orange'>Password : </p>
+            <div className='relative py-2 mt-3 text-[#322f30]  border-b-2 border-orange border-opacity-50 font-medium'>
               {!showPassword ? (
                 <input
                   type='password'
                   value={data.password}
-                  placeholder='Enter password'
+                  placeholder='Enter your password'
                   className='border p-2 w-full outline-none bg-transparent border-none text-[16px]'
                   style={{
                     fontWeight: data.password ? 'bold' : 'normal',
@@ -111,7 +112,7 @@ const Login = () => {
                 <input
                   type='text'
                   value={data.password}
-                  placeholder='Enter password'
+                  placeholder='Enter your password'
                   className='border p-2 w-full outline-none bg-transparent border-none text-[16px]'
                   onChange={(e) => setData({ ...data, password: e.target.value })}
                 />
@@ -135,7 +136,11 @@ const Login = () => {
                   Remember Me
                 </label>
               </div>
-              <button type='button' onClick={() => console.log('hello world')}>
+              <button
+                type='button'
+                onClick={() => console.log('hello world')}
+                className='font-medium text-[#322f30] hover:text-orange transition-all duration-150 ease-in-out'
+              >
                 Forgot Password
               </button>
             </div>
@@ -143,7 +148,7 @@ const Login = () => {
 
           <button
             type='submit'
-            className='p-5 font-bold text-white bg-black rounded-lg'
+            className='py-4 font-bold  rounded-lg bg-orange bg-opacity-50 text-[#322f30] hover:bg-orange hover:bg-opacity-100 transition-all duration-150 ease-in-out hover:text-white uppercase'
           >
             {isLoginViaEmailPending || isLoginViaGooglePending
               ? 'Loading...'
@@ -152,22 +157,33 @@ const Login = () => {
         </form>
 
         <div className='flex items-center justify-center pt-10'>
-          <div className='flex-grow mr-3 border-t border-black'></div>
-          <span className='text-lg text-black '>or</span>
-          <div className='flex-grow ml-3 border-t border-black'></div>
+          <div className='flex-grow mr-3 border-t-2 border-opacity-50 border-orange'></div>
+          <span className='text-lg text-[#322f30] '>or</span>
+          <div className='flex-grow ml-3 border-t-2 border-opacity-50 border-orange'></div>
         </div>
 
         <div className='flex justify-center gap-10 pt-10'>
           <GoogleLoginButton onClick={() => googleLogin()} />
         </div>
 
-        <p className='pt-10 text-center'>
+        <p className='pt-10 text-center '>
           Don&apos;t have an account ?{' '}
-          <span className='font-semibold text-black cursor-pointer'>Sign Up</span>
+          <span className='font-semibold cursor-pointer text-orange'>Sign Up</span>
         </p>
       </div>
-      <div className='flex w-full p-5 md:w-1/2 md:h-full'>
-        <img src={CUP_OF_CHI} alt='Cup of Chi Logo' className='object-contain' />
+      <div className='flex w-full p-5 bg-orange bg-opacity-50 md:w-1/2 md:h-full rounded-l-[200px] relative'>
+        <div className='absolute top-0 left-0 z-0 flex items-center justify-center w-full h-full '>
+          <img
+            src={BEVERAGE}
+            alt='Cup of Chi Logo'
+            className='object-contain w-full h-full'
+          />
+        </div>
+        <img
+          src={CUP_OF_CHI}
+          alt='Cup of Chi Logo'
+          className='z-10 object-contain m-auto'
+        />
       </div>
     </div>
   )
