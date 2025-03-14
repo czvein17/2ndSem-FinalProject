@@ -27,3 +27,8 @@ export const createIngredient = async (ingredient) => {
   })
   return newIngredient.data
 }
+
+export const getLowStockIngredients = async () => {
+  const lowStockIngredients = await http.get('/ingredients/low-stock')
+  return lowStockIngredients.data
+}
