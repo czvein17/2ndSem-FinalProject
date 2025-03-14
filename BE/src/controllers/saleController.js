@@ -103,10 +103,44 @@ const getTopPreferredProducts = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getTotalPurchase = asyncHandler(async (req, res, next) => {
+  const totalPurchase = await salesService.getTotalPurchase();
+
+  res.status(200).json({
+    c: 200,
+    m: "Total purchase",
+    d: totalPurchase,
+  });
+});
+
+const getTotalSales = asyncHandler(async (req, res, next) => {
+  const totalSales = await salesService.getTotalSales();
+
+  res.status(200).json({
+    c: 200,
+    m: "Total sales",
+    d: totalSales,
+  });
+});
+
+const getSalesData = asyncHandler(async (req, res, next) => {
+  const { timeRange } = req.query;
+  const salesData = await salesService.getSalesData(timeRange);
+
+  res.status(200).json({
+    c: 200,
+    m: "Get sales data successfully",
+    d: salesData,
+  });
+});
+
 module.exports = {
   createSale,
   getSales,
   getSaleById,
   getProductSales,
   getTopPreferredProducts,
+  getTotalPurchase,
+  getTotalSales,
+  getSalesData,
 };

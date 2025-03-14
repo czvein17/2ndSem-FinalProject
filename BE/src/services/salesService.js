@@ -127,6 +127,79 @@ const getTopPreferredProducts = async () => {
   return topPreferredProducts;
 };
 
+const getTotalPurchase = async () => {
+  const totalPurchase = await Sales.countDocuments({ paymentStatus: "paid" });
+  return totalPurchase;
+};
+
+const getTotalSales = async () => {
+  const totalSales = await Sales.aggregate([
+    {
+      $match: { paymentStatus: "paid" },
+    },
+    {
+      $lookup: {
+        from: "orders",
+        localField: "order",
+        foreignField: "_id",
+        as: "order",
+      },
+    },
+    {
+      $unwind: "$order",
+    },
+    {
+      $group: {
+        _id: null,
+        totalSales: { $sum: "$order.totalAmount" }, // Sum the totalAmount field from the order
+      },
+    },
+  ]);
+
+  return totalSales.length > 0 ? totalSales[0].totalSales : 0;
+};
+
+const getSalesData = async (timeRange) => {
+  let matchCondition = { paymentStatus: "paid" };
+
+  const now = new Date();
+
+  if (timeRange === "last7days") {
+    const last7Days = new Date(now.setDate(now.getDate() - 7));
+    matchCondition.createdAt = { $gte: last7Days };
+  } else if (timeRange === "lastMonth") {
+    const lastMonth = new Date(now.setMonth(now.getMonth() - 1));
+    matchCondition.createdAt = { $gte: lastMonth };
+  } else if (timeRange === "thisMonth") {
+    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    matchCondition.createdAt = { $gte: firstDayOfMonth };
+  }
+
+  const salesData = await Sales.aggregate([
+    { $match: matchCondition },
+    {
+      $lookup: {
+        from: "orders",
+        localField: "order",
+        foreignField: "_id",
+        as: "order",
+      },
+    },
+    { $unwind: "$order" },
+    {
+      $group: {
+        _id: {
+          $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
+        },
+        totalSales: { $sum: "$order.totalAmount" },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]);
+
+  return salesData;
+};
+
 const updateSales = async (id, payload) => {
   const sale = await Sales.findByIdAndUpdate(id, payload, {
     new: true,
@@ -143,5 +216,8 @@ module.exports = {
   findSaleByOrderId,
   findProductSalesById,
   getTopPreferredProducts,
+  getTotalPurchase,
+  getTotalSales,
+  getSalesData,
   updateSales,
 };
