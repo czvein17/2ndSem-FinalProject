@@ -49,6 +49,15 @@ const updateIngredientStock = async (ingredientId, quantityChange) => {
   await ingredient.save();
 };
 
+const alertLowIngredientsStock = async () => {
+  const ingredients = await Ingredient.find();
+  const lowStockIngredients = ingredients.filter(
+    (ingredient) => ingredient.stock < ingredient.lowStockThreshold
+  );
+
+  return lowStockIngredients;
+};
+
 const deleteIngredient = async (id) => {
   const deletedIngredient = await Ingredient.findByIdAndDelete(id);
   return deletedIngredient;
@@ -59,6 +68,7 @@ module.exports = {
   findIngredientById,
   createIngredient,
   updateIngredient,
-  deleteIngredient,
   updateIngredientStock,
+  alertLowIngredientsStock,
+  deleteIngredient,
 };

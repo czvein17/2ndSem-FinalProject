@@ -4,6 +4,7 @@ const {
   createIngredient,
   findAllIngredients,
   findIngredientById,
+  alertLowIngredientsStock,
   updateIngredient,
   deleteIngredient,
 } = require("../controllers/ingredientController");
@@ -16,6 +17,8 @@ router
   .route("/")
   .get(findAllIngredients)
   .post(uploadImage("ingredients-image"), createIngredient);
+
+router.route("/low-stock").get(alertLowIngredientsStock);
 
 router
   .route("/:id")

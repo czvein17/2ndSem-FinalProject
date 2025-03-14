@@ -49,6 +49,17 @@ const findIngredientById = asyncHandler(async (req, res, next) => {
   });
 });
 
+const alertLowIngredientsStock = asyncHandler(async (req, res, next) => {
+  const lowStockIngredients =
+    await ingredientService.alertLowIngredientsStock();
+
+  res.status(200).json({
+    c: 200,
+    m: null,
+    d: lowStockIngredients,
+  });
+});
+
 const updateIngredient = asyncHandler(async (req, res, next) => {
   const payload = {
     name: req.body.name,
@@ -92,6 +103,7 @@ module.exports = {
   findAllIngredients,
   createIngredient,
   findIngredientById,
+  alertLowIngredientsStock,
   updateIngredient,
   deleteIngredient,
 };
