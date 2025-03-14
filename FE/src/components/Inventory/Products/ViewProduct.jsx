@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
@@ -10,12 +10,14 @@ import { IoIosArrowBack } from 'react-icons/io'
 
 import { PrimaryDetails } from './PrimaryDetails'
 import { ProductPurchases } from './ProductPurchases'
+import { EditProductModal } from './EditProductModal'
 
 export const ViewProduct = () => {
   const { id } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
   const tabParams = searchParams.get('tab')
   const navigate = useNavigate()
+  const editRef = useRef()
 
   const {
     data: coffee,
@@ -65,7 +67,10 @@ export const ViewProduct = () => {
             </div>
 
             <div className='flex space-x-2'>
-              <button className='flex items-center gap-2 px-4 py-2 transition-all duration-100 ease-in-out border rounded border-orange text-orange hover:bg-orange hover:text-white hover:border-orange'>
+              <button
+                className='flex items-center gap-2 px-4 py-2 transition-all duration-100 ease-in-out border rounded border-orange text-orange hover:bg-orange hover:text-white hover:border-orange'
+                onClick={() => editRef.current.openModal()}
+              >
                 <FiEdit2 size={20} />
                 Edit
               </button>
@@ -101,6 +106,8 @@ export const ViewProduct = () => {
           {tabParams === 'purchase' && <ProductPurchases productId={coffee.d._id} />}
         </>
       )}
+
+      <EditProductModal ref={editRef} coffee={coffee?.d} />
     </div>
   )
 }

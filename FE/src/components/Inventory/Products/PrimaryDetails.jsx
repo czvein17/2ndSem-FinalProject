@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { EditProductModal } from './EditProductModal'
 
 export const PrimaryDetails = ({ coffee }) => {
   const [selectedSize, setSelectedSize] = useState('small')
@@ -72,31 +73,12 @@ export const PrimaryDetails = ({ coffee }) => {
         </div>
       </div>
 
-      {/* <div className='w-full space-y-5 text-base '>
-          <h1 className='text-lg font-semibold'>Ingridients</h1>
-          {coffee.ingredients.map((ingredient, index) => (
-            <div className='space-y-2' key={index}>
-              <div className='flex gap-20 font-medium'>
-                <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Name</p>
-                <p>{ingredient.ingredient.name}</p>
-              </div>
-
-              <div className='flex gap-20 font-medium'>
-                <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Amount</p>
-                <p className='uppercase'>
-                  {ingredient.quantity} {ingredient.ingredient.unit}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
       <div className='flex flex-col items-center justify-center flex-shrink-0 w-1/4 gap-2 space-y-10'>
         <div className='p-5 border-2 border-dashed h-60 w-60 rounded-xl border-orange'>
           <img
+            className='object-contain w-full h-full rounded-xl'
             src={`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}/images/coffee-image/${coffee.image}`}
-            alt=''
+            alt={coffee.name}
           />
         </div>
 
