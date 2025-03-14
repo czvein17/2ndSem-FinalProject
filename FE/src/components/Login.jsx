@@ -176,7 +176,7 @@ const Login = () => {
           <img
             src={BEVERAGE}
             alt='Cup of Chi Logo'
-            className='object-contain w-full h-full'
+            className='object-cover w-full h-full'
           />
         </div>
         <img
