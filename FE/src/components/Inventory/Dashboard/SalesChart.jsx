@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -45,13 +45,73 @@ ChartJS.register(
   customBorder,
 )
 
-export const SalesChart = () => {
+export const SalesChart = ({ salesData, timeRange, setTimeRange }) => {
+  console.log(timeRange)
+  const [processedSalesData, setProcessedSalesData] = useState([])
+
+  useEffect(() => {
+    setProcessedSalesData(preprocessSalesData(salesData, timeRange))
+  }, [salesData, timeRange])
+
+  const preprocessSalesData = (salesData, timeRange) => {
+    const now = new Date()
+    let startDate, endDate
+
+    if (timeRange === 'last7days') {
+      startDate = new Date(now.setDate(now.getDate() - 6))
+      endDate = new Date()
+    } else if (timeRange === 'lastMonth') {
+      startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+      endDate = new Date(now.getFullYear(), now.getMonth(), 0)
+    } else if (timeRange === 'thisMonth') {
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1)
+      endDate = new Date()
+    }
+
+    const filledSalesData = []
+    if (timeRange === 'last7days') {
+      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split('T')[0]
+        const sales = salesData.find((s) => s._id === dateStr)
+        filledSalesData.push({
+          _id: dateStr,
+          totalSales: sales ? sales.totalSales : 0,
+        })
+      }
+    } else {
+      const weeks = {}
+      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const weekStr = `${d.getFullYear()}-W${Math.ceil((d.getDate() - 1) / 7)}`
+        if (!weeks[weekStr]) {
+          weeks[weekStr] = { _id: weekStr, totalSales: 0 }
+        }
+        const sales = salesData.find((s) => s._id === d.toISOString().split('T')[0])
+        if (sales) {
+          weeks[weekStr].totalSales += sales.totalSales
+        }
+      }
+      filledSalesData.push(...Object.values(weeks))
+    }
+
+    return filledSalesData
+  }
+
+  const formatLabel = (label, timeRange) => {
+    if (timeRange === 'last7days') {
+      const date = new Date(label)
+      return date.toLocaleDateString('en-US', { weekday: 'short' })
+    } else {
+      const weekNumber = label.split('-W')[1]
+      return `Week ${parseInt(weekNumber, 10) + 1}`
+    }
+  }
+
   const data = {
-    labels: ['Mar 04', 'Mar 05', 'Mar 06', 'Mar 07', 'Mar 08', 'Mar 09', 'Mar 10'],
+    labels: processedSalesData.map((item) => formatLabel(item._id, timeRange)),
     datasets: [
       {
         label: 'Sales',
-        data: [110, 20, 30, 70, 80, 20, 100],
+        data: processedSalesData.map((item) => item.totalSales),
         backgroundColor: 'rgba(255, 174, 130, 0.2)',
         borderColor: 'rgba(255, 174, 130, 1)',
         borderWidth: 1,
@@ -65,7 +125,6 @@ export const SalesChart = () => {
       legend: {
         display: false,
       },
-      //   customBorder,
     },
     layout: {
       padding: {

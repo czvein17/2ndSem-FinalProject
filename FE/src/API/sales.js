@@ -16,3 +16,20 @@ export const getBestSellingProducts = async () => {
   const bestSellingProducts = await http.get('/sales/best-preferred-products')
   return bestSellingProducts.data
 }
+
+export const getTotalPurchase = async () => {
+  const totalPurchase = await http.get('/sales/total-purchase')
+  return totalPurchase.data
+}
+
+export const getTotalSales = async () => {
+  const totalSales = await http.get('/sales/total-sales')
+  return totalSales.data
+}
+
+export const getSalesData = async (timeRange) => {
+  const salesData = await http.get('/sales/sales-data', {
+    params: { timeRange },
+  })
+  return salesData.data
+}
