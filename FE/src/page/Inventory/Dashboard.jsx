@@ -5,6 +5,7 @@ import { TbCurrencyPeso } from 'react-icons/tb'
 import { BiPurchaseTag } from 'react-icons/bi'
 import { LuShoppingCart } from 'react-icons/lu'
 import { IoIosArrowDown } from 'react-icons/io'
+import { BsTruck } from 'react-icons/bs'
 
 import { useCartContext } from '../../hooks/useCartContext'
 import { SalesChart } from '../../components/Inventory/Dashboard/SalesChart'
@@ -12,6 +13,7 @@ import { SalesByStatusChart } from '../../components/Inventory/Dashboard/SalesBy
 import { StockAlert } from '../../components/Inventory/Dashboard/StockAlert'
 
 import { getSalesData, getTotalPurchase, getTotalSales } from '../../API/sales'
+import { getLowStockIngredients } from '../../API/stocks'
 
 export const Dashboard = () => {
   const { pendingOrdersCount } = useCartContext()
@@ -33,6 +35,11 @@ export const Dashboard = () => {
     queryFn: () => getSalesData(timeRange),
   })
 
+  const { data: stockAlert } = useQuery({
+    queryKey: ['stockAlert'],
+    queryFn: () => getLowStockIngredients(),
+  })
+
   const summary = [
     {
       icon: <TbCurrencyPeso size={36} />,
@@ -50,6 +57,11 @@ export const Dashboard = () => {
       icon: <BiPurchaseTag size={36} />,
       label: 'Purchases',
       value: totalPurchase?.d || '0',
+    },
+    {
+      icon: <BsTruck size={36} />,
+      label: 'Suppliers',
+      value: '0',
     },
   ]
 
@@ -166,7 +178,7 @@ export const Dashboard = () => {
             <h2 className='text-lg font-semibold'>Stock Alert</h2>
           </div>
 
-          <StockAlert />
+          <StockAlert stockAlert={stockAlert?.d || []} />
         </div>
       </div>
     </div>
