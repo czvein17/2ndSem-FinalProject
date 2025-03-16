@@ -7,8 +7,10 @@ import React, {
 } from 'react'
 import ReactDOM from 'react-dom'
 import { useParams } from 'react-router-dom'
+
+import { IoIosRemoveCircleOutline } from 'react-icons/io'
 import { useQuery } from '@tanstack/react-query'
-import { getProductById } from '../../../API/product'
+import { getAllIngredients } from '../../../API/stocks'
 
 export const EditProductModal = forwardRef(({ coffee }, ref) => {
   const { id } = useParams()
@@ -27,6 +29,11 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
     moodTags: [],
     ingredients: [],
     image: null,
+  })
+
+  const { data: ingredients } = useQuery({
+    queryKey: ['ingredients'],
+    queryFn: getAllIngredients,
   })
 
   useImperativeHandle(ref, () => ({
@@ -75,16 +82,86 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
     }))
   }
 
+  const handleAddIngredient = () => {
+    setProduct((prev) => ({
+      ...prev,
+      ingredients: [
+        ...prev.ingredients,
+        {
+          quantity: {
+            small: 0,
+            medium: 0,
+            large: 0,
+          },
+          _id: Date.now().toString(), // Temporary ID for new ingredient
+          ingredient: {
+            _id: '',
+            name: '',
+            unit: '',
+          },
+        },
+      ],
+    }))
+  }
+
+  const handleRemoveIngredient = (e, index) => {
+    e.preventDefault()
+
+    setProduct((prev) => {
+      const updatedIngredients = [...prev.ingredients]
+      updatedIngredients.splice(index, 1)
+      return {
+        ...prev,
+        ingredients: updatedIngredients,
+      }
+    })
+  }
+
+  const handleIngredientSelectChange = (e, index) => {
+    const { value } = e.target
+    const selectedIngredient = ingredients.d.find(
+      (ingredient) => ingredient._id === value,
+    )
+    setProduct((prev) => {
+      const updatedIngredients = [...prev.ingredients]
+      updatedIngredients[index].ingredient = selectedIngredient
+      return {
+        ...prev,
+        ingredients: updatedIngredients,
+      }
+    })
+  }
+
+  const handleIngredientChange = (e, index, size) => {
+    const { value } = e.target
+    setProduct((prev) => {
+      const updatedIngredients = [...prev.ingredients]
+      updatedIngredients[index].quantity[size] = parseFloat(value)
+      return {
+        ...prev,
+        ingredients: updatedIngredients,
+      }
+    })
+  }
+
+  const handleUpdateProduct = (e) => {
+    e.preventDefault()
+    console.log(product)
+  }
+
   if (!isOpen) return null
 
   return ReactDOM.createPortal(
     <div className='fixed top-0 left-0 w-[100%] h-[100%] bg-black bg-opacity-50 flex justify-center items-center'>
-      <div className=' bg-white rounded-xl w-[750px] h-[800px] relative font-poppins flex flex-col'>
+      <div className=' bg-white rounded-xl w-[750px] max-h-[900px] relative font-poppins flex flex-col  '>
         <div className='w-full px-5 py-3 bg-orange rounded-t-xl'>
           <h1 className='text-xl font-medium text-white uppercase'>Edit Product</h1>
         </div>
 
-        <form>
+        <form
+          onSubmit={handleUpdateProduct}
+          className='overflow-auto custom-scrollbar'
+        >
           <div className='flex w-full gap-10 px-5 py-3'>
             <div className='w-full space-y-3'>
               {/* NAME */}
@@ -176,7 +253,7 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
             </div>
           </div>
 
-          <div className='h-full px-5'>
+          <div className='h-full px-5 space-y-1'>
             {/* PRICES */}
             <div className='py-2 space-y-1 '>
               <label
@@ -241,7 +318,104 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
             </div>
 
             {/* INGREDIENTS */}
-            <div></div>
+            <div className='flex flex-col gap-2 py-5 space-y-2'>
+              <div className='flex items-center justify-between'>
+                <h3 className='font-medium'>Ingredients :</h3>
+                <button
+                  type='button'
+                  className='px-3 py-1 text-white bg-orange rounded-xl'
+                  onClick={handleAddIngredient}
+                >
+                  Add Ingredient
+                </button>
+              </div>
+
+              {product.ingredients.map((ingredient, index) => (
+                <div key={ingredient._id} className='flex flex-col gap-3'>
+                  <div className='flex justify-between'>
+                    <select
+                      className='bg-transparent outline-none '
+                      value={ingredient.ingredient._id}
+                      onChange={(e) => handleIngredientSelectChange(e, index)}
+                    >
+                      {ingredients?.d.map((ingredient) => (
+                        <option key={ingredient._id} value={ingredient._id}>
+                          {ingredient.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    <button
+                      className='flex items-center gap-1'
+                      onClick={handleRemoveIngredient}
+                    >
+                      <span className='text-red-500'>
+                        <IoIosRemoveCircleOutline size={24} />
+                      </span>
+
+                      <span className='text-sm'>Remove</span>
+                    </button>
+                  </div>
+                  <div className='flex items-center gap-5'>
+                    <div className='flex py-2 border-b-2 border-orange'>
+                      <label
+                        htmlFor={`small-${index}`}
+                        className='text-sm font-medium text-gray-600'
+                      >
+                        Small:
+                      </label>
+                      <input
+                        type='number'
+                        name={`small-${index}`}
+                        id={`small-${index}`}
+                        className='w-full px-2 bg-transparent outline-none no-spinner'
+                        value={ingredient.quantity.small}
+                        onChange={(e) => handleIngredientChange(e, index, 'small')}
+                      />
+                    </div>
+                    <div className='flex py-2 border-b-2 border-orange'>
+                      <label
+                        htmlFor={`medium-${index}`}
+                        className='text-sm font-medium text-gray-600'
+                      >
+                        Medium:
+                      </label>
+                      <input
+                        type='number'
+                        name={`medium-${index}`}
+                        id={`medium-${index}`}
+                        className='w-full px-2 bg-transparent outline-none no-spinner'
+                        value={ingredient.quantity.medium}
+                        onChange={(e) => handleIngredientChange(e, index, 'medium')}
+                      />
+                    </div>
+                    <div className='flex py-2 border-b-2 border-orange'>
+                      <label
+                        htmlFor={`large-${index}`}
+                        className='text-sm font-medium text-gray-600'
+                      >
+                        Large:
+                      </label>
+                      <input
+                        type='number'
+                        name={`large-${index}`}
+                        id={`large-${index}`}
+                        className='w-full px-2 bg-transparent outline-none no-spinner'
+                        value={ingredient.quantity.large}
+                        onChange={(e) => handleIngredientChange(e, index, 'large')}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              <button
+                className='px-10 py-2 mx-auto text-white bg-orange rounded-xl'
+                type='submit'
+              >
+                Update
+              </button>
+            </div>
           </div>
         </form>
       </div>
