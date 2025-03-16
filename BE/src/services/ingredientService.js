@@ -14,7 +14,7 @@ const findAllIngredients = async (req) => {
 };
 
 const findIngredientById = async (id) => {
-  const ingredient = await Ingredient.findById(id);
+  const ingredient = await Ingredient.findById(id).populate("supplier");
   return ingredient;
 };
 
@@ -70,5 +70,6 @@ module.exports = {
   updateIngredient,
   updateIngredientStock,
   alertLowIngredientsStock,
+
   deleteIngredient,
 };

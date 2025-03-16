@@ -32,3 +32,14 @@ export const getLowStockIngredients = async () => {
   const lowStockIngredients = await http.get('/ingredients/low-stock')
   return lowStockIngredients.data
 }
+
+export const getIngredientById = async (id) => {
+  const ingredient = await http.get(`/ingredients/${id}`)
+  return ingredient.data
+}
+
+export const notifySupplier = async (id) => {
+  console.log(id)
+  const response = await http.post(`/ingredients/notify-supplier/${id}`)
+  return response.data
+}

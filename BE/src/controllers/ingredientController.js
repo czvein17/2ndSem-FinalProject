@@ -1,6 +1,8 @@
 const ingredientService = require("../services/ingredientService");
 const supplierService = require("../services/supplierService");
 const ErrorResponse = require("../utils/ErrorResponse");
+const { emailSupplier } = require("../utils/email");
+
 const { asyncHandler } = require("../middlewares/asyncHandler");
 
 const findAllIngredients = asyncHandler(async (req, res, next) => {
@@ -60,6 +62,23 @@ const alertLowIngredientsStock = asyncHandler(async (req, res, next) => {
   });
 });
 
+const notifySupplier = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const ingredient = await ingredientService.findIngredientById(id);
+
+  if (!ingredient) {
+    return next(new ErrorResponse(404, `Ingredient not found with that id`));
+  }
+
+  await emailSupplier(ingredient);
+
+  res.status(200).json({
+    c: 200,
+    m: "Supplier notified successfully",
+    d: ingredient,
+  });
+});
+
 const updateIngredient = asyncHandler(async (req, res, next) => {
   const payload = {
     name: req.body.name,
@@ -104,6 +123,7 @@ module.exports = {
   createIngredient,
   findIngredientById,
   alertLowIngredientsStock,
+  notifySupplier,
   updateIngredient,
   deleteIngredient,
 };

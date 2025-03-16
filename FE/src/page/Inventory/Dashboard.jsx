@@ -14,6 +14,8 @@ import { StockAlert } from '../../components/Inventory/Dashboard/StockAlert'
 
 import { getSalesData, getTotalPurchase, getTotalSales } from '../../API/sales'
 import { getLowStockIngredients } from '../../API/stocks'
+import { getAllSuppliers } from '../../API/suppliers'
+import { Suppliers } from '../../components/Inventory/Dashboard/Suppliers'
 
 export const Dashboard = () => {
   const { pendingOrdersCount } = useCartContext()
@@ -40,6 +42,11 @@ export const Dashboard = () => {
     queryFn: () => getLowStockIngredients(),
   })
 
+  const { data: suppliers } = useQuery({
+    queryKey: ['suppliers'],
+    queryFn: getAllSuppliers,
+  })
+
   const summary = [
     {
       icon: <TbCurrencyPeso size={36} />,
@@ -61,7 +68,7 @@ export const Dashboard = () => {
     {
       icon: <BsTruck size={36} />,
       label: 'Suppliers',
-      value: '0',
+      value: suppliers?.d?.length || 0,
     },
   ]
 
@@ -154,10 +161,18 @@ export const Dashboard = () => {
         </div>
 
         <div
-          className='col-span-2 p-3 bg-white rounded-xl'
+          className='col-span-2 p-5 space-y-5 overflow-hidden bg-white rounded-xl'
           style={{ boxShadow: '0px 0px 5px 3px rgba(0,0,0,0.1)' }}
         >
-          2
+          <div className='flex items-center justify-between'>
+            <h2 className='text-lg font-semibold'>Suppliers</h2>
+
+            <button className='px-3 py-1 text-sm font-medium transition duration-150 ease-out border rounded-full text-orange border-orange hover:bg-orange hover:text-white'>
+              Add Supplier
+            </button>
+          </div>
+
+          <Suppliers suppliers={suppliers?.d || []} />
         </div>
 
         <div
