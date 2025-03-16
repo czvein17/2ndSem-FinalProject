@@ -28,6 +28,25 @@ export const createIngredient = async (ingredient) => {
   return newIngredient.data
 }
 
+export const updateIngredient = async ({ id, newIngredient }) => {
+  const formData = new FormData()
+
+  formData.append('name', newIngredient.name)
+  formData.append('stock', newIngredient.stock)
+  formData.append('unit', newIngredient.unit)
+  formData.append('lowStockThreshold', newIngredient.lowStockThreshold)
+  formData.append('supplier', newIngredient.supplier)
+  formData.append('image', newIngredient.image)
+
+  const updatedIngredient = await http.patch(`/ingredients/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  return updatedIngredient.data
+}
+
 export const getLowStockIngredients = async () => {
   const lowStockIngredients = await http.get('/ingredients/low-stock')
   return lowStockIngredients.data

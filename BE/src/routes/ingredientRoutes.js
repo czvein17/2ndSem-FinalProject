@@ -25,7 +25,7 @@ router.route("/notify-supplier/:id").post(notifySupplier);
 router
   .route("/:id")
   .get(findIngredientById)
-  .patch(updateIngredient)
+  .patch(uploadImage("ingredients-image"), updateIngredient)
   .delete(deleteIngredient);
 
 module.exports = router;

@@ -81,12 +81,15 @@ const notifySupplier = asyncHandler(async (req, res, next) => {
 
 const updateIngredient = asyncHandler(async (req, res, next) => {
   const payload = {
-    name: req.body.name,
-    stock: req.body.stock,
-    unit: req.body.unit,
-    lowStockThreshold: req.body.lowStockThreshold,
-    supplier: req.body.supplier,
+    name: req?.body?.name,
+    stock: req?.body?.stock,
+    unit: req?.body?.unit,
+    lowStockThreshold: req?.body?.lowStockThreshold,
+    supplier: req?.body?.supplier,
+    image: req?.file?.filename,
   };
+
+  console.log(payload);
 
   const ingredient = await ingredientService.updateIngredient(
     req.params.id,

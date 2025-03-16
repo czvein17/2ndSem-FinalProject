@@ -12,7 +12,12 @@ import { SalesChart } from '../../components/Inventory/Dashboard/SalesChart'
 import { SalesByStatusChart } from '../../components/Inventory/Dashboard/SalesByStatusChart'
 import { StockAlert } from '../../components/Inventory/Dashboard/StockAlert'
 
-import { getSalesData, getTotalPurchase, getTotalSales } from '../../API/sales'
+import {
+  getSalesByStatus,
+  getSalesData,
+  getTotalPurchase,
+  getTotalSales,
+} from '../../API/sales'
 import { getLowStockIngredients } from '../../API/stocks'
 import { getAllSuppliers } from '../../API/suppliers'
 import { Suppliers } from '../../components/Inventory/Dashboard/Suppliers'
@@ -45,6 +50,11 @@ export const Dashboard = () => {
   const { data: suppliers } = useQuery({
     queryKey: ['suppliers'],
     queryFn: getAllSuppliers,
+  })
+
+  const { data: salesByStatus } = useQuery({
+    queryKey: ['salesByStatus'],
+    queryFn: getSalesByStatus,
   })
 
   const summary = [
@@ -182,7 +192,7 @@ export const Dashboard = () => {
           <div className='flex justify-between'>
             <h2 className='text-lg font-semibold'>Total Sales by Status</h2>
           </div>
-          <SalesByStatusChart />
+          <SalesByStatusChart salesStatus={salesByStatus?.d || []} />
         </div>
 
         <div

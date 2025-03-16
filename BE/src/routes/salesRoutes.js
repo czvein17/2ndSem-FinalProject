@@ -10,6 +10,7 @@ const {
   getTotalPurchase,
   getTotalSales,
   getSalesData,
+  getSalesByStatus,
 } = require("../controllers/saleController");
 
 const { protectAuth } = require("../middlewares/protectAuth");
@@ -19,6 +20,8 @@ router.get("/", getSales);
 
 router.get("/total-purchase", getTotalPurchase);
 router.get("/total-sales", getTotalSales);
+router.get("/sales-by-status", getSalesByStatus);
+
 router.get("/sales-data", getSalesData);
 router.get("/best-preferred-products", getTopPreferredProducts);
 router.get("/:salesId", getSaleById);

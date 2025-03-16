@@ -134,6 +134,16 @@ const getSalesData = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getSalesByStatus = asyncHandler(async (req, res, next) => {
+  const salesByStatus = await salesService.getSalesByStatus();
+
+  res.status(200).json({
+    c: 200,
+    m: "Get sales by status successfully",
+    d: salesByStatus,
+  });
+});
+
 module.exports = {
   createSale,
   getSales,
@@ -143,4 +153,5 @@ module.exports = {
   getTotalPurchase,
   getTotalSales,
   getSalesData,
+  getSalesByStatus,
 };

@@ -1,82 +1,79 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import React, { useEffect, useState } from 'react'
 import { getAllSuppliers } from '../../../API/suppliers'
-import { useState } from 'react'
-import { createIngredient } from '../../../API/stocks'
+import { updateIngredient } from '../../../API/stocks'
 import { queryClient } from '../../../API/http'
 import { toast } from 'react-toastify'
 
-export const AddNewIngredientModal = ({ closeModal }) => {
-  const [error, setError] = useState('')
-  const [ingredient, setIngredients] = useState({
+export const EditStockModal = ({ ingredient, closeModal }) => {
+  const [ingredientForm, setIngredinietForm] = useState({
     name: '',
     stock: '',
     unit: '',
-    threshold: '',
+    lowStockThreshold: '',
     supplier: '',
     image: null,
   })
 
-  const {
-    data: suppliers,
-    isLoading,
-    isPending,
-    isError,
-  } = useQuery({
+  const { data: suppliers } = useQuery({
     queryKey: ['suppliers'],
-    queryFn: getAllSuppliers,
+    queryFn: () => getAllSuppliers(),
   })
 
-  const { mutate: AddNewIngredientMutate } = useMutation({
-    mutationFn: createIngredient,
+  const { mutate: updateIngredientMutate } = useMutation({
+    mutationFn: updateIngredient,
     onSuccess: () => {
       queryClient.invalidateQueries('ingredients')
-      toast.success('Ingredient added successfully')
+      toast.success('Ingredient updated successfully')
       closeModal()
+    },
+    onError: (error) => {
+      toast.error('Failed to update ingredient')
     },
   })
 
+  useEffect(() => {
+    setIngredinietForm({
+      name: ingredient.name,
+      stock: ingredient.stock,
+      unit: ingredient.unit,
+      lowStockThreshold: ingredient.lowStockThreshold,
+      supplier: ingredient.supplier,
+      image: ingredient.image,
+    })
+  }, [])
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target
-    setIngredients((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setIngredinietForm({
+      ...ingredientForm,
+      [e.target.name]: e.target.value,
+    })
   }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]
-    if (file) {
-      setIngredients((prev) => ({
-        ...prev,
-        image: file,
-      }))
-    }
+
+    setIngredinietForm({
+      ...ingredientForm,
+      image: file,
+    })
   }
 
   const handleSumbit = (e) => {
     e.preventDefault()
-    console.log(ingredient)
 
-    if (
-      ingredient.name === '' ||
-      ingredient.stocks === '' ||
-      ingredient.unit === '' ||
-      ingredient.threshold === '' ||
-      ingredient.suppliers === ''
-    ) {
-      setError('Please fill all the fields')
-      return
-    }
-
-    AddNewIngredientMutate(ingredient)
+    updateIngredientMutate({
+      id: ingredient._id,
+      newIngredient: ingredientForm,
+    })
   }
 
   return (
-    <div className='w-[600px]  font-poppins'>
-      <h1 className='text-xl font-medium uppercase text-orange'>Add Ingredient</h1>
+    <div className='w-[600px] font-poppins'>
+      <h1 className='text-xl font-medium uppercase text-orange'>Edit Ingredient</h1>
 
       <p className='flex items-center justify-center h-8 text-sm font-medium text-red-600'>
-        {error}
+        {/* {error} */}
       </p>
       <form
         className='flex flex-col w-full px-5 space-y-5 text-sm '
@@ -90,7 +87,7 @@ export const AddNewIngredientModal = ({ closeModal }) => {
                 type='text'
                 className='bg-transparent outline-none'
                 name='name'
-                value={ingredient.name}
+                value={ingredientForm.name}
                 onChange={handleInputChange}
               />
             </div>
@@ -99,9 +96,9 @@ export const AddNewIngredientModal = ({ closeModal }) => {
               <p className='font-medium'>Stocks :</p>
               <input
                 type='number'
-                className='bg-transparent outline-none'
+                className='bg-transparent outline-none no-spinner'
                 name='stock'
-                value={ingredient.stock}
+                value={ingredientForm.stock}
                 onChange={handleInputChange}
               />
             </div>
@@ -111,7 +108,7 @@ export const AddNewIngredientModal = ({ closeModal }) => {
               <select
                 className='w-full outline-none cursor-pointer'
                 name='unit'
-                value={ingredient.unit}
+                value={ingredientForm.unit}
                 onChange={handleInputChange}
               >
                 <option value=''>Select Unit</option>
@@ -128,7 +125,7 @@ export const AddNewIngredientModal = ({ closeModal }) => {
               <select
                 className='w-full outline-none cursor-pointer'
                 name='supplier'
-                value={ingredient.supplier}
+                value={ingredientForm.supplier}
                 onChange={handleInputChange}
               >
                 <option value=''>Select Supplier</option>
@@ -145,8 +142,8 @@ export const AddNewIngredientModal = ({ closeModal }) => {
               <input
                 type='number'
                 className='bg-transparent outline-none'
-                name='threshold'
-                value={ingredient.threshold}
+                name='lowStockThreshold'
+                value={ingredientForm.lowStockThreshold}
                 onChange={handleInputChange}
               />
             </div>
@@ -157,16 +154,20 @@ export const AddNewIngredientModal = ({ closeModal }) => {
               className='flex items-center justify-center w-40 h-40 p-2 m-auto border-2 border-dashed rounded-lg cursor-pointer border-orange'
               onClick={() => document.getElementById('imageUpload').click()}
             >
-              {!ingredient.image ? (
-                <>
-                  <p className='font-medium text-center'>Upload Image</p>
-                </>
-              ) : (
+              {ingredientForm.image && !(ingredientForm.image instanceof File) ? (
                 <img
-                  src={URL.createObjectURL(ingredient.image)}
+                  src={`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}/images/ingredients-image/${ingredientForm.image}`}
                   alt='Preview'
-                  className='object-cover w-full h-full rounded-lg'
+                  className='object-contain w-full h-full rounded-lg'
                 />
+              ) : (
+                ingredientForm.image instanceof File && (
+                  <img
+                    src={URL.createObjectURL(ingredientForm.image)}
+                    alt='Preview'
+                    className='object-contain w-full h-full rounded-lg'
+                  />
+                )
               )}
 
               <input
@@ -185,7 +186,7 @@ export const AddNewIngredientModal = ({ closeModal }) => {
             className='px-5 py-2 text-white bg-orange rounded-xl '
             type='submit'
           >
-            Add Ingredient
+            Update Ingredient
           </button>
         </div>
       </form>

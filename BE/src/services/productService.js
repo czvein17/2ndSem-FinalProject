@@ -100,6 +100,19 @@ const updateProductAvailability = async () => {
   }
 };
 
+const updateProduct = async (payload) => {
+  const product = await Product.findByIdAndUpdate(payload.id, payload, {
+    runValidators: true,
+    new: true,
+  });
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  return product;
+};
+
 const deleteProduct = async (id) => {
   const product = await Product.findByIdAndDelete(id);
 
@@ -116,6 +129,7 @@ module.exports = {
   recomendProductsByMood,
   findProductsByNames,
   getProductById,
+  updateProduct,
   updateProductAvailability,
   deleteProduct,
 };

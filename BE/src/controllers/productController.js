@@ -6,6 +6,7 @@ const createProduct = asyncHandler(async (req, res, next) => {
   console.log(req.file); // Check uploaded image
 
   let bodyData = req.body;
+  console.log(bodyData);
 
   // Check if the request is multipart/form-data (form-data)
   if (req.is("multipart/form-data") && req.body.data) {
@@ -37,7 +38,7 @@ const createProduct = asyncHandler(async (req, res, next) => {
   });
 });
 
-const findAllProducts = asyncHandler(async (req, res) => {
+const findAllProducts = asyncHandler(async (req, res, next) => {
   const products = await productService.findAllProducts(req);
 
   res.json({
@@ -48,7 +49,7 @@ const findAllProducts = asyncHandler(async (req, res) => {
   });
 });
 
-const recomendProductsByMood = asyncHandler(async (req, res) => {
+const recomendProductsByMood = asyncHandler(async (req, res, next) => {
   const { mood } = req.body;
   const suggestion = await productService.recomendProductsByMood(mood);
 
@@ -74,11 +75,45 @@ const recomendProductsByMood = asyncHandler(async (req, res) => {
   });
 });
 
-const getProductById = asyncHandler(async (req, res) => {
+const getProductById = asyncHandler(async (req, res, next) => {
   const product = await productService.getProductById(req.params.id);
   res.json({
     c: 200,
     m: null,
+    d: product,
+  });
+});
+
+const updateProduct = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  let bodyData = req.body;
+
+  if (req.is("multipart/form-data") && req.body.data) {
+    try {
+      bodyData = JSON.parse(req.body.data);
+    } catch (error) {
+      return res
+        .status(400)
+        .json({ c: 400, m: "Invalid JSON format", d: null });
+    }
+  }
+
+  const payload = {
+    id: id,
+    name: bodyData.name,
+    description: bodyData.description,
+    prices: bodyData.prices,
+    category: bodyData.category,
+    moodTags: bodyData.moodTags,
+    image: req.file?.filename,
+    ingredients: bodyData.ingredients,
+  };
+
+  const product = await productService.updateProduct(payload);
+
+  res.json({
+    c: 200,
+    m: "Product updated",
     d: product,
   });
 });
@@ -97,5 +132,6 @@ module.exports = {
   findAllProducts,
   recomendProductsByMood,
   getProductById,
+  updateProduct,
   deleteProduct,
 };

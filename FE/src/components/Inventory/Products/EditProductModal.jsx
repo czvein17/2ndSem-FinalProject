@@ -9,8 +9,11 @@ import ReactDOM from 'react-dom'
 import { useParams } from 'react-router-dom'
 
 import { IoIosRemoveCircleOutline } from 'react-icons/io'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAllIngredients } from '../../../API/stocks'
+import { updateProduct } from '../../../API/product'
+import { queryClient } from '../../../API/http'
+import { toast } from 'react-toastify'
 
 export const EditProductModal = forwardRef(({ coffee }, ref) => {
   const { id } = useParams()
@@ -34,6 +37,15 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
   const { data: ingredients } = useQuery({
     queryKey: ['ingredients'],
     queryFn: getAllIngredients,
+  })
+
+  const { mutate: updateProductMutate } = useMutation({
+    mutationFn: updateProduct,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries('coffee')
+      toast.success('Product updated successfully')
+      setIsOpen(false)
+    },
   })
 
   useImperativeHandle(ref, () => ({
@@ -74,6 +86,14 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
       }))
     }
   }, [coffee])
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    setProduct((prev) => ({
+      ...prev,
+      image: file,
+    }))
+  }
 
   const handleFieldChange = (e) => {
     setProduct((prev) => ({
@@ -146,7 +166,18 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
 
   const handleUpdateProduct = (e) => {
     e.preventDefault()
-    console.log(product)
+
+    const updatedProductWithSplittedMoodTags = {
+      ...product,
+      moodTags: Array.isArray(product.moodTags)
+        ? product.moodTags
+        : product.moodTags.split(','),
+    }
+
+    updateProductMutate({
+      id: coffee._id,
+      newProduct: updatedProductWithSplittedMoodTags,
+    })
   }
 
   if (!isOpen) return null
@@ -242,11 +273,32 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
             </div>
 
             <div className='flex-shrink-0 my-auto space-y-3'>
-              <div className='flex items-center justify-center p-5 my-auto border-2 border-dashed h-60 w-60 border-orange rounded-xl'>
-                <img
-                  src={`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}/images/coffee-image/${coffee.image}`}
-                  alt={coffee.name}
-                  className='object-contain w-full h-full rounded-xl'
+              <div
+                className='flex items-center justify-center p-5 my-auto border-2 border-dashed cursor-pointer h-60 w-60 border-orange rounded-xl'
+                onClick={() => document.getElementById('imageUpload').click()}
+              >
+                {product.image && !(product.image instanceof File) ? (
+                  <img
+                    src={`${import.meta.env.VITE_API_BASE_URL.replace('/api/v1', '')}/images/coffee-image/${coffee.image}`}
+                    alt={coffee.name}
+                    className='object-contain w-full h-full rounded-xl'
+                  />
+                ) : (
+                  product.image instanceof File && (
+                    <img
+                      src={URL.createObjectURL(product.image)}
+                      alt='Preview'
+                      className='object-contain w-full h-full rounded-lg'
+                    />
+                  )
+                )}
+
+                <input
+                  id='imageUpload'
+                  type='file'
+                  accept='image/*'
+                  className='hidden'
+                  onChange={handleImageChange}
                 />
               </div>
               <p className='text-sm text-center'>Click the image to re-upload</p>

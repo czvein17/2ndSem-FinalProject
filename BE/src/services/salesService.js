@@ -200,6 +200,19 @@ const getSalesData = async (timeRange) => {
   return salesData;
 };
 
+const getSalesByStatus = async () => {
+  const salesByStatus = await Sales.aggregate([
+    {
+      $group: {
+        _id: "$paymentStatus",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  return salesByStatus;
+};
+
 const updateSales = async (id, payload) => {
   const sale = await Sales.findByIdAndUpdate(id, payload, {
     new: true,
@@ -219,5 +232,6 @@ module.exports = {
   getTotalPurchase,
   getTotalSales,
   getSalesData,
+  getSalesByStatus,
   updateSales,
 };

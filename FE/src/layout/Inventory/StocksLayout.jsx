@@ -1,6 +1,7 @@
 import React from 'react'
 import { SeachBar } from '../../components/Inventory/SeachBar'
 import { Outlet } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 export const StocksLayout = () => {
   return (
@@ -12,6 +13,20 @@ export const StocksLayout = () => {
       <div className='h-full'>
         <Outlet />
       </div>
+
+      <ToastContainer
+        className='custom-toast-container'
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        closeButton={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   )
 }

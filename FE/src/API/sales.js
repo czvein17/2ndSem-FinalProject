@@ -33,3 +33,8 @@ export const getSalesData = async (timeRange) => {
   })
   return salesData.data
 }
+
+export const getSalesByStatus = async () => {
+  const salesByStatus = await http.get('/sales/sales-by-status')
+  return salesByStatus.data
+}

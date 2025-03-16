@@ -10,8 +10,32 @@ export const recommendProduct = async (emotion) => {
 export const createNewProduct = async (product) => {
   const formData = new FormData()
   formData.append('data', JSON.stringify(product))
+  if (product.image) {
+    formData.append('image', product.image)
+  }
 
   const response = await http.post('/products/create', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
+
+  console.log(response.data)
+  return response.data
+}
+
+export const updateProduct = async ({ id, newProduct }) => {
+  console.log('NEW PRODUCT ', newProduct)
+
+  const formData = new FormData()
+  formData.append('data', JSON.stringify(newProduct))
+  if (newProduct.image) {
+    formData.append('image', newProduct.image)
+  }
+
+  console.log('FORM DATA' + formData)
+
+  const response = await http.patch(`/products/${id}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -29,7 +53,6 @@ export const getAllProducts = async (queryParams = {}) => {
 
 export const getProductById = async (id) => {
   const coffee = await http.get(`/products/${id}`)
-  console.log(coffee.data)
   return coffee.data
 }
 
