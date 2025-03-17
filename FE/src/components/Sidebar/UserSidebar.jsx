@@ -8,7 +8,7 @@ import {
   TbLogout,
 } from 'react-icons/tb'
 
-import CUP_OF_CHI from '../../assets/images/logo.svg'
+import CUP_OF_CHI from '../../assets/images/POS_LOGO.svg'
 
 import { SidebarList as SidebarListComponent } from './SidebarList'
 import { useAuth } from '../../hooks/useAuth'

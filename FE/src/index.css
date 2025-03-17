@@ -25,6 +25,32 @@
   scrollbar-width: none; /* Firefox */
 }
 
+/* Custom scrollbar for Chrome, Safari, and Opera */
+.orange-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.orange-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.orange-scrollbar::-webkit-scrollbar-thumb {
+  background-color: orange;
+  border-radius: 10px;
+  border: 2px solid transparent;
+}
+
+/* Custom scrollbar for Firefox */
+.orange-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: orange transparent;
+}
+
+/* Custom scrollbar for IE and Edge */
+.orange-scrollbar {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+}
+
 .no-spinner::-webkit-outer-spin-button,
 .no-spinner::-webkit-inner-spin-button {
   -webkit-appearance: none;

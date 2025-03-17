@@ -53,7 +53,7 @@ export const ModalWrapper = forwardRef(({ children }, ref) => {
             ref={modalRef}
           >
             <button
-              className='absolute top-2 right-2 rounded-tr-xl '
+              className='absolute top-2 right-2 rounded-tr-xl text-orange'
               onClick={() => setIsOpen(false)}
             >
               <SlClose size={24} />

@@ -10,13 +10,13 @@ const DeleteModalContent = ({ message, onClose, onDelete }) => {
 
       <div className='flex gap-3'>
         <button
-          className='px-5 py-2 font-medium rounded-md bg-secondary'
+          className='px-5 py-2 font-medium transition border rounded-md border-orange text-orange hover:bg-orange hover:text-white'
           onClick={onClose}
         >
           Cancel
         </button>
         <button
-          className='px-5 py-2 font-medium text-white rounded-md bg-accent'
+          className='px-5 py-2 font-medium text-white transition border rounded-md bg-orange border-orange hover:bg-transparent hover:text-orange'
           onClick={onDelete}
         >
           Yes

@@ -7,6 +7,7 @@ const {
   createSale,
   getProductSales,
   getTopPreferredProducts,
+  getLeastPreferredProducts,
   getTotalPurchase,
   getTotalSales,
   getSalesData,
@@ -24,6 +25,7 @@ router.get("/sales-by-status", getSalesByStatus);
 
 router.get("/sales-data", getSalesData);
 router.get("/best-preferred-products", getTopPreferredProducts);
+router.get("/least-preferred-products", getLeastPreferredProducts);
 router.get("/:salesId", getSaleById);
 router.get("/product/:productId", getProductSales);
 

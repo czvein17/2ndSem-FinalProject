@@ -115,6 +115,26 @@ export const StockAlert = ({ stockAlert }) => {
             </tr>
           ))}
         </tbody>
+        {console.log(stockAlert.length)}
+        {isError && (
+          <tfoot className='h-14'>
+            <tr>
+              <td colSpan='4' className='text-center text-[#3b3b3b80] font-medium'>
+                {error.message}
+              </td>
+            </tr>
+          </tfoot>
+        )}
+
+        {stockAlert.length === 0 && (
+          <tfoot className='h-14'>
+            <tr>
+              <td colSpan='4' className='text-center text-[#3b3b3b80] font-medium'>
+                No low stock ingredients
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   )

@@ -25,6 +25,7 @@ export const createNewProduct = async (product) => {
 }
 
 export const updateProduct = async ({ id, newProduct }) => {
+  console.log(newProduct)
   console.log('NEW PRODUCT ', newProduct)
 
   const formData = new FormData()

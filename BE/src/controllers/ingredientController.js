@@ -110,10 +110,6 @@ const updateIngredient = asyncHandler(async (req, res, next) => {
 const deleteIngredient = asyncHandler(async (req, res, next) => {
   await ingredientService.deleteIngredient(req.params.id);
 
-  if (!ingredient) {
-    return next(new ErrorResponse(404, `Ingredient not found with that id`));
-  }
-
   res.status(200).json({
     c: 200,
     m: "Ingredient deleted successfully",

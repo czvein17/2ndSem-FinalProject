@@ -13,20 +13,6 @@ export const StocksLayout = () => {
       <div className='h-full'>
         <Outlet />
       </div>
-
-      <ToastContainer
-        className='custom-toast-container'
-        position='top-right'
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        closeButton={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
     </div>
   )
 }

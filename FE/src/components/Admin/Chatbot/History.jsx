@@ -41,7 +41,7 @@ export const History = React.memo(
       <>
         {!toggleShow && (
           <button
-            className='absolute top-2 md:right-0 text-accent'
+            className='absolute top-2 md:right-2 text-orange'
             title='Show History'
           >
             <FiSidebar size={24} onClick={() => setToggleShow(!toggleShow)} />
@@ -55,26 +55,28 @@ export const History = React.memo(
               animate={{ x: 0 }}
               exit={{ x: mobile ? '-100%' : '100%' }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className={`fixed left-0 bottom-0 top-0 md:relative w-[300px] flex flex-col justify-center items-center bg-secondary p-5 rounded-xl`}
+              className={`fixed left-0 bottom-0 top-0 md:relative w-[300px] flex flex-col justify-center items-center bg-white p-5 rounded-xl`}
+              style={{ boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.2)' }}
             >
-              <button className='absolute top-3 right-3 md:left-3 text-accent'>
+              <button className='absolute top-3 right-3 md:left-3 text-orange'>
                 <FiSidebar size={22} onClick={() => setToggleShow(!toggleShow)} />
               </button>
               <h1 className='p-2 text-xl font-meduim'>History</h1>
 
               <button
-                className='flex items-center justify-center w-full gap-2 py-2 mb-2 text-sm text-white rounded-md bg-accent hover:cursor-pointer'
+                className='flex items-center justify-center w-full gap-2 py-2 mb-2 text-sm text-white rounded-lg bg-orange hover:cursor-pointer'
                 onClick={createNewConversation}
               >
                 <IoCreateOutline size={20} />
                 Create New
               </button>
+
               <div className='flex-grow w-[300px] px-5 overflow-y-auto custom-scrollbar'>
                 <ul className='overflow-y-auto text-sm'>
                   {chatHistory?.conversation?.map((chat, index) => (
                     <li
                       key={chat._id}
-                      className='flex justify-between w-full my-2 text-white rounded-lg bg-accent'
+                      className='flex justify-between w-full my-2 text-sm text-white rounded-lg bg-orange'
                       style={{ width: '100%' }}
                     >
                       <button

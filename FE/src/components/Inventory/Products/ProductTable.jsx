@@ -80,16 +80,16 @@ export const ProductTable = () => {
             Add Product
           </button>
 
-          <button className='flex gap-2 px-3 py-2 transition-all duration-150 ease-in-out border rounded-lg text-orange border-orange hover:bg-orange hover:text-white'>
+          {/* <button className='flex gap-2 px-3 py-2 transition-all duration-150 ease-in-out border rounded-lg text-orange border-orange hover:bg-orange hover:text-white'>
             <span>
               <IoFilterOutline size={24} />
             </span>
             Filters
-          </button>
+          </button> */}
 
-          <button className='flex gap-2 px-3 py-2 transition-all duration-150 ease-in-out border rounded-lg text-orange border-orange hover:bg-orange hover:text-white'>
+          {/* <button className='flex gap-2 px-3 py-2 transition-all duration-150 ease-in-out border rounded-lg text-orange border-orange hover:bg-orange hover:text-white'>
             Download All
-          </button>
+          </button> */}
         </div>
       </div>
 

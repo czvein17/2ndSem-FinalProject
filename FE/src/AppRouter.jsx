@@ -31,6 +31,7 @@ import { StocksLayout } from './layout/Inventory/StocksLayout'
 import { SalesLayout } from './layout/Inventory/SalesLayout'
 import { Sales } from './page/Inventory/Sales'
 import { UnderConstruction } from './components/UnderConstruction'
+import { ForgotPassword } from './components/ForgotPassword'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -38,6 +39,7 @@ const AppRouter = () => {
   return (
     <Routes>
       <Route path='/' element={<Login />} />
+      <Route path='/forgot-password' element={<ForgotPassword />} />
 
       {isLoggedIn && (
         <>
@@ -54,11 +56,14 @@ const AppRouter = () => {
                 <Route index element={<Stocks />} />
               </Route>
 
-              <Route path='/inventory/orders' element={<h1>Orders</h1>} />
+              <Route path='/inventory/orders' element={<OrderPage />} />
 
               <Route path='/inventory/sales' element={<SalesLayout />}>
                 <Route index element={<Sales />} />
               </Route>
+
+              <Route path='/inventory/chat' element={<AdminChatBot />} />
+              <Route path='/inventory/chat/:id' element={<AdminChatBot />} />
             </Route>
 
             {/* <Route path='/inventory' element={<AdminPage />}>

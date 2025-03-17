@@ -48,4 +48,14 @@ CUP OF CHI System
   });
 };
 
-module.exports = { emailSupplier };
+const sendOTPtoMail = async (email, otp) => {
+  const message = `Your OTP is ${otp}`;
+
+  await sendEmail({
+    email: email,
+    subject: "Password Reset OTP",
+    message: message,
+  });
+};
+
+module.exports = { emailSupplier, sendOTPtoMail };

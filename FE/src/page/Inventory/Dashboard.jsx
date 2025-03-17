@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import React, { useRef, useState } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { TbCurrencyPeso } from 'react-icons/tb'
 import { BiPurchaseTag } from 'react-icons/bi'
@@ -19,13 +19,24 @@ import {
   getTotalSales,
 } from '../../API/sales'
 import { getLowStockIngredients } from '../../API/stocks'
-import { getAllSuppliers } from '../../API/suppliers'
+import { createSupplier, getAllSuppliers } from '../../API/suppliers'
 import { Suppliers } from '../../components/Inventory/Dashboard/Suppliers'
+import { ModalWrapper } from '../../components/ModalWrapper'
+import { toast } from 'react-toastify'
+import { queryClient } from '../../API/http'
 
 export const Dashboard = () => {
+  const addSupplierRef = useRef()
   const { pendingOrdersCount } = useCartContext()
   const [timeRangeOptionOpen, setTimeRangeOptionOpen] = useState(false)
   const [timeRange, setTimeRange] = useState('last7days')
+
+  const [newSupplier, setNewSupplier] = useState({
+    name: '',
+    contactNumber: '',
+    email: '',
+    address: '',
+  })
 
   const { data: totalPurchase } = useQuery({
     queryKey: ['totalPurchase'],
@@ -56,6 +67,24 @@ export const Dashboard = () => {
     queryKey: ['salesByStatus'],
     queryFn: getSalesByStatus,
   })
+
+  const { mutate: postNewSupplierMutate } = useMutation({
+    mutationFn: createSupplier,
+    onSuccess: () => {
+      toast.success('Supplier added successfully')
+      queryClient.invalidateQueries('suppliers')
+      addSupplierRef.current.closeModal()
+    },
+    onError: (error) => {
+      toast.error(error.response.data.message)
+    },
+  })
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    postNewSupplierMutate(newSupplier)
+  }
 
   const summary = [
     {
@@ -96,6 +125,13 @@ export const Dashboard = () => {
   const selectedOption = timeRangeOptions.find(
     (option) => option.value === timeRange,
   )
+
+  const handleNewSupplierFormChange = (e) => {
+    setNewSupplier((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }))
+  }
 
   return (
     <div className='h-full p-6 space-y-6 overflow-auto font-poppins custom-scrollbar'>
@@ -177,10 +213,99 @@ export const Dashboard = () => {
           <div className='flex items-center justify-between'>
             <h2 className='text-lg font-semibold'>Suppliers</h2>
 
-            <button className='px-3 py-1 text-sm font-medium transition duration-150 ease-out border rounded-full text-orange border-orange hover:bg-orange hover:text-white'>
+            <button
+              className='px-3 py-1 text-sm font-medium transition duration-150 ease-out border rounded-full text-orange border-orange hover:bg-orange hover:text-white'
+              onClick={() => addSupplierRef.current.openModal()}
+            >
               Add Supplier
             </button>
           </div>
+
+          <ModalWrapper ref={addSupplierRef}>
+            <div className='space-y-5 w-[400px]'>
+              <h1 className='font-medium text-orange '>Add Supplier</h1>
+
+              <form
+                onSubmit={handleSubmit}
+                className='flex flex-col px-3 space-y-4 text-base font-medium'
+              >
+                <div className='flex items-center gap-2 py-2 border-b-2 border-orange'>
+                  <label
+                    htmlFor='name'
+                    className='flex-shrink-0 block text-sm font-medium text-gray-700'
+                  >
+                    Name :
+                  </label>
+
+                  <input
+                    className='w-full bg-transparent outline-none'
+                    type='text'
+                    name='name'
+                    value={newSupplier.name}
+                    onChange={handleNewSupplierFormChange}
+                  />
+                </div>
+
+                <div className='flex items-center gap-2 py-2 border-b-2 border-orange'>
+                  <label
+                    htmlFor='name'
+                    className='flex-shrink-0 block text-sm font-medium text-gray-700'
+                  >
+                    Contact Number :
+                  </label>
+
+                  <input
+                    className='w-full bg-transparent outline-none no-spinner'
+                    type='number'
+                    name='contactNumber'
+                    value={newSupplier.contactNumber}
+                    onChange={handleNewSupplierFormChange}
+                  />
+                </div>
+
+                <div className='flex items-center gap-2 py-2 border-b-2 border-orange'>
+                  <label
+                    htmlFor='name'
+                    className='flex-shrink-0 block text-sm font-medium text-gray-700'
+                  >
+                    Email :
+                  </label>
+
+                  <input
+                    className='w-full bg-transparent outline-none'
+                    type='text'
+                    name='email'
+                    value={newSupplier.email}
+                    onChange={handleNewSupplierFormChange}
+                  />
+                </div>
+
+                <div className='flex items-center gap-2 py-2 border-b-2 border-orange'>
+                  <label
+                    htmlFor='name'
+                    className='flex-shrink-0 block text-sm font-medium text-gray-700'
+                  >
+                    Address :
+                  </label>
+
+                  <input
+                    className='w-full bg-transparent outline-none'
+                    type='text'
+                    name='address'
+                    value={newSupplier.address}
+                    onChange={handleNewSupplierFormChange}
+                  />
+                </div>
+
+                <button
+                  className='px-3 py-2 mx-auto text-white transition border rounded-xl bg-orange border-orange hover:bg-transparent hover:text-orange'
+                  type='submit'
+                >
+                  Add Supplier
+                </button>
+              </form>
+            </div>
+          </ModalWrapper>
 
           <Suppliers suppliers={suppliers?.d || []} />
         </div>

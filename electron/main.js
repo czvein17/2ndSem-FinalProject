@@ -8,8 +8,8 @@ let loadingWindow;
 
 function createWindow() {
   loadingWindow = new BrowserWindow({
-    width: 400,
-    height: 300,
+    width: 1000,
+    height: 8000,
     frame: false,
     transparent: true,
     alwaysOnTop: true,
@@ -27,7 +27,7 @@ function createWindow() {
     autoHideMenuBar: true,
     width: 1800,
     height: 1100,
-    icon: path.join(__dirname, "assets", "logo.jpg"),
+    icon: path.join(__dirname, "assets", "logo.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -35,7 +35,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
   mainWindow.loadURL("http://localhost:5173/");
   mainWindow.setMenu(null);
 
@@ -45,7 +45,7 @@ function createWindow() {
       loadingWindow = null;
     }
     mainWindow.show();
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
   });
 
   mainWindow.on("closed", () => {

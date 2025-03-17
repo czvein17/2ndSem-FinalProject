@@ -4,9 +4,15 @@ import CUP_OF_CHI from '../../assets/images/Inventory_logo.svg'
 import { LuLayoutDashboard, LuBox, LuPackage, LuShoppingCart } from 'react-icons/lu'
 import { HiOutlineChartBar } from 'react-icons/hi2'
 
+import { TbLogout } from 'react-icons/tb'
+import { TbMessageChatbot } from 'react-icons/tb'
+
 import { SidebarList } from './SidebarList'
+import { useAuth } from '../../hooks/useAuth'
 
 export const InventorySidebar = () => {
+  const { logout } = useAuth()
+
   const sidebarList = [
     {
       name: 'Dashboard',
@@ -23,15 +29,21 @@ export const InventorySidebar = () => {
       path: '/inventory/stocks',
       icon: <LuPackage size={26} />,
     },
-    {
-      name: 'Orders',
-      path: '/inventory/orders',
-      icon: <LuShoppingCart size={26} />,
-    },
+    // {
+    //   name: 'Orders',
+    //   path: '/inventory/orders',
+    //   icon: <LuShoppingCart size={26} />,
+    // },
     {
       name: 'Sales',
       path: '/inventory/sales',
       icon: <HiOutlineChartBar size={26} />,
+    },
+
+    {
+      name: 'Chi Bot',
+      path: '/inventory/chat',
+      icon: <TbMessageChatbot size={26} />,
     },
   ]
 
@@ -47,7 +59,16 @@ export const InventorySidebar = () => {
         ))}
       </ul>
 
-      <div></div>
+      {/* <div></div>
+       */}
+
+      <button
+        className='flex items-center gap-3 px-5 py-3 mx-auto mb-10 text-sm transition-all duration-150 ease-in-out hover:text-orange rounded-xl hover:bg-secondary'
+        onClick={logout}
+      >
+        <TbLogout size={26} />
+        Logout
+      </button>
     </nav>
   )
 }

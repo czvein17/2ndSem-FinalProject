@@ -1,7 +1,8 @@
 const { jwtDecode } = require("jwt-decode");
 const ErrorResponse = require("../utils/ErrorResponse");
-
 const userService = require("./userService");
+
+const { sendOTPtoMail } = require("../utils/email");
 
 const loginEmailAndPassword = async (email, password) => {
   const user = await userService.findUserByEmail(email);
@@ -40,7 +41,66 @@ const loginViaGoogle = async (req) => {
   return user;
 };
 
+const sendOTPToEmail = async (email) => {
+  // Generate OTP
+  const otp = Math.floor(100000 + Math.random() * 900000);
+
+  const user = await userService.findUserByEmail(email);
+
+  if (!user) throw new ErrorResponse(404, "No user found");
+
+  // Save OTP to user document
+  user.otp = otp;
+  user.otpExpires = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+  await user.save();
+
+  // Send OTP to email
+  await sendOTPtoMail(email, otp);
+
+  return;
+};
+
+const verifyOTP = async (email, otp) => {
+  const user = await userService.findUserByEmail(email);
+
+  if (!user) throw new ErrorResponse(404, "No user found");
+
+  otp = parseInt(otp, 10);
+
+  if (user.otp !== otp || user.otpExpires < Date.now()) {
+    throw new ErrorResponse(400, "Invalid or expired OTP");
+  }
+
+  return user;
+};
+
+const resetPassword = async (otp, email, password) => {
+  const user = await userService.findUserByEmail(email);
+
+  if (!user) throw new ErrorResponse(404, "No user found");
+
+  otp = parseInt(otp, 10);
+
+  if (user.otp !== otp || user.otpExpires < Date.now()) {
+    throw new ErrorResponse(400, "Invalid or expired OTP");
+  }
+
+  user.password = password;
+  user.otp = undefined;
+  user.otp;
+
+  console.log(password);
+  console.log(user);
+
+  await user.save();
+
+  return user;
+};
+
 module.exports = {
   loginEmailAndPassword,
   loginViaGoogle,
+  sendOTPToEmail,
+  verifyOTP,
+  resetPassword,
 };

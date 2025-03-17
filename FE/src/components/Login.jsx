@@ -12,9 +12,11 @@ import { FaEyeSlash } from 'react-icons/fa6'
 import { GoogleLoginButton } from './button/GoogleLoginButton'
 import { useAuth } from '../hooks/useAuth'
 import { useMutation } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const { login } = useAuth()
+  const navigate = useNavigate()
 
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
@@ -126,7 +128,7 @@ const Login = () => {
             </div>
 
             <div className='flex justify-between pt-3 mx-1'>
-              <div className='flex items-center'>
+              {/* <div className='flex items-center'>
                 <input
                   type='checkbox'
                   id='rememberMe'
@@ -135,11 +137,11 @@ const Login = () => {
                 <label htmlFor='rememberMe' className='peer-checked:text-black'>
                   Remember Me
                 </label>
-              </div>
+              </div> */}
               <button
                 type='button'
-                onClick={() => console.log('hello world')}
-                className='font-medium text-[#322f30] hover:text-orange transition-all duration-150 ease-in-out'
+                className='font-medium text-[#322f30] hover:text-orange transition-all duration-150 ease-in-out ml-auto'
+                onClick={() => navigate('/forgot-password')}
               >
                 Forgot Password
               </button>

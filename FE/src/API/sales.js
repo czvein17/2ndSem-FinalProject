@@ -6,6 +6,11 @@ export const getAllSales = async (queryParams = {}) => {
   return sales.data
 }
 
+export const getSalesById = async (salesId) => {
+  const sales = await http.get(`/sales/${salesId}`)
+  return sales.data
+}
+
 export const getProductSales = async (productId) => {
   const productSales = await http.get(`/sales/product/${productId}`)
   console.log(productSales.data)
@@ -15,6 +20,11 @@ export const getProductSales = async (productId) => {
 export const getBestSellingProducts = async () => {
   const bestSellingProducts = await http.get('/sales/best-preferred-products')
   return bestSellingProducts.data
+}
+
+export const getLeastSellingProducts = async () => {
+  const leastSellingProducts = await http.get('/sales/least-preferred-products')
+  return leastSellingProducts.data
 }
 
 export const getTotalPurchase = async () => {

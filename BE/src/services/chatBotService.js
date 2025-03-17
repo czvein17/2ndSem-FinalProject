@@ -1,7 +1,10 @@
 const { openai } = require("../config/openai");
 const Conversation = require("../models/Conversation");
 
-const chatCompletion = async (userId, message, conversationId = null) => {
+const SalesService = require("./salesService");
+const ProductService = require("./productService");
+
+const chatCompletion = async (req, userId, message, conversationId = null) => {
   let conversation;
 
   // Find the conversation by ID
@@ -10,24 +13,13 @@ const chatCompletion = async (userId, message, conversationId = null) => {
   else {
     // if no conversation ID is provided, create a new conversation
     const conversationTitle = await generateTitle(message);
-
     conversation = await Conversation.create({
       userId,
       conversationTitle,
       messages: [],
     });
-
-    // Find the conversation for the user or create a new one
-    // conversation = await Conversation.findOne({ userId });
-    // if (!conversation) {
-    //   const conversationTitle = await generateTitle(message);
-    //   conversation = new Conversation({
-    //     userId,
-    //     conversationTitle,
-    //     messages: [],
-    //   });
-    // }
   }
+
   // Add the new user message to the conversation history
   conversation.messages.push({
     role: "user",
@@ -44,9 +36,48 @@ const chatCompletion = async (userId, message, conversationId = null) => {
   if (messages.length === 1) {
     messages.unshift({
       role: "system",
-      content: "You are a helpful assistant.",
+      content: `You are CUP OF CHI's chatbot assistant. Your role is strictly limited to handling queries related to the Point of Sale (POS) system, including sales monitoring, product details, and other POS-related tasks. 
+
+    ⚠️ Do NOT assist with any topic unrelated to the POS system.  
+    ⚠️ If asked anything outside of your scope, respond with:  
+    "I can only assist with CUP OF CHI's POS system. Please ask about sales, products, or POS-related tasks."  
+
+    Always ensure all monetary values are displayed in Philippine Pesos (₱).`,
     });
   }
+
+  // Check if the message contains keywords related to sales or product data
+  if (message.toLowerCase().includes("sales")) {
+    const salesData = await SalesService.getSales(req);
+
+    // Convert "$" to "₱" in sales data
+    const formattedSalesData = JSON.stringify(salesData, null, 2).replace(
+      /\$/g,
+      "₱"
+    );
+
+    messages.push({
+      role: "system",
+      content: `Here is the sales data: ${formattedSalesData}`,
+    });
+  }
+
+  if (message.toLowerCase().includes("product")) {
+    const productData = await ProductService.findAllProducts(req);
+
+    // Convert "$" to "₱" in product data
+    const formattedProductData = JSON.stringify(productData, null, 2).replace(
+      /\$/g,
+      "₱"
+    );
+
+    messages.push({
+      role: "system",
+      content: `Here is the product data: ${formattedProductData}`,
+    });
+  }
+
+  console.log(messages);
 
   // Make the API request
   const response = await openai.chat.completions.create({
@@ -54,13 +85,26 @@ const chatCompletion = async (userId, message, conversationId = null) => {
     messages,
   });
 
-  // console.log(response.choices[0].message.content);
-
   // Add the assistant's response to the conversation history
+  let botMessageContent = response.choices[0].message.content;
+
+  // Ensure the assistant always displays Philippine Pesos (₱)
+  botMessageContent = botMessageContent.replace(/\$/g, "₱");
+
+  // Prevent responses unrelated to the POS system
+  if (
+    !botMessageContent.toLowerCase().includes("sales") &&
+    !botMessageContent.toLowerCase().includes("product")
+  ) {
+    botMessageContent =
+      "I can only assist with CUP OF CHI's POS system. Please ask about sales, products, or POS-related tasks.";
+  }
+
   const botMessage = {
     role: "assistant",
-    content: response.choices[0].message.content,
+    content: botMessageContent,
   };
+
   conversation.messages.push(botMessage);
 
   // Save the conversation

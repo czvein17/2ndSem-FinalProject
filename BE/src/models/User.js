@@ -60,6 +60,12 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       select: false,
     },
+    otp: {
+      type: Number,
+    },
+    otpExpires: {
+      type: Date,
+    },
   },
   {
     toJSON: { virtuals: true },

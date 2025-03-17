@@ -75,9 +75,9 @@ export const ViewProduct = () => {
                 Edit
               </button>
 
-              <button className='flex items-center gap-2 px-4 py-2 transition-all duration-100 ease-in-out border rounded border-orange text-orange hover:bg-orange hover:text-white hover:border-orange'>
+              {/* <button className='flex items-center gap-2 px-4 py-2 transition-all duration-100 ease-in-out border rounded border-orange text-orange hover:bg-orange hover:text-white hover:border-orange'>
                 Download
-              </button>
+              </button> */}
             </div>
           </div>
 

@@ -62,3 +62,9 @@ export const notifySupplier = async (id) => {
   const response = await http.post(`/ingredients/notify-supplier/${id}`)
   return response.data
 }
+
+export const deleteIngredient = async (id) => {
+  console.log(id)
+  const response = await http.delete(`/ingredients/${id}`)
+  return response.data
+}

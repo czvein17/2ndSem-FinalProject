@@ -20,7 +20,15 @@ const getSales = async (req) => {
 };
 
 const getSaleById = async (id) => {
-  const sale = await Sales.findById(id).populate("user").populate("order");
+  const sale = await Sales.findById(id)
+    .populate("user")
+    .populate({
+      path: "order",
+      populate: {
+        path: "orderItems.product",
+        model: "Product",
+      },
+    });
   return sale;
 };
 
@@ -127,6 +135,39 @@ const getTopPreferredProducts = async () => {
   return topPreferredProducts;
 };
 
+const getLeastPreferredProducts = async () => {
+  // Aggregate sales data to find the least preferred products based on total quantity ordered
+  const leastPreferredProducts = await Order.aggregate([
+    { $unwind: "$orderItems" },
+    {
+      $group: {
+        _id: "$orderItems.product",
+        totalQuantity: { $sum: "$orderItems.quantity" },
+      },
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "_id",
+        foreignField: "_id",
+        as: "product",
+      },
+    },
+    { $unwind: "$product" },
+    { $sort: { totalQuantity: 1 } }, // Sort by totalQuantity in ascending order
+    { $limit: 3 }, // Limit to top 3 least preferred products
+    {
+      $project: {
+        _id: 0,
+        productName: "$product.name",
+        totalQuantity: 1,
+      },
+    },
+  ]);
+
+  return leastPreferredProducts;
+};
+
 const getTotalPurchase = async () => {
   const totalPurchase = await Sales.countDocuments({ paymentStatus: "paid" });
   return totalPurchase;
@@ -229,6 +270,7 @@ module.exports = {
   findSaleByOrderId,
   findProductSalesById,
   getTopPreferredProducts,
+  getLeastPreferredProducts,
   getTotalPurchase,
   getTotalSales,
   getSalesData,

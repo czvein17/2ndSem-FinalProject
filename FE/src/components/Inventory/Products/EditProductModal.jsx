@@ -34,6 +34,8 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
     image: null,
   })
 
+  console.log(product)
+
   const { data: ingredients } = useQuery({
     queryKey: ['ingredients'],
     queryFn: getAllIngredients,
@@ -113,7 +115,7 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
             medium: 0,
             large: 0,
           },
-          _id: Date.now().toString(), // Temporary ID for new ingredient
+
           ingredient: {
             _id: '',
             name: '',
@@ -124,9 +126,11 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
     }))
   }
 
-  const handleRemoveIngredient = (e, index) => {
-    e.preventDefault()
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
 
+  const handleRemoveIngredient = (index) => {
     setProduct((prev) => {
       const updatedIngredients = [...prev.ingredients]
       updatedIngredients.splice(index, 1)
@@ -172,6 +176,10 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
       moodTags: Array.isArray(product.moodTags)
         ? product.moodTags
         : product.moodTags.split(','),
+      ingredients: product.ingredients.map((ingredient) => {
+        const { _id, ...rest } = ingredient
+        return rest
+      }),
     }
 
     updateProductMutate({
@@ -240,16 +248,18 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
                   Category :
                 </label>
                 <select
+                  name='category'
                   className='w-full px-2 bg-transparent outline-none'
-                  value={product.category}
+                  // value={product.category}
+                  value={capitalizeFirstLetter(product.category)}
                   onChange={handleFieldChange}
                 >
                   <option value='' defaultValue disabled>
                     Select Category
                   </option>
                   <option value='coffee'>Coffee</option>
-                  <option value='tea'>Tea</option>
-                  <option value='juice'>Juice</option>
+                  <option value='Tea'>Tea</option>
+                  <option value='Juice'>Juice</option>
                 </select>
               </div>
 
@@ -383,7 +393,7 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
               </div>
 
               {product.ingredients.map((ingredient, index) => (
-                <div key={ingredient._id} className='flex flex-col gap-3'>
+                <div key={index} className='flex flex-col gap-3'>
                   <div className='flex justify-between'>
                     <select
                       className='bg-transparent outline-none '
@@ -399,7 +409,7 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
 
                     <button
                       className='flex items-center gap-1'
-                      onClick={handleRemoveIngredient}
+                      onClick={() => handleRemoveIngredient(index)}
                     >
                       <span className='text-red-500'>
                         <IoIosRemoveCircleOutline size={24} />

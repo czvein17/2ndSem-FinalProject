@@ -60,6 +60,11 @@ const alertLowIngredientsStock = async () => {
 
 const deleteIngredient = async (id) => {
   const deletedIngredient = await Ingredient.findByIdAndDelete(id);
+
+  if (!deletedIngredient) {
+    throw new Error("Ingredient not found");
+  }
+
   return deletedIngredient;
 };
 

@@ -5,6 +5,7 @@ import 'highlight.js/styles/atom-one-dark.css'
 
 import { useAuth } from '../../../hooks/useAuth'
 import ChatBot from '../../../assets/images/chatbot.jpg'
+import CHIBOT from '../../../assets/icons/chibot.svg'
 
 marked.setOptions({
   highlight: function (code, lang) {
@@ -38,7 +39,7 @@ export const Messages = memo(({ messages }) => {
           }`}
         >
           <img
-            src={`${message.role === 'user' ? userPhoto : ChatBot}`}
+            src={`${message.role === 'user' ? userPhoto : CHIBOT}`}
             alt='User Photo'
             className='w-8 h-8 mt-auto rounded-full '
           />
@@ -47,7 +48,7 @@ export const Messages = memo(({ messages }) => {
             className={`px-4 py-2 max-w-[80%] md:max-w-[60%] text-sm flex justify-center items-center 
                           ${
                             message.role === 'user'
-                              ? 'bg-accent text-white rounded-s-2xl rounded-br-none rounded-tr-2xl ml-auto'
+                              ? 'bg-orange text-white rounded-s-2xl rounded-br-none rounded-tr-2xl ml-auto'
                               : 'bg-[#EEEEEE] text-[#656565] rounded-e-2xl rounded-tl-2xl rounded-bl-none'
                           }`}
           >

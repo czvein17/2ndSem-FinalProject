@@ -103,6 +103,16 @@ const getTopPreferredProducts = asyncHandler(async (req, res, next) => {
   });
 });
 
+const getLeastPreferredProducts = asyncHandler(async (req, res, next) => {
+  const products = await salesService.getLeastPreferredProducts();
+
+  res.status(200).json({
+    c: 200,
+    m: "Top 3 least selling products",
+    d: products,
+  });
+});
+
 const getTotalPurchase = asyncHandler(async (req, res, next) => {
   const totalPurchase = await salesService.getTotalPurchase();
 
@@ -150,6 +160,7 @@ module.exports = {
   getSaleById,
   getProductSales,
   getTopPreferredProducts,
+  getLeastPreferredProducts,
   getTotalPurchase,
   getTotalSales,
   getSalesData,

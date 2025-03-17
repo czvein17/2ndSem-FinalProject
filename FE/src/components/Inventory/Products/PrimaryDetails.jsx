@@ -6,7 +6,7 @@ export const PrimaryDetails = ({ coffee }) => {
 
   return (
     <div className='flex h-full px-5 mt-4 '>
-      <div className='flex flex-col w-full space-y-10 '>
+      <div className='flex flex-col w-full space-y-10 overflow-hidden '>
         <div className='w-full space-y-5 text-base '>
           <h1 className='text-xl font-semibold'>Primary Details</h1>
 
@@ -33,7 +33,7 @@ export const PrimaryDetails = ({ coffee }) => {
           </div>
         </div>
 
-        <div className='w-full space-y-5 text-base '>
+        <div className='w-full space-y-5 text-base  h-[300px] '>
           <h1 className='text-lg font-semibold'>Ingredients</h1>
           <div className='flex gap-5'>
             <button
@@ -55,21 +55,23 @@ export const PrimaryDetails = ({ coffee }) => {
               Large
             </button>
           </div>
-          {coffee.ingredients.map((ingredient, index) => (
-            <div className='space-y-2' key={index}>
-              <div className='flex gap-20 font-medium'>
-                <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Name</p>
-                <p>{ingredient.ingredient.name}</p>
-              </div>
+          <div className='space-y-2 overflow-auto h-[200px] w-[400px] orange-scrollbar'>
+            {coffee.ingredients.map((ingredient, index) => (
+              <div key={index}>
+                <div className='flex gap-20 font-medium'>
+                  <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Name</p>
+                  <p>{ingredient.ingredient.name}</p>
+                </div>
 
-              <div className='flex gap-20 font-medium'>
-                <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Amount</p>
-                <p className='uppercase'>
-                  {ingredient.quantity[selectedSize]} {ingredient.ingredient.unit}
-                </p>
+                <div className='flex gap-20 font-medium'>
+                  <p className='w-1/6 text-[#3B3B3B80] flex-shrink-0'>Amount</p>
+                  <p className='uppercase'>
+                    {ingredient.quantity[selectedSize]} {ingredient.ingredient.unit}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

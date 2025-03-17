@@ -91,6 +91,7 @@ const updateProduct = asyncHandler(async (req, res, next) => {
   if (req.is("multipart/form-data") && req.body.data) {
     try {
       bodyData = JSON.parse(req.body.data);
+      console.log(bodyData);
     } catch (error) {
       return res
         .status(400)
@@ -108,6 +109,8 @@ const updateProduct = asyncHandler(async (req, res, next) => {
     image: req.file?.filename,
     ingredients: bodyData.ingredients,
   };
+
+  console.log(payload);
 
   const product = await productService.updateProduct(payload);
 

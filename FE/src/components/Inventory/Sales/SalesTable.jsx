@@ -1,8 +1,13 @@
 import React from 'react'
 
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from 'react-icons/hi'
+import { FaRegEye } from 'react-icons/fa'
+import { ViewSalesModal } from './ViewSalesModal'
+import { useNavigate } from 'react-router-dom'
 
 export const SalesTable = ({ sales, currentPage, setCurrentPage }) => {
+  const navigate = useNavigate()
+
   const formatCreatedAt = (date) => {
     const now = new Date()
     const createdAt = new Date(date)
@@ -114,8 +119,10 @@ export const SalesTable = ({ sales, currentPage, setCurrentPage }) => {
                 {formatUpdatedAt(sale.updatedAt)}
               </td>
 
-              <td>
-                <button>View</button>
+              <td className='text-center'>
+                <button onClick={() => navigate(`/inventory/sales?id=${sale._id}`)}>
+                  <FaRegEye size={24} />
+                </button>
               </td>
             </tr>
           ))}
@@ -141,6 +148,8 @@ export const SalesTable = ({ sales, currentPage, setCurrentPage }) => {
           />
         </button>
       </div>
+
+      <ViewSalesModal />
     </div>
   )
 }

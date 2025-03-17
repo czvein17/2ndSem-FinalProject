@@ -1,5 +1,6 @@
 const express = require("express");
 
+const authRoutes = require("./authRoutes");
 const signinRoutes = require("./signinRoutes");
 const signupRoutes = require("./signupRoutes");
 const userRoutes = require("./userRoutes");
@@ -17,6 +18,8 @@ const router = express.Router();
 
 router.use("/signin", signinRoutes);
 router.use("/signup", signupRoutes);
+router.use("/auth", authRoutes);
+
 router.use("/users", userRoutes);
 router.use("/chat", chatBotRoutes);
 router.use("/products", productRoutes);

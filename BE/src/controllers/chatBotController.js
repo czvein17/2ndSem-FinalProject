@@ -7,6 +7,7 @@ const sendChatToBot = asyncHandler(async (req, res, next) => {
   const { message, conversationId } = req.body;
   const userId = req.user._id;
   const { response, conversationId: _id } = await chatBotService.chatCompletion(
+    req,
     userId,
     message,
     conversationId

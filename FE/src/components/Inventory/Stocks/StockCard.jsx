@@ -5,9 +5,11 @@ import { IoIosRemoveCircleOutline } from 'react-icons/io'
 
 import { ModalWrapper } from '../../ModalWrapper'
 import { EditStockModal } from './EditStockModal'
+import { DeleteStockModal } from './DeleteStockModal'
 
 export const StockCard = ({ ingredient }) => {
   const editProductRef = useRef()
+  const deleteProductRef = useRef()
   const [actionDropdownOpen, setActionDropdownOpen] = useState(false)
 
   return (
@@ -36,7 +38,10 @@ export const StockCard = ({ ingredient }) => {
                 <FiEdit2 size={20} />
                 Edit
               </li>
-              <li className='flex items-center gap-2 px-4 py-1 transition rounded-lg cursor-pointer hover:bg-white hover:text-orange'>
+              <li
+                className='flex items-center gap-2 px-4 py-1 transition rounded-lg cursor-pointer hover:bg-white hover:text-orange'
+                onClick={() => deleteProductRef.current.openModal()}
+              >
                 <IoIosRemoveCircleOutline size={20} />
                 delete
               </li>
@@ -80,6 +85,13 @@ export const StockCard = ({ ingredient }) => {
         <EditStockModal
           ingredient={ingredient}
           closeModal={() => editProductRef.current.closeModal()}
+        />
+      </ModalWrapper>
+
+      <ModalWrapper ref={deleteProductRef}>
+        <DeleteStockModal
+          ingredient={ingredient}
+          closeModal={() => deleteProductRef.current.closeModal()}
         />
       </ModalWrapper>
     </div>

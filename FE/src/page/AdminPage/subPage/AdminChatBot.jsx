@@ -38,7 +38,7 @@ const AdminChatBot = () => {
       setMessages((prevMessages) => [...prevMessages, botMessage])
       setConversationId(data.conversationId)
       queryClient.invalidateQueries(['chatHistory'])
-      navigate(`/admin/chat/${data.conversationId}`)
+      navigate(`/inventory/chat/${data.conversationId}`)
     },
     onError: (error) => console.error('Error fetching response from bot:', error),
   })
@@ -59,10 +59,10 @@ const AdminChatBot = () => {
     onSuccess: (data) => {
       setMessages(data.conversation.messages)
       setConversationId(data.conversation._id)
-      navigate(`/admin/chat/${data.conversation._id}`)
+      navigate(`/inventory/chat/${data.conversation._id}`)
     },
     onError: (error) => {
-      navigate('/admin/chat')
+      navigate('/inventory/chat')
       console.error('Error fetching conversation:', error)
     },
   })
@@ -73,7 +73,7 @@ const AdminChatBot = () => {
       const trimmedDeletedId = deletedConversationId.id.trim()
       if (trimmedDeletedId === currentConversationId) createNewConversation()
       queryClient.invalidateQueries(['chatHistory', 'conversation'])
-      navigate('/admin/chat')
+      navigate('/inventory/chat')
     },
   })
 
@@ -100,7 +100,7 @@ const AdminChatBot = () => {
   )
 
   const createNewConversation = useCallback(() => {
-    navigate('/admin/chat')
+    navigate('/inventory/chat')
     setMessages([])
     setConversationId(null)
   }, [navigate])
@@ -116,7 +116,7 @@ const AdminChatBot = () => {
   }, [id, showChatHistory])
 
   return (
-    <div className='relative flex flex-col-reverse w-full h-full gap-3 py-5 overflow-x-hidden md:flex-row'>
+    <div className='relative flex flex-col-reverse w-full h-full gap-3 p-5 py-5 overflow-x-hidden md:flex-row'>
       <div className='flex flex-col flex-grow w-full h-full'>
         <div
           className='flex-grow py-4 overflow-y-auto custom-scrollbar'
@@ -125,19 +125,20 @@ const AdminChatBot = () => {
           {isHistoryLoading && <Loading />}
 
           {!isHistoryLoading && messages.length === 0 && (
-            <div className='flex flex-col items-center justify-center h-full p-4 rounded-lg'>
+            <div className='flex flex-col items-center justify-center h-full p-4 space-y-4 rounded-lg'>
               <img
                 src={UnderConstruction}
-                className='w-20 h-20 '
+                className='h-28 w-28 '
                 alt='under-construction'
               />
-              <h1 className='text-lg font-bold text-accent'>
-                This is currently in beta testing
+              <h1 className='text-lg font-bold uppercase text-orange'>
+                This is currently in development phase
               </h1>
-              <p className='text-sm text-center text-wrap w-[30%]'>
-                Please note that this chatbot is currently under development. The
-                responses might not be accurate or fully reliable. We appreciate your
-                understanding and feedback.
+              <p className='text-sm text-center text-wrap w-[30%] font-medium text-gray-500'>
+                This chatbot is currently in development. While it aims to assist
+                with POS-related inquiries, responses may occasionally be inaccurate
+                or inconsistent. We appreciate your patience and feedback as we work
+                to enhance its accuracy and reliability.
               </p>
             </div>
           )}

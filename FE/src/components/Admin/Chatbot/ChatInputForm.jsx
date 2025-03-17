@@ -7,21 +7,22 @@ export const ChatInputForm = memo(({ handleSubmit, value, setValue, isSending })
   return (
     <form
       onSubmit={handleSubmit}
-      className='flex gap-5 bg-secondary py-2 px-4  rounded-xl justify-center items-center'
+      className='flex items-center justify-center gap-5 px-4 py-2 bg-white rounded-xl'
+      style={{ boxShadow: '0 0 10px 0 rgba(0, 0, 0, 0.2)' }}
     >
       <input
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder='Type your message... HERE'
-        className='w-full bg-transparent outline-none py-2 text-sm overflow-hidden resize-none '
+        className='w-full py-2 overflow-hidden text-sm bg-transparent outline-none resize-none '
       />
       <button
         type='submit'
-        className='bg-accent p-3 rounded-lg'
+        className='p-3 rounded-lg bg-orange'
         title='Send'
         disabled={isSending}
       >
-        <span className='text-white flex justify-center items-center gap-2'>
+        <span className='flex items-center justify-center gap-2 text-white'>
           {isSending ? (
             <span className='text-white animate-spin'>
               <AiOutlineLoading3Quarters size={20} />

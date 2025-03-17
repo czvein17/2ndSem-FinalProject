@@ -7,31 +7,59 @@
     <style>
       body {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background-color: #f0f0f0;
+        background-color: transparent;
         margin: 0;
       }
-      .loader {
-        border: 16px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 16px solid #3498db;
-        width: 120px;
-        height: 120px;
-        animation: spin 2s linear infinite;
+      .logo {
+        width: 600px;
       }
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
+      .progress-bar-container {
+        width: 80%;
+        background-color: #f3f3f3;
+        border-radius: 25px;
+        margin-top: 20px;
+      }
+      .progress-bar {
+        width: 0;
+        height: 30px;
+        background-color: #ffae82;
+        border-radius: 25px;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        font-weight: bold;
       }
     </style>
   </head>
   <body>
-    <div class="loader"></div>
+    <img src="./assets/logo.svg" class="logo" />
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+
+    <script>
+      const { ipcRenderer } = require("electron");
+
+      function updateProgressBar() {
+        const progressBar = document.getElementById("progress-bar");
+        let width = 0;
+        const interval = setInterval(() => {
+          if (width >= 100) {
+            clearInterval(interval);
+            ipcRenderer.send("loading-complete"); // Notify the main process that loading is complete
+          } else {
+            width++;
+            progressBar.style.width = width + "%";
+            progressBar.innerHTML = width + "%";
+          }
+        }, 50); // Adjust the interval time to control the speed of the progress bar
+      }
+
+      window.onload = updateProgressBar;
+    </script>
   </body>
 </html>
