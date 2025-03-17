@@ -2,8 +2,6 @@ const multer = require("multer");
 const path = require("path");
 
 const storage = (folder) => {
-  console.log("Im triggered");
-  console.log("Directory name: ", __dirname);
   return multer.diskStorage({
     destination: (req, file, cb) => {
       cb(null, path.join(__dirname, `../public/images/${folder}`));

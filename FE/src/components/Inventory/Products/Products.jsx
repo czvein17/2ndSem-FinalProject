@@ -1,9 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { ProductTable } from './ProductTable'
 import { ProductsAnalytic } from './ProductsAnalytic'
 
 export const Products = () => {
-  console.log('IM RENDERED')
-
   return (
     <div className='flex flex-col h-full space-y-5'>
       <ProductsAnalytic testValue={'TEST'} />

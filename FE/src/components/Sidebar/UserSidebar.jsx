@@ -28,11 +28,11 @@ export const UserSidebar = () => {
       icon: <TbBookmark size={26} />,
       path: '/user/orders',
     },
-    {
-      name: 'History',
-      icon: <TbFile size={26} />,
-      path: '/user/history',
-    },
+    // {
+    //   name: 'History',
+    //   icon: <TbFile size={26} />,
+    //   path: '/user/history',
+    // },
   ]
 
   const userSetting = [

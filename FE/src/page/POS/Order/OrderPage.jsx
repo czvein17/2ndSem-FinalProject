@@ -26,7 +26,7 @@ export const OrderPage = () => {
   console.log(debounceSearch)
 
   const queryParams = {
-    sort: '-status',
+    sort: '-status,-createdAt',
     searchBy: '_id',
     search: debounceSearch,
   }

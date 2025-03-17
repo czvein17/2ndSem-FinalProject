@@ -1,8 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
 import React, { memo } from 'react'
+import { LuShoppingCart } from 'react-icons/lu'
+
 import { getBestSellingProducts } from '../../../API/sales'
+import { getAllProducts } from '../../../API/product'
 
 export const ProductsAnalytic = memo(({ testValue }) => {
+  const { data: totalProducts } = useQuery({
+    queryKey: ['totalProducts'],
+    queryFn: () => getAllProducts(),
+  })
+
   const {
     data: topSellingProducts,
     isPending,
@@ -23,7 +31,14 @@ export const ProductsAnalytic = memo(({ testValue }) => {
 
       <div className='grid h-full grid-cols-3 gap-5'>
         <div className='flex flex-col justify-between h-full'>
-          <h4 className='font-medium'>Total Products</h4>
+          <div className='flex flex-col h-full gap-2 px-5'>
+            <h4 className='text-lg font-medium'>Total Products</h4>
+
+            <div className='flex items-center gap-4'>
+              <LuShoppingCart size={50} />
+              <p className='text-2xl font-medium'>{totalProducts?.d?.length}</p>
+            </div>
+          </div>
         </div>
         <div className='flex flex-col items-center justify-center h-full bg-black'>
           1

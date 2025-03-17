@@ -55,7 +55,9 @@ export const RecommendCoffee = () => {
   const [recomendedProducts, setRecomendedProducts] = useState([])
   const [selectedEmotion, setSelectedEmotion] = useState([])
 
-  const { mutate: recommend, isPending } = useMutation({
+  const isPending = true
+
+  const { mutate: recommend } = useMutation({
     mutationFn: recommendProduct,
     onSuccess: (data) => {
       setRecomendedProducts(data.d)
@@ -144,7 +146,9 @@ export const RecommendCoffee = () => {
 
       {isPending && (
         <DotLottieReact
-          src='https://lottie.host/c547c13b-5989-4389-8250-1e614f0d7442/tL1laAh5sf.lottie'
+          // src='https://lottie.host/c547c13b-5989-4389-8250-1e614f0d7442/tL1laAh5sf.lottie'
+          src='https://lottie.host/e1b6d8eb-32c2-4f13-8f5b-da9623c1d6bb/3DTdf1TgJq.lottie'
+          className='h-[600px]  mx-auto my-auto'
           loop
           autoplay
         />

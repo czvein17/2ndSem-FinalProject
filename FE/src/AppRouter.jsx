@@ -30,6 +30,7 @@ import { Stocks } from './page/Inventory/Stocks'
 import { StocksLayout } from './layout/Inventory/StocksLayout'
 import { SalesLayout } from './layout/Inventory/SalesLayout'
 import { Sales } from './page/Inventory/Sales'
+import { UnderConstruction } from './components/UnderConstruction'
 
 const AppRouter = () => {
   const { isLoggedIn } = useAuth()
@@ -89,8 +90,8 @@ const AppRouter = () => {
             <Route path='/user/orders' element={<OrderPage />} />
             <Route path='/user/history' element={<>history</>} />
 
-            <Route path='/user/profile' element={<>profile</>} />
-            <Route path='/user/settings' element={<>settings</>} />
+            <Route path='/user/profile' element={<UnderConstruction />} />
+            <Route path='/user/settings' element={<UnderConstruction />} />
           </Route>
         )}
       </Route>
