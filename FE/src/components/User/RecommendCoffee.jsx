@@ -55,9 +55,9 @@ export const RecommendCoffee = () => {
   const [recomendedProducts, setRecomendedProducts] = useState([])
   const [selectedEmotion, setSelectedEmotion] = useState([])
 
-  const isPending = true
+  // const isPending = true
 
-  const { mutate: recommend } = useMutation({
+  const { mutate: recommend, isPending } = useMutation({
     mutationFn: recommendProduct,
     onSuccess: (data) => {
       setRecomendedProducts(data.d)
