@@ -9,6 +9,8 @@ import ReactDOM from 'react-dom'
 import { useParams } from 'react-router-dom'
 
 import { IoIosRemoveCircleOutline } from 'react-icons/io'
+import { IoCloseCircleOutline } from 'react-icons/io5'
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { getAllIngredients } from '../../../API/stocks'
 import { updateProduct } from '../../../API/product'
@@ -196,6 +198,13 @@ export const EditProductModal = forwardRef(({ coffee }, ref) => {
         <div className='w-full px-5 py-3 bg-orange rounded-t-xl'>
           <h1 className='text-xl font-medium text-white uppercase'>Edit Product</h1>
         </div>
+
+        <button
+          className='absolute top-0 right-0 p-3'
+          onClick={() => setIsOpen(false)}
+        >
+          <IoCloseCircleOutline size={28} className='text-white' />
+        </button>
 
         <form
           onSubmit={handleUpdateProduct}
